@@ -1,19 +1,22 @@
 from bit_utils import read_bits, write_bits
-from item_data import get_item_group, get_item_size_x, get_item_size_y, get_true_set_id, Rarity
+from item_data import get_item_group, get_item_size_x, get_item_size_y, get_true_set_id, Rarity, Version
 
 
 # Item class, holding the various relevant item-related attributes and methods
 class Item:
     def __init__(self, data):
         self.data = data  # The byte data
-        self.code = self.get_item_code(data)  # Item code, i.e. "amu", "rng" etc
-        self.rw = self.is_runeword(data)      # Is the item a runeword?
-        self.simple = self.is_simple(data)    # Is the item "simple" (contains limited amount of data)
-        self.rarity = self.get_rarity(data)   # Item rarity (normal, unique, rare, etc)
-        self.set_id = self.get_set_id(data)   # Which set does item belong to?
-        self.group = get_item_group(self.code)     # What group does the item belong to (gloves, jewel, uber key, etc)
-        self.x_size = get_item_size_x(self.code)   # How many horizontal slots does the item take
-        self.y_size = get_item_size_y(self.code)   # How many vertical slots does the item take
+        self.code = self.get_item_code(data)        # Item code, i.e. "amu", "rng" etc
+        self.rw = self.is_runeword(data)            # Is the item a runeword?
+        self.simple = self.is_simple(data)          # Is the item "simple" (contains limited amount of data)
+        self.rarity = self.get_rarity(data)         # Item rarity (normal, unique, rare, etc)
+        self.identifier = self.get_identifier(data) # Unique item identifier (used for dupe checks)
+        self.level = self.get_level(data)           # Item level
+        self.unique_id = self.get_unique_id(data)   # Which set does item belong to?
+        self.set_id = self.get_set_id(data)         # Which set does item belong to?
+        self.group = get_item_group(self.code)      # What group does the item belong to (gloves, jewel, uber key, etc)
+        self.x_size = get_item_size_x(self.code)    # How many horizontal slots does the item take
+        self.y_size = get_item_size_y(self.code)    # How many vertical slots does the item take
 
     def set_position(self, x, y):
         # Modify item data and write new stash position
@@ -41,16 +44,55 @@ class Item:
         return item_code
 
     @staticmethod
+    def is_identified(item):
+        return read_bits(item, 20, 1)
+
+    @staticmethod
+    def is_socketed(item):
+        return read_bits(item, 27, 1)
+
+    @staticmethod
     def is_ear(item):
         return read_bits(item, 32, 1)
+
+    @staticmethod
+    def is_simple(item):
+        return read_bits(item, 37, 1)
+
+    @staticmethod
+    def is_ethereal(item):
+        return read_bits(item, 38, 1)
+
+    @staticmethod
+    def is_personalized(item):
+        return read_bits(item, 40, 1)
 
     @staticmethod
     def is_runeword(item):
         return read_bits(item, 42, 1)
 
     @staticmethod
-    def is_simple(item):
-        return read_bits(item, 37, 1)
+    def get_version(item):
+        return Version(read_bits(item, 48, 8))
+
+    @staticmethod
+    def num_filled_sockets(item):
+        # Return number of socketed items in item
+        if Item.is_ear(item):
+            return 0
+        return read_bits(item, 108, 3)
+
+    @staticmethod
+    def get_identifier(item):
+        if Item.is_simple(item):
+            return None
+        return read_bits(item, 111, 32))
+
+    @staticmethod
+    def get_level(item):
+        if Item.is_simple(item):
+            return None
+        return Rarity(read_bits(item, 143, 7))
 
     @staticmethod
     def get_rarity(item):
@@ -66,16 +108,20 @@ class Item:
     @staticmethod
     def is_class_specific(item):
         # The bits indicating if an item is class specific vary in location based on whether it has multiple pictures
+        offset = 155
         if Item.has_multiple_pictures(item):
-            return read_bits(item, 158, 1)
-        return read_bits(item, 155, 1)
+            offset += 1
+        return read_bits(item, offset, 1)
 
-    @staticmethod
-    def num_filled_sockets(item):
-        # Return number of socketed items in item
-        if Item.is_ear(item):
-            return 0
-        return read_bits(item, 108, 3)
+    def get_unique_id(self, item):
+        if self.rarity is not Rarity.UNIQ:  # First, make sure it's actually a unique item
+            return None
+        offset = 156
+        if self.has_multiple_pictures(item):
+            offset += 3
+        if self.is_class_specific(item):
+            offset += 11
+        return read_bits(item, offset, 12)
 
     def get_set_id(self, item):
         # Get the set id of the item.

@@ -2,6 +2,11 @@
 from typing import Dict
 from enum import IntEnum
 
+class Version(IntEnum):
+    PRE_108 = 0
+    CLASSIC = 1
+    EXPANSION = 100
+    POST_110 = 101
 
 # ITEM RARITIES
 class Rarity(IntEnum):
