@@ -1,139 +1,113 @@
 from bit_utils import read_bits, write_bits
-from item_data import get_item_group, get_item_size_x, get_item_size_y, get_true_set_id, Rarity, Version
+from item_data import get_item_group, get_item_size_x, get_item_size_y, get_set_id, get_unique_name, Quality, Version
 
 
 # Item class, holding the various relevant item-related attributes and methods
 class Item:
     def __init__(self, data):
         self.data = data  # The byte data
-        self.code = self.get_item_code(data)        # Item code, i.e. "amu", "rng" etc
-        self.rw = self.is_runeword(data)            # Is the item a runeword?
-        self.simple = self.is_simple(data)          # Is the item "simple" (contains limited amount of data)
-        self.rarity = self.get_rarity(data)         # Item rarity (normal, unique, rare, etc)
-        self.identifier = self.get_identifier(data) # Unique item identifier (used for dupe checks)
-        self.level = self.get_level(data)           # Item level
-        self.unique_id = self.get_unique_id(data)   # Which set does item belong to?
-        self.set_id = self.get_set_id(data)         # Which set does item belong to?
-        self.group = get_item_group(self.code)      # What group does the item belong to (gloves, jewel, uber key, etc)
-        self.x_size = get_item_size_x(self.code)    # How many horizontal slots does the item take
-        self.y_size = get_item_size_y(self.code)    # How many vertical slots does the item take
+
+        offset = 20
+        self.is_identified, offset = self.read_attribute(data, offset, 1)  # offset: 20
+        offset += 6  # unknown bits
+        self.is_socketed, offset = self.read_attribute(data, offset, 1)  # offset: 27
+        offset += 1  # unknown bits
+        offset += 1  # irrelevant bit: is_new
+        offset += 2  # unknown bits
+        self.is_ear, offset = self.read_attribute(data, offset, 1)  # offset: 32
+        offset += 1  # irrelevant bit: is_starter_item
+        offset += 3  # unknown bits
+        self.is_simple, offset = self.read_attribute(data, offset, 1)  # offset: 37
+        self.is_ethereal, offset = self.read_attribute(data, offset, 1)  # offset: 38
+        offset += 1  # unknown bit
+        self.is_personalized, offset = self.read_attribute(data, offset, 1)  # offset: 40
+        offset += 1  # unknown bit
+        self.is_runeword, offset = self.read_attribute(data, offset, 1)  # offset: 42
+        offset += 5  # unknown bits
+        self.version, offset = self.read_version(self, offset, 8)  # offset: 48
+        offset += 2  # unknown bits
+        offset += 3  # irrelevant bits: location_id
+        offset += 4  # irrelevant bits: equipped_id
+        offset += 4  # irrelevant bits: position_x
+        offset += 3  # irrelevant bits: position_y
+        offset += 1  # unknown bit
+        offset += 3  # irrelevant bits: alt_position_id
+
+        if self.is_ear == 1:
+            self.ear_class, offset = self.read_attribute(data, offset, 3)  # offset: 76
+            self.ear_level, offset = self.read_attribute(data, offset, 7)  # offset: 79
+            self.ear_data, offset = self.read_attribute_as_char(data, offset, 15, 7)  # offset: 86
+        else:
+            self.code, offset = self.read_attribute_as_char(data, offset, 4, 8)  # offset: 76
+            self.group = get_item_group(self.code)
+            self.num_filled_sockets, offset = self.read_attribute(data, offset, 3)  # offset: 108
+
+        if self.is_simple == 1:
+            self.quality = None
+        else:
+            self.identifier, offset = self.read_attribute(data, offset, 32)  # offset: 111
+            self.level, offset = self.read_attribute(data, offset, 7)  # offset: 143
+            self.quality, offset = self.read_quality(self, offset, 4)  # offset: 150
+
+            self.has_multiple_pictures, offset = self.read_attribute(data, offset, 1)  # offset: 154
+            if self.has_multiple_pictures == 1:
+                self.picture_id, offset = self.read_attribute(data, offset, 3)
+
+            self.is_class_specific, offset = self.read_attribute(data, offset, 1)
+            if self.is_class_specific == 1:
+                self.class_specific_data, offset = self.read_attribute(data, offset, 11)
+
+            if self.quality in (Quality.LOW_QUALITY, Quality.HIGH_QUALITY):
+                offset += 3  # irrelevant bits
+            elif self.quality == Quality.MAGIC:
+                self.prefix_id, offset = self.read_attribute(data, offset, 11)
+                self.suffix_id, offset = self.read_attribute(data, offset, 11)
+            elif self.quality == Quality.SET:
+                self.set_item_id, offset = self.read_attribute(data, offset, 12)
+                self.set_id = get_set_id(self.set_item_id)
+            elif self.quality == Quality.UNIQUE:
+                self.unique_id, offset = self.read_attribute(data, offset, 12)
+                self.unique_name = get_unique_name(self.unique_id)
+            elif self.quality in (Quality.RARE, Quality.CRAFTED):
+                offset += 0  # TODO parseRareOrCraftedBits
+
+            if self.is_runeword == 1:
+                offset += 16  # TODO parseRunewordBits
+
+            if self.is_personalized == 1:
+                self.personalized_data, offset = self.read_attribute_as_char(data, offset, 15, 7)
+
+            # TODO further parsing
+
+        self.x_size = get_item_size_x(self.code)     # How many horizontal slots does the item take
+        self.y_size = get_item_size_y(self.code)     # How many vertical slots does the item take
+
+    @staticmethod
+    def read_attribute(item, offset, bits_to_read):
+        return read_bits(item, offset, bits_to_read), offset + bits_to_read
+
+    @staticmethod
+    def read_version(self, offset, bits_to_read):
+        version_id, _ = self.read_attribute(self.data, offset, bits_to_read)
+        return Version(version_id), offset + bits_to_read
+
+    @staticmethod
+    def read_quality(self, offset, bits_to_read):
+        quality_id, _ = self.read_attribute(self.data, offset, bits_to_read)
+        return Quality(quality_id), offset + bits_to_read
+
+    @staticmethod
+    def read_attribute_as_char(item, offset, char_count, bits_per_char):
+        item_code = ''
+        for _ in range(char_count):  # Reach each char individually
+            char = chr(read_bits(item, offset, bits_per_char))
+            offset += bits_per_char
+            if char == ' ':
+                break
+            item_code += char
+        return item_code, offset
 
     def set_position(self, x, y):
         # Modify item data and write new stash position
         self.data = write_bits(self.data, 65, 4, x)
         self.data = write_bits(self.data, 69, 4, y)
-
-    @staticmethod
-    def get_position(item):
-        # Get position in stash
-        x_pos = read_bits(item, 65, 4)
-        y_pos = read_bits(item, 69, 4)
-        return x_pos, y_pos
-
-    @staticmethod
-    def get_item_code(item):
-        # Get the item code
-        if Item.is_ear(item):  # Ears lack the bits that indicate item code, but they have a specific ear indicator
-            return 'ear'
-        item_code = ''
-        for i in range(4):  # Reach each char individually
-            char = chr(read_bits(item, 76 + i * 8, 8))
-            if char != ' ':  # Item codes are 4 bytes long but most of them have a space as the last char which
-                # should be ignored
-                item_code += char
-        return item_code
-
-    @staticmethod
-    def is_identified(item):
-        return read_bits(item, 20, 1)
-
-    @staticmethod
-    def is_socketed(item):
-        return read_bits(item, 27, 1)
-
-    @staticmethod
-    def is_ear(item):
-        return read_bits(item, 32, 1)
-
-    @staticmethod
-    def is_simple(item):
-        return read_bits(item, 37, 1)
-
-    @staticmethod
-    def is_ethereal(item):
-        return read_bits(item, 38, 1)
-
-    @staticmethod
-    def is_personalized(item):
-        return read_bits(item, 40, 1)
-
-    @staticmethod
-    def is_runeword(item):
-        return read_bits(item, 42, 1)
-
-    @staticmethod
-    def get_version(item):
-        return Version(read_bits(item, 48, 8))
-
-    @staticmethod
-    def num_filled_sockets(item):
-        # Return number of socketed items in item
-        if Item.is_ear(item):
-            return 0
-        return read_bits(item, 108, 3)
-
-    @staticmethod
-    def get_identifier(item):
-        if Item.is_simple(item):
-            return None
-        return read_bits(item, 111, 32))
-
-    @staticmethod
-    def get_level(item):
-        if Item.is_simple(item):
-            return None
-        return Rarity(read_bits(item, 143, 7))
-
-    @staticmethod
-    def get_rarity(item):
-        if Item.is_simple(item):
-            return None
-        return Rarity(read_bits(item, 150, 4))
-
-    @staticmethod
-    def has_multiple_pictures(item):
-        # Used to indicate whether an item can have multiple graphics (like rings, amulets, jewels etc)
-        return read_bits(item, 154, 1)
-
-    @staticmethod
-    def is_class_specific(item):
-        # The bits indicating if an item is class specific vary in location based on whether it has multiple pictures
-        offset = 155
-        if Item.has_multiple_pictures(item):
-            offset += 1
-        return read_bits(item, offset, 1)
-
-    def get_unique_id(self, item):
-        if self.rarity is not Rarity.UNIQ:  # First, make sure it's actually a unique item
-            return None
-        offset = 156
-        if self.has_multiple_pictures(item):
-            offset += 3
-        if self.is_class_specific(item):
-            offset += 11
-        return read_bits(item, offset, 12)
-
-    def get_set_id(self, item):
-        # Get the set id of the item.
-        if self.rarity is not Rarity.SET:  # First, make sure it's actually a set item
-            return None
-        # The relevant bit offset depends on whether the item has multiple graphics and/or is class specific
-        offset = 156
-        if self.has_multiple_pictures(item):
-            offset += 3
-        if self.is_class_specific(item):
-            offset += 11
-        # Once the set id is obtained, get the "true" set id from item_data.py
-        # The set id as given in the item data actually indicates the specific item and not the set, i.e. Sigon parts
-        # have different ids in the 35-40 range, Death's set is 47-49, etc. We want a single id for each set.
-        return get_true_set_id(read_bits(item, offset, 12))

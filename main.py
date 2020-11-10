@@ -1,7 +1,7 @@
 import struct
 import re
 from bit_utils import find_next_null, write_bits
-from item_data import ItemGroup, Rarity
+from item_data import ItemGroup, Quality
 from item import Item
 from page import Page
 import tkinter as tk
@@ -67,8 +67,8 @@ def chunks_unify_sockets(chunks):
     new_chunks = []
     while chunks:
         item_candidate = chunks.pop(0)
-        socketed_items = Item.num_filled_sockets(item_candidate)
-        for i in range(socketed_items):
+        socketed_items = Item(data=item_candidate).num_filled_sockets
+        for _ in range(socketed_items):
             item_candidate += chunks.pop(0)
         new_chunks.append(item_candidate)
     return new_chunks
@@ -149,7 +149,8 @@ def to_groups(item_list, config):
     runewords = []
     runes = []
     jewels = []
-    rings_ammies = []
+    rings = []
+    amulets = []
     bases = []
     misc = []
     gems = []
@@ -160,31 +161,34 @@ def to_groups(item_list, config):
     # These rules decide which item goes into which group. Note that the ordering here is important. For example, if you
     # want anni/torches to be sorted with the charms, the charm group condition must come before the "unique" condition
     for item in item_list:
-        if item.rw:
+        if item.is_runeword:
             add_to_group(runewords, item)
-        elif item.group == ItemGroup.JEWEL:
-            add_to_group(jewels, item)
         elif item.group == ItemGroup.RUNE:
             add_to_group(runes, item)
         elif item.group in [ItemGroup.UBERKEY, ItemGroup.UBERPART]:
             add_to_group(ubers, item)
         elif item.group == ItemGroup.MISC:
             add_to_group(misc, item)
-        elif item.rarity == Rarity.SET:
-            add_to_group(sets, item, item.set_id)
-        elif item.group in [ItemGroup.AMULET, ItemGroup.RING]:
-            add_to_group(rings_ammies, item)
+        elif item.quality == Quality.SET:
+            group_by = getattr(item, config["SETTINGS"]["GroupSetItemsBy"], "set_id")
+            add_to_group(sets, item, group_by)
+        elif item.quality == Quality.UNIQUE:
+            group_by = getattr(item, config["SETTINGS"]["GroupUniqueItemsBy"], "group")
+            add_to_group(uniques, item, group_by)
+        elif item.group == ItemGroup.AMULET:
+            add_to_group(amulets, item)
+        elif item.group == ItemGroup.RING:
+            add_to_group(rings, item)
+        elif item.group == ItemGroup.JEWEL:
+            add_to_group(jewels, item)
         elif item.group == ItemGroup.ESSENCE:
             add_to_group(essences, item)
-        elif item.rarity in [Rarity.LOW_QUALITY, Rarity.NORMAL, Rarity.HIGH_QUALITY] and not item.simple:
+        elif item.quality in [Quality.LOW_QUALITY, Quality.NORMAL, Quality.HIGH_QUALITY] and not item.is_simple:
             add_to_group(bases, item)
         elif item.group == ItemGroup.CHARM:
             add_to_group(charms, item)
-        elif item.group in [ItemGroup.GEM_CHIP, ItemGroup.GEM_FLAWED, ItemGroup.GEM_NORM,
-                            ItemGroup.GEM_FLAWLESS, ItemGroup.GEM_PERFECT]:
+        elif item.group in [ItemGroup.GEM_CHIPPED, ItemGroup.GEM_FLAWED, ItemGroup.GEM_NORMAL, ItemGroup.GEM_FLAWLESS, ItemGroup.GEM_PERFECT]:
             add_to_group(gems, item)
-        elif item.rarity == Rarity.UNIQ:
-            add_to_group(uniques, item, item.group)
         else:  # Catch-all for items which don't fall into one of the other categories and aren't explicitly misc
             add_to_group(misc, item)
 
@@ -193,15 +197,16 @@ def to_groups(item_list, config):
     ubers.sort(key=lambda x: x.code)
     runewords.sort(key=lambda x: (x.group, x.code))
     bases.sort(key=lambda x: (x.group, x.code))
-    jewels.sort(key=lambda x: x.rarity)
-    rings_ammies.sort(key=lambda x: (x.group, x.rarity))
+    jewels.sort(key=lambda x: x.quality)
+    amulets.sort(key=lambda x: x.quality)
+    rings.sort(key=lambda x: x.quality)
     runes.sort(key=lambda x: x.code)
     misc.sort(key=lambda x: x.code)
-    charms.sort(key=lambda x: (x.code, x.rarity))
+    charms.sort(key=lambda x: (x.code, x.quality))
     gems.sort(key=lambda x: (x.group, x.code))
     essences.sort(key=lambda x: x.code)
     for item_set in sets:
-        sets[item_set].sort(key=lambda x: x.group)
+        sets[item_set].sort(key=lambda x: (x.set_id, x.group))
     for item_unique in uniques:
         uniques[item_unique].sort(key=lambda x: x.group)
 
@@ -216,7 +221,8 @@ def to_groups(item_list, config):
     groups.append(essences)
     groups.append(bases)
     groups.append(runewords)
-    groups.append(rings_ammies)
+    groups.append(amulets)
+    groups.append(rings)
     append_supergroup(groups, sets)
     append_supergroup(groups, uniques)
     groups.append(misc)
