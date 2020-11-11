@@ -35,7 +35,7 @@ def read_bits(data, offset, size):
     # Take byte data and read bits specified by offset and size (number of bits to read), while performing all of the
     # required manipulations due to the way diablo 2 handles bit data. Return int value of bits.
     byte_start = int(offset / 8)  # Since python can't read individual bits, we need to read the entire byte range
-    byte_end = int((offset + size)/8)
+    byte_end = int((offset + size) / 8)
     bytes_to_read = byte_end - byte_start + 1
     result = []
 
@@ -57,7 +57,7 @@ def write_bits(data, offset, size, value_to_write):
     # given size, while performing the required bit manipulations.
     value_reversed = reverse_bits(int_to_bit_list(value_to_write, size))  # First translate int to bit list and reverse
     byte_start = int(offset / 8)  # Since python can't read individual bits, we need to replace the entire byte range
-    byte_end = int((offset + size - 1)/8)
+    byte_end = int((offset + size - 1) / 8)
     bytes_to_read = byte_end - byte_start + 1
     data_new = data[:byte_start]  # Binary literals in python are immutable, so we need to create a new byte object.
     # Anything up to the starting byte remains unchanged to we can copy from the original.

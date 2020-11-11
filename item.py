@@ -1,5 +1,5 @@
 from bit_utils import read_bits, write_bits
-from item_data import get_item_group, get_item_size_x, get_item_size_y, get_set_id, get_unique_name, Quality, Version
+from item_data import get_item_type, get_item_size_x, get_item_size_y, get_set_id, get_unique_name, ItemQuality, ItemVersion
 
 
 # Item class, holding the various relevant item-related attributes and methods
@@ -39,7 +39,7 @@ class Item:
             self.ear_data, offset = self.read_attribute_as_char(data, offset, 15, 7)  # offset: 86
         else:
             self.code, offset = self.read_attribute_as_char(data, offset, 4, 8)  # offset: 76
-            self.group = get_item_group(self.code)
+            self.type = get_item_type(self.code)
             self.num_filled_sockets, offset = self.read_attribute(data, offset, 3)  # offset: 108
 
         if self.is_simple == 1:
@@ -57,18 +57,18 @@ class Item:
             if self.is_class_specific == 1:
                 self.class_specific_data, offset = self.read_attribute(data, offset, 11)
 
-            if self.quality in (Quality.LOW_QUALITY, Quality.HIGH_QUALITY):
+            if self.quality in (ItemQuality.LOW_QUALITY, ItemQuality.HIGH_QUALITY):
                 offset += 3  # irrelevant bits
-            elif self.quality == Quality.MAGIC:
+            elif self.quality == ItemQuality.MAGIC:
                 self.prefix_id, offset = self.read_attribute(data, offset, 11)
                 self.suffix_id, offset = self.read_attribute(data, offset, 11)
-            elif self.quality == Quality.SET:
+            elif self.quality == ItemQuality.SET:
                 self.set_item_id, offset = self.read_attribute(data, offset, 12)
                 self.set_id = get_set_id(self.set_item_id)
-            elif self.quality == Quality.UNIQUE:
+            elif self.quality == ItemQuality.UNIQUE:
                 self.unique_id, offset = self.read_attribute(data, offset, 12)
                 self.unique_name = get_unique_name(self.unique_id)
-            elif self.quality in (Quality.RARE, Quality.CRAFTED):
+            elif self.quality in (ItemQuality.RARE, ItemQuality.CRAFTED):
                 offset += 0  # TODO parseRareOrCraftedBits
 
             if self.is_runeword == 1:
@@ -79,8 +79,8 @@ class Item:
 
             # TODO further parsing
 
-        self.x_size = get_item_size_x(self.code)     # How many horizontal slots does the item take
-        self.y_size = get_item_size_y(self.code)     # How many vertical slots does the item take
+        self.x_size = get_item_size_x(self.code)  # How many horizontal slots does the item take
+        self.y_size = get_item_size_y(self.code)  # How many vertical slots does the item take
 
     @staticmethod
     def read_attribute(item, offset, bits_to_read):
@@ -89,12 +89,12 @@ class Item:
     @staticmethod
     def read_version(self, offset, bits_to_read):
         version_id, _ = self.read_attribute(self.data, offset, bits_to_read)
-        return Version(version_id), offset + bits_to_read
+        return ItemVersion(version_id), offset + bits_to_read
 
     @staticmethod
     def read_quality(self, offset, bits_to_read):
         quality_id, _ = self.read_attribute(self.data, offset, bits_to_read)
-        return Quality(quality_id), offset + bits_to_read
+        return ItemQuality(quality_id), offset + bits_to_read
 
     @staticmethod
     def read_attribute_as_char(item, offset, char_count, bits_per_char):

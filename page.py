@@ -9,7 +9,7 @@ class Page:
         # ant existing item on the page
         for x in range(x_size):
             for y in range(y_size):
-                if x_position + x > 9 or y_position + y > 9 or\
+                if x_position + x > 9 or y_position + y > 9 or \
                         self.spaces[x_position + x][y_position + y] > 0:
                     return True
         return False

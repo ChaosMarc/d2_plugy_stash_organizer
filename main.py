@@ -1,13 +1,14 @@
-import struct
-import re
-from bit_utils import find_next_null, write_bits
-from item_data import ItemGroup, Quality
-from item import Item
-from page import Page
-import tkinter as tk
-from tkinter import filedialog
-from shutil import copy
 import configparser
+import re
+import struct
+import tkinter as tk
+from shutil import copy
+from tkinter import filedialog
+
+from bit_utils import find_next_null, write_bits
+from item import Item
+from item_data import ItemType, ItemQuality
+from page import Page
 
 root = tk.Tk()
 root.withdraw()
@@ -92,7 +93,7 @@ def get_pages(stash_data):
 def parse_stash_data(stash_data, config):
     # Retrieve the pages we do not wish to sort, and parse the list of items in the remaining pages
     stash_pages = get_pages(stash_data)
-    num_pages_to_ignore = int(config["SETTINGS"]["IgnoreFirstXPages"])
+    num_pages_to_ignore = int(config["GENERAL"]["IgnoreFirstXPages"])
 
     # If there are fewer pages total than those we wish to ignore, do nothing except return all pages.
     # Otherwise divide into pages to ignore and pages to parse
@@ -143,89 +144,84 @@ def to_groups(item_list, config):
     # Sort the items into groups. Each group is sorted internally with some criteria, and different groups will never
     # be on the same stash page.
 
-    # The groups:
-    sets = {}  # Note that sets and uniques are the exception here. They contain subgroups while the other groups don't
-    uniques = {}
-    runewords = []
-    runes = []
-    jewels = []
-    rings = []
-    amulets = []
-    bases = []
-    misc = []
-    gems = []
-    charms = []
-    ubers = []
-    essences = []
+    item_groups = {}
+    if "ITEM_GROUP_MISC" not in config:
+        config["ITEM_GROUP_MISC"] = {}
+    for section in config:
+        if section.startswith('ITEM_GROUP_'):
+            item_group = section[11:]
+            if 'SubGroupByAttribute' in config[section]:
+                item_groups[item_group] = {}
+            else:
+                item_groups[item_group] = []
 
-    # These rules decide which item goes into which group. Note that the ordering here is important. For example, if you
-    # want anni/torches to be sorted with the charms, the charm group condition must come before the "unique" condition
     for item in item_list:
-        if item.is_runeword:
-            add_to_group(runewords, item)
-        elif item.group == ItemGroup.RUNE:
-            add_to_group(runes, item)
-        elif item.group in [ItemGroup.UBERKEY, ItemGroup.UBERPART]:
-            add_to_group(ubers, item)
-        elif item.group == ItemGroup.MISC:
-            add_to_group(misc, item)
-        elif item.quality == Quality.SET:
-            group_by = getattr(item, config["SETTINGS"]["GroupSetItemsBy"], "set_id")
-            add_to_group(sets, item, group_by)
-        elif item.quality == Quality.UNIQUE:
-            group_by = getattr(item, config["SETTINGS"]["GroupUniqueItemsBy"], "group")
-            add_to_group(uniques, item, group_by)
-        elif item.group == ItemGroup.AMULET:
-            add_to_group(amulets, item)
-        elif item.group == ItemGroup.RING:
-            add_to_group(rings, item)
-        elif item.group == ItemGroup.JEWEL:
-            add_to_group(jewels, item)
-        elif item.group == ItemGroup.ESSENCE:
-            add_to_group(essences, item)
-        elif item.quality in [Quality.LOW_QUALITY, Quality.NORMAL, Quality.HIGH_QUALITY] and not item.is_simple:
-            add_to_group(bases, item)
-        elif item.group == ItemGroup.CHARM:
-            add_to_group(charms, item)
-        elif item.group in [ItemGroup.GEM_CHIPPED, ItemGroup.GEM_FLAWED, ItemGroup.GEM_NORMAL, ItemGroup.GEM_FLAWLESS, ItemGroup.GEM_PERFECT]:
-            add_to_group(gems, item)
-        else:  # Catch-all for items which don't fall into one of the other categories and aren't explicitly misc
-            add_to_group(misc, item)
+        added = False
 
-    # Sort each group internally, according to its own criteria. Uniques are sorted by type (helms, gloves, etc) and
-    # then by item code (grim helm, winged helm, etc). Jewels are sorted by rarity. Modify this as you see fit.
-    ubers.sort(key=lambda x: x.code)
-    runewords.sort(key=lambda x: (x.group, x.code))
-    bases.sort(key=lambda x: (x.group, x.code))
-    jewels.sort(key=lambda x: x.quality)
-    amulets.sort(key=lambda x: x.quality)
-    rings.sort(key=lambda x: x.quality)
-    runes.sort(key=lambda x: x.code)
-    misc.sort(key=lambda x: x.code)
-    charms.sort(key=lambda x: (x.code, x.quality))
-    gems.sort(key=lambda x: (x.group, x.code))
-    essences.sort(key=lambda x: x.code)
-    for item_set in sets:
-        sets[item_set].sort(key=lambda x: (x.set_id, x.group))
-    for item_unique in uniques:
-        uniques[item_unique].sort(key=lambda x: x.group)
+        for group in item_groups:
+            add_by_type = "ItemType" not in config["ITEM_GROUP_" + group]
+            add_by_quality = "ItemQuality" not in config["ITEM_GROUP_" + group]
+            add_by_attribute = "Attribute" not in config["ITEM_GROUP_" + group]
+
+            if "ItemType" in config["ITEM_GROUP_" + group]:
+                add_by_type = False
+                types = [x.strip() for x in config["ITEM_GROUP_" + group]["ItemType"].split(',')]
+                for t in types:
+                    if ItemType[t] == item.type:
+                        add_by_type = True
+                        break
+
+            if "ItemQuality" in config["ITEM_GROUP_" + group]:
+                add_by_quality = False
+                qualities = [x.strip() for x in config["ITEM_GROUP_" + group]["ItemQuality"].split(',')]
+                for q in qualities:
+                    if ItemQuality[q] == item.quality:
+                        add_by_quality = True
+                        break
+
+            if "Attribute" in config["ITEM_GROUP_" + group]:
+                add_by_attribute = False
+                attributes = [x.strip() for x in config["ITEM_GROUP_" + group]["Attribute"].split(',')]
+                for a in attributes:
+                    check_against = 1
+                    if a[0] == "!":
+                        check_against = 0
+                        a = a[1:]
+                    if getattr(item, a) == check_against:
+                        add_by_attribute = True
+                        break
+
+            if add_by_type and add_by_quality and add_by_attribute:
+                if "SubGroupByAttribute" in config["ITEM_GROUP_" + group]:
+                    add_to_group(item_groups[group], item, getattr(item, config["ITEM_GROUP_" + group]["SubGroupByAttribute"]))
+                    added = True
+                    break
+                else:
+                    add_to_group(item_groups[group], item)
+                    added = True
+                    break
+
+        if not added:
+            add_to_group(item_groups["MISC"], item)
+
+    for group in item_groups:
+        sort_by = []
+        if "SortByAttribute" in config["ITEM_GROUP_" + group]:
+            sort_by = [x.strip() for x in config["ITEM_GROUP_" + group]["SortByAttribute"].split(',')]
+        if 'SubGroupByAttribute' in config["ITEM_GROUP_" + group]:
+            for sub_group in sorted(item_groups[group]):
+                item_groups[group][sub_group].sort(key=lambda x: [getattr(x, attr, "code") for attr in sort_by])
+        else:
+            item_groups[group].sort(key=lambda x: [getattr(x, attr, "code") for attr in sort_by])
 
     # Finally, add all sorted groups to the groups list. The ordering here is what will determine the actual order in
     # the stash, so modify to your taste.
     groups = []
-    groups.append(gems)
-    groups.append(runes)
-    groups.append(charms)
-    groups.append(jewels)
-    groups.append(ubers)
-    groups.append(essences)
-    groups.append(bases)
-    groups.append(runewords)
-    groups.append(amulets)
-    groups.append(rings)
-    append_supergroup(groups, sets)
-    append_supergroup(groups, uniques)
-    groups.append(misc)
+    for key in item_groups:
+        if isinstance(item_groups[key], dict):
+            append_supergroup(groups, item_groups[key])
+        else:
+            groups.append(item_groups[key])
 
     # Finally, remove any empty groups to avoid having empty stash pages
     groups = [group for group in groups if group]
@@ -285,7 +281,7 @@ def make_stash(path, header, ver, gold, new_pages, ignored_pages):
 
 def backup_stash(stash_file_path, config):
     # Backup old stash file if indicated in settings
-    if config["SETTINGS"]["BackupStashFile"] == '1':
+    if config["GENERAL"]["BackupStashFile"] == '1':
         new_path = stash_file_path.rsplit(".", 1)[0] + "_OLD." + stash_file_path.rsplit(".", 1)[1]
         copy(stash_file_path, new_path)
 
