@@ -194,12 +194,10 @@ def to_groups(item_list, config):
             if add_by_type and add_by_quality and add_by_attribute:
                 if "SubGroupByAttribute" in config["ITEM_GROUP_" + group]:
                     add_to_group(item_groups[group], item, getattr(item, config["ITEM_GROUP_" + group]["SubGroupByAttribute"]))
-                    added = True
-                    break
                 else:
                     add_to_group(item_groups[group], item)
-                    added = True
-                    break
+                added = True
+                break
 
         if not added:
             add_to_group(item_groups["MISC"], item)
@@ -209,7 +207,7 @@ def to_groups(item_list, config):
         if "SortByAttribute" in config["ITEM_GROUP_" + group]:
             sort_by = [x.strip() for x in config["ITEM_GROUP_" + group]["SortByAttribute"].split(',')]
         if 'SubGroupByAttribute' in config["ITEM_GROUP_" + group]:
-            for sub_group in sorted(item_groups[group]):
+            for sub_group in sorted(item_groups[group], key=lambda x: [getattr(x, attr, "code") for attr in sort_by]):
                 item_groups[group][sub_group].sort(key=lambda x: [getattr(x, attr, "code") for attr in sort_by])
         else:
             item_groups[group].sort(key=lambda x: [getattr(x, attr, "code") for attr in sort_by])
