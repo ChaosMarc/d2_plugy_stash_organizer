@@ -1,11 +1,10 @@
 import configparser
-import re
 import struct
 import tkinter as tk
 from shutil import copy
 from tkinter import filedialog
 
-from bit_utils import find_next_null, write_bits
+from bit_utils import find_next_null, write_bits, get_data_chunks
 from item import Item
 from item_data import ItemType, ItemQuality
 from page import Page
@@ -47,19 +46,6 @@ def get_page_name(stash_data, ptr):
     # Return page name
     next_null = find_next_null(stash_data, ptr)
     return stash_data[ptr: next_null], next_null + 1
-
-
-def get_data_chunks(data, header):
-    # Get data and split into "chunks", each chunk being all the data from one appearance of the header until
-    # either the next appearance or EOD
-    chunks = []
-    chunk_locs = [m.start() for m in re.finditer(header, data)] + [len(data)]
-    for idx, loc in enumerate(chunk_locs):
-        if idx == len(chunk_locs) - 1:
-            continue
-        next_loc = chunk_locs[idx + 1]
-        chunks.append(data[loc: next_loc])
-    return chunks
 
 
 def chunks_unify_sockets(chunks):

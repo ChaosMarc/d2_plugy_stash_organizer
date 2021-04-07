@@ -1,4 +1,5 @@
 # HELPER FUNCTIONS FOR BIT MANIPULATION
+import re
 
 
 def byte_to_bits(byte_value):
@@ -84,3 +85,16 @@ def find_next_null(data, start):
     while cur < len(data) and data[cur] != 0:
         cur += 1
     return cur
+
+
+def get_data_chunks(data, header):
+    # Get data and split into "chunks", each chunk being all the data from one appearance of the header until
+    # either the next appearance or EOD
+    chunks = []
+    chunk_locs = [m.start() for m in re.finditer(header, data)] + [len(data)]
+    for idx, loc in enumerate(chunk_locs):
+        if idx == len(chunk_locs) - 1:
+            continue
+        next_loc = chunk_locs[idx + 1]
+        chunks.append(data[loc: next_loc])
+    return chunks

@@ -52,28 +52,30 @@ class ItemType(IntEnum):
     QUEST = 29
     RUNE = 31
     POTION = 32
-    CHARM = 33
-    SCROLL = 34
-    MISC = 35
-    JEWEL = 36
-    AMULET = 37
-    RING = 38
-    UBERKEY = 39
-    UBERPART = 40
-    ESSENCE = 41
-    GEM_CHIPPED = 42
-    GEM_FLAWED = 43
-    GEM_NORMAL = 44
-    GEM_FLAWLESS = 45
-    GEM_PERFECT = 46
+    CHARM_GRAND = 33
+    CHARM_LARGE = 34
+    CHARM_SMALL = 35
+    SCROLL = 36
+    MISC = 37
+    JEWEL = 38
+    AMULET = 39
+    RING = 40
+    UBERKEY = 41
+    UBERPART = 42
+    ESSENCE = 43
+    GEM_CHIPPED = 44
+    GEM_FLAWED = 45
+    GEM_NORMAL = 46
+    GEM_FLAWLESS = 47
+    GEM_PERFECT = 48
 
 
 class ItemTypeData:
-    # Class for storing size and type of items
-    def __init__(self, x_size, y_size, item_type):
+    def __init__(self, x_size, y_size, type, name):
         self.x_size = x_size
         self.y_size = y_size
-        self.item_type = item_type
+        self.type = type
+        self.name = name
 
 
 def get_item_size_x(item_code):
@@ -88,1225 +90,1876 @@ def get_item_size(item_code):
     return get_item_size_x(item_code), get_item_size_y(item_code)
 
 
-def get_item_type(item_code):
-    return item_data[item_code].item_type
+def get_item_data(item_code):
+    return item_data[item_code]
 
 
-# ITEM SIZE DATA
-item_data: Dict[str, ItemTypeData] = {}
-# HELM
-item_data['cap'] = ItemTypeData(2, 2, ItemType.HELM)  # Cap
-item_data['skp'] = ItemTypeData(2, 2, ItemType.HELM)  # Skull Cap
-item_data['hlm'] = ItemTypeData(2, 2, ItemType.HELM)  # Helm
-item_data['fhl'] = ItemTypeData(2, 2, ItemType.HELM)  # Full Helm
-item_data['ghm'] = ItemTypeData(2, 2, ItemType.HELM)  # Great Helm
-item_data['crn'] = ItemTypeData(2, 2, ItemType.HELM)  # Crown
-item_data['msk'] = ItemTypeData(2, 2, ItemType.HELM)  # Mask
-item_data['bhm'] = ItemTypeData(2, 2, ItemType.HELM)  # Bone Helm
-item_data['xap'] = ItemTypeData(2, 2, ItemType.HELM)  # War Hat
-item_data['xkp'] = ItemTypeData(2, 2, ItemType.HELM)  # Sallet
-item_data['xlm'] = ItemTypeData(2, 2, ItemType.HELM)  # Casque
-item_data['xhl'] = ItemTypeData(2, 2, ItemType.HELM)  # Basinet
-item_data['xhm'] = ItemTypeData(2, 2, ItemType.HELM)  # Winged Helm
-item_data['xrn'] = ItemTypeData(2, 2, ItemType.HELM)  # Grand Crown
-item_data['xsk'] = ItemTypeData(2, 2, ItemType.HELM)  # Death Mask
-item_data['xh9'] = ItemTypeData(2, 2, ItemType.HELM)  # Grim Helm
-item_data['uap'] = ItemTypeData(2, 2, ItemType.HELM)  # Shako
-item_data['ukp'] = ItemTypeData(2, 2, ItemType.HELM)  # Hydraskull
-item_data['ulm'] = ItemTypeData(2, 2, ItemType.HELM)  # Armet
-item_data['uhl'] = ItemTypeData(2, 2, ItemType.HELM)  # Giant Conch
-item_data['uhm'] = ItemTypeData(2, 2, ItemType.HELM)  # Spired Helm
-item_data['urn'] = ItemTypeData(2, 2, ItemType.HELM)  # Corona
-item_data['usk'] = ItemTypeData(2, 2, ItemType.HELM)  # Demonhead
-item_data['uh9'] = ItemTypeData(2, 2, ItemType.HELM)  # Bone Visage
-# BODY
-item_data['qui'] = ItemTypeData(2, 3, ItemType.BODY)  # Quilted Armor
-item_data['lea'] = ItemTypeData(2, 3, ItemType.BODY)  # Leather Armor
-item_data['hla'] = ItemTypeData(2, 3, ItemType.BODY)  # Hard Leather
-item_data['stu'] = ItemTypeData(2, 3, ItemType.BODY)  # Studded Leather
-item_data['rng'] = ItemTypeData(2, 3, ItemType.BODY)  # Ring Mail
-item_data['scl'] = ItemTypeData(2, 3, ItemType.BODY)  # Scale Mail
-item_data['chn'] = ItemTypeData(2, 3, ItemType.BODY)  # Chain Mail
-item_data['brs'] = ItemTypeData(2, 3, ItemType.BODY)  # Breast Plate
-item_data['spl'] = ItemTypeData(2, 3, ItemType.BODY)  # Splint Mail
-item_data['plt'] = ItemTypeData(2, 3, ItemType.BODY)  # Plate Mail
-item_data['fld'] = ItemTypeData(2, 3, ItemType.BODY)  # Field Plate
-item_data['gth'] = ItemTypeData(2, 3, ItemType.BODY)  # Gothic Plate
-item_data['ful'] = ItemTypeData(2, 3, ItemType.BODY)  # Full Plate Mail
-item_data['aar'] = ItemTypeData(2, 3, ItemType.BODY)  # Ancient Armor
-item_data['ltp'] = ItemTypeData(2, 3, ItemType.BODY)  # Light Plate
-item_data['xui'] = ItemTypeData(2, 3, ItemType.BODY)  # Ghost Armor
-item_data['xea'] = ItemTypeData(2, 3, ItemType.BODY)  # Serpentskin
-item_data['xla'] = ItemTypeData(2, 3, ItemType.BODY)  # Demonhide Armor
-item_data['xtu'] = ItemTypeData(2, 3, ItemType.BODY)  # Trellised Armor
-item_data['xng'] = ItemTypeData(2, 3, ItemType.BODY)  # Linked Mail
-item_data['xcl'] = ItemTypeData(2, 3, ItemType.BODY)  # Tigulated Mail
-item_data['xhn'] = ItemTypeData(2, 3, ItemType.BODY)  # Mesh Armor
-item_data['xrs'] = ItemTypeData(2, 3, ItemType.BODY)  # Cuirass
-item_data['xpl'] = ItemTypeData(2, 3, ItemType.BODY)  # Russet Armor
-item_data['xlt'] = ItemTypeData(2, 3, ItemType.BODY)  # Templar Coat
-item_data['xld'] = ItemTypeData(2, 3, ItemType.BODY)  # Sharktooth
-item_data['xth'] = ItemTypeData(2, 3, ItemType.BODY)  # Embossed Plate
-item_data['xul'] = ItemTypeData(2, 3, ItemType.BODY)  # Chaos Armor
-item_data['xar'] = ItemTypeData(2, 3, ItemType.BODY)  # Ornate Armor
-item_data['xtp'] = ItemTypeData(2, 3, ItemType.BODY)  # Mage Plate
-item_data['uui'] = ItemTypeData(2, 3, ItemType.BODY)  # Dusk Shroud
-item_data['uea'] = ItemTypeData(2, 3, ItemType.BODY)  # Wyrmhide
-item_data['ula'] = ItemTypeData(2, 3, ItemType.BODY)  # Scarab Husk
-item_data['utu'] = ItemTypeData(2, 3, ItemType.BODY)  # Wire Fleece
-item_data['ung'] = ItemTypeData(2, 3, ItemType.BODY)  # Diamond Mail
-item_data['ucl'] = ItemTypeData(2, 3, ItemType.BODY)  # Loricated Mail
-item_data['uhn'] = ItemTypeData(2, 3, ItemType.BODY)  # Boneweave
-item_data['urs'] = ItemTypeData(2, 3, ItemType.BODY)  # Great Hauberk
-item_data['upl'] = ItemTypeData(2, 3, ItemType.BODY)  # Balrog Skin
-item_data['ult'] = ItemTypeData(2, 3, ItemType.BODY)  # Hellforge Plate
-item_data['uld'] = ItemTypeData(2, 3, ItemType.BODY)  # Kraken Shell
-item_data['uth'] = ItemTypeData(2, 3, ItemType.BODY)  # Lacquered Plate
-item_data['uul'] = ItemTypeData(2, 3, ItemType.BODY)  # Shadow Plate
-item_data['uar'] = ItemTypeData(2, 3, ItemType.BODY)  # Sacred Armor
-item_data['utp'] = ItemTypeData(2, 3, ItemType.BODY)  # Archon Plate
-# SHIELD
-item_data['buc'] = ItemTypeData(2, 2, ItemType.SHIELD)  # Buckler
-item_data['sml'] = ItemTypeData(2, 2, ItemType.SHIELD)  # Small Shield
-item_data['lrg'] = ItemTypeData(2, 3, ItemType.SHIELD)  # Large Shield
-item_data['kit'] = ItemTypeData(2, 3, ItemType.SHIELD)  # Kite Shield
-item_data['tow'] = ItemTypeData(2, 3, ItemType.SHIELD)  # Tower Shield
-item_data['gts'] = ItemTypeData(2, 4, ItemType.SHIELD)  # Gothic Shield
-item_data['bsh'] = ItemTypeData(2, 3, ItemType.SHIELD)  # Bone Shield
-item_data['spk'] = ItemTypeData(2, 3, ItemType.SHIELD)  # Spiked Shield
-item_data['xuc'] = ItemTypeData(2, 2, ItemType.SHIELD)  # Defender
-item_data['xml'] = ItemTypeData(2, 2, ItemType.SHIELD)  # Round Shield
-item_data['xrg'] = ItemTypeData(2, 3, ItemType.SHIELD)  # Scutum
-item_data['xit'] = ItemTypeData(2, 3, ItemType.SHIELD)  # Dragon Shield
-item_data['xow'] = ItemTypeData(2, 3, ItemType.SHIELD)  # Pavise
-item_data['xts'] = ItemTypeData(2, 4, ItemType.SHIELD)  # Ancient Shield
-item_data['xsh'] = ItemTypeData(2, 3, ItemType.SHIELD)  # Grim Shield
-item_data['xpk'] = ItemTypeData(2, 3, ItemType.SHIELD)  # Barbed Shield
-item_data['uuc'] = ItemTypeData(2, 2, ItemType.SHIELD)  # Heater
-item_data['uml'] = ItemTypeData(2, 2, ItemType.SHIELD)  # Luna
-item_data['urg'] = ItemTypeData(2, 3, ItemType.SHIELD)  # Hyperion
-item_data['uit'] = ItemTypeData(2, 3, ItemType.SHIELD)  # Monarch
-item_data['uow'] = ItemTypeData(2, 3, ItemType.SHIELD)  # Aegis
-item_data['uts'] = ItemTypeData(2, 4, ItemType.SHIELD)  # Ward
-item_data['ush'] = ItemTypeData(2, 3, ItemType.SHIELD)  # Troll Nest
-item_data['upk'] = ItemTypeData(2, 3, ItemType.SHIELD)  # Blade Barrier
-# GLOVES
-item_data['lgl'] = ItemTypeData(2, 2, ItemType.GLOVES)  # Leather Gloves
-item_data['vgl'] = ItemTypeData(2, 2, ItemType.GLOVES)  # Heavy Gloves
-item_data['mgl'] = ItemTypeData(2, 2, ItemType.GLOVES)  # Chain Gloves
-item_data['tgl'] = ItemTypeData(2, 2, ItemType.GLOVES)  # Light Gauntlets
-item_data['hgl'] = ItemTypeData(2, 2, ItemType.GLOVES)  # Gauntlets
-item_data['xlg'] = ItemTypeData(2, 2, ItemType.GLOVES)  # Demonhide Glove
-item_data['xvg'] = ItemTypeData(2, 2, ItemType.GLOVES)  # Sharkskin Glove
-item_data['xmg'] = ItemTypeData(2, 2, ItemType.GLOVES)  # Heavy Bracers
-item_data['xtg'] = ItemTypeData(2, 2, ItemType.GLOVES)  # Battle Gauntlet
-item_data['xhg'] = ItemTypeData(2, 2, ItemType.GLOVES)  # War Gauntlets
-item_data['ulg'] = ItemTypeData(2, 2, ItemType.GLOVES)  # Bramble Mitts
-item_data['uvg'] = ItemTypeData(2, 2, ItemType.GLOVES)  # Vampirebone Gl
-item_data['umg'] = ItemTypeData(2, 2, ItemType.GLOVES)  # Vambraces
-item_data['utg'] = ItemTypeData(2, 2, ItemType.GLOVES)  # Crusader Gaunt
-item_data['uhg'] = ItemTypeData(2, 2, ItemType.GLOVES)  # Ogre Gauntlets
-# BOOTS
-item_data['lbt'] = ItemTypeData(2, 2, ItemType.BOOTS)  # Boots
-item_data['vbt'] = ItemTypeData(2, 2, ItemType.BOOTS)  # Heavy Boots
-item_data['mbt'] = ItemTypeData(2, 2, ItemType.BOOTS)  # Chain Boots
-item_data['tbt'] = ItemTypeData(2, 2, ItemType.BOOTS)  # Light Plate
-item_data['hbt'] = ItemTypeData(2, 2, ItemType.BOOTS)  # Greaves
-item_data['xlb'] = ItemTypeData(2, 2, ItemType.BOOTS)  # Demonhide Boots
-item_data['xvb'] = ItemTypeData(2, 2, ItemType.BOOTS)  # Sharkskin Boots
-item_data['xmb'] = ItemTypeData(2, 2, ItemType.BOOTS)  # Mesh Boots
-item_data['xtb'] = ItemTypeData(2, 2, ItemType.BOOTS)  # Battle Boots
-item_data['xhb'] = ItemTypeData(2, 2, ItemType.BOOTS)  # War Boots
-item_data['ulb'] = ItemTypeData(2, 2, ItemType.BOOTS)  # Wyrmhide Boots
-item_data['uvb'] = ItemTypeData(2, 2, ItemType.BOOTS)  # Scarabshell Bts
-item_data['umb'] = ItemTypeData(2, 2, ItemType.BOOTS)  # Boneweave Boots
-item_data['utb'] = ItemTypeData(2, 2, ItemType.BOOTS)  # Mirrored Boots
-item_data['uhb'] = ItemTypeData(2, 2, ItemType.BOOTS)  # Myrmidon Greave
-# BELT
-item_data['lbl'] = ItemTypeData(2, 1, ItemType.BELT)  # Sash
-item_data['vbl'] = ItemTypeData(2, 1, ItemType.BELT)  # Light Belt
-item_data['mbl'] = ItemTypeData(2, 1, ItemType.BELT)  # Belt
-item_data['tbl'] = ItemTypeData(2, 1, ItemType.BELT)  # Heavy Belt
-item_data['hbl'] = ItemTypeData(2, 1, ItemType.BELT)  # Plated Belt
-item_data['zlb'] = ItemTypeData(2, 1, ItemType.BELT)  # Demonhide Sash
-item_data['zvb'] = ItemTypeData(2, 1, ItemType.BELT)  # Sharkskin Belt
-item_data['zmb'] = ItemTypeData(2, 1, ItemType.BELT)  # Mesh Belt
-item_data['ztb'] = ItemTypeData(2, 1, ItemType.BELT)  # Battle Belt
-item_data['zhb'] = ItemTypeData(2, 1, ItemType.BELT)  # War Belt
-item_data['ulc'] = ItemTypeData(2, 1, ItemType.BELT)  # Spiderweb Sash
-item_data['uvc'] = ItemTypeData(2, 1, ItemType.BELT)  # Vampirefang Blt
-item_data['umc'] = ItemTypeData(2, 1, ItemType.BELT)  # Mithril Coil
-item_data['utc'] = ItemTypeData(2, 1, ItemType.BELT)  # Troll Belt
-item_data['uhc'] = ItemTypeData(2, 1, ItemType.BELT)  # Colossus Girdle
-# PELT
-item_data['dr1'] = ItemTypeData(2, 2, ItemType.PELT)  # Wolf Head
-item_data['dr2'] = ItemTypeData(2, 2, ItemType.PELT)  # Hawk Helm
-item_data['dr3'] = ItemTypeData(2, 2, ItemType.PELT)  # Antlers
-item_data['dr4'] = ItemTypeData(2, 2, ItemType.PELT)  # Falcon Mask
-item_data['dr5'] = ItemTypeData(2, 2, ItemType.PELT)  # Spirit Mask
-item_data['dr6'] = ItemTypeData(2, 2, ItemType.PELT)  # Alpha Helm
-item_data['dr7'] = ItemTypeData(2, 2, ItemType.PELT)  # Griffon Headress
-item_data['dr8'] = ItemTypeData(2, 2, ItemType.PELT)  # Hunter’s Guise
-item_data['dr9'] = ItemTypeData(2, 2, ItemType.PELT)  # Sacred Feathers
-item_data['dra'] = ItemTypeData(2, 2, ItemType.PELT)  # Totemic Mask
-item_data['drb'] = ItemTypeData(2, 2, ItemType.PELT)  # Blood Spirit
-item_data['drc'] = ItemTypeData(2, 2, ItemType.PELT)  # Sun Spirit
-item_data['drd'] = ItemTypeData(2, 2, ItemType.PELT)  # Earth Spirit
-item_data['dre'] = ItemTypeData(2, 2, ItemType.PELT)  # Sky Spirit
-item_data['drf'] = ItemTypeData(2, 2, ItemType.PELT)  # Dream Spirit
-# BARB
-item_data['ba1'] = ItemTypeData(2, 2, ItemType.BARB)  # Jawbone Cap
-item_data['ba2'] = ItemTypeData(2, 2, ItemType.BARB)  # Fanged Helm
-item_data['ba3'] = ItemTypeData(2, 2, ItemType.BARB)  # Horned Helm
-item_data['ba4'] = ItemTypeData(2, 2, ItemType.BARB)  # Assualt Helmet
-item_data['ba5'] = ItemTypeData(2, 2, ItemType.BARB)  # Avenger Guard
-item_data['ba6'] = ItemTypeData(2, 2, ItemType.BARB)  # Jawbone Visor
-item_data['ba7'] = ItemTypeData(2, 2, ItemType.BARB)  # Lion Helm
-item_data['ba8'] = ItemTypeData(2, 2, ItemType.BARB)  # Rage Mask
-item_data['ba9'] = ItemTypeData(2, 2, ItemType.BARB)  # Savage Helmet
-item_data['baa'] = ItemTypeData(2, 2, ItemType.BARB)  # Slayer Guard
-item_data['bab'] = ItemTypeData(2, 2, ItemType.BARB)  # Carnage Helm
-item_data['bac'] = ItemTypeData(2, 2, ItemType.BARB)  # Fury Visor
-item_data['bad'] = ItemTypeData(2, 2, ItemType.BARB)  # Destroyer Helm
-item_data['bae'] = ItemTypeData(2, 2, ItemType.BARB)  # Conqueror Crown
-item_data['baf'] = ItemTypeData(2, 2, ItemType.BARB)  # Guardian Crown
-# PAL
-item_data['pa1'] = ItemTypeData(2, 2, ItemType.PAL)  # Targe
-item_data['pa2'] = ItemTypeData(2, 2, ItemType.PAL)  # Rondache
-item_data['pa3'] = ItemTypeData(2, 4, ItemType.PAL)  # Heraldic Shield
-item_data['pa4'] = ItemTypeData(2, 4, ItemType.PAL)  # Aerin Shield
-item_data['pa5'] = ItemTypeData(2, 2, ItemType.PAL)  # Crown Shield
-item_data['pa6'] = ItemTypeData(2, 2, ItemType.PAL)  # Akaran Targe
-item_data['pa7'] = ItemTypeData(2, 2, ItemType.PAL)  # Akaran Rondache
-item_data['pa8'] = ItemTypeData(2, 4, ItemType.PAL)  # Protector Shld
-item_data['pa9'] = ItemTypeData(2, 4, ItemType.PAL)  # Guilded Shield
-item_data['paa'] = ItemTypeData(2, 2, ItemType.PAL)  # Royal Shield
-item_data['pab'] = ItemTypeData(2, 2, ItemType.PAL)  # Sacred Targe
-item_data['pac'] = ItemTypeData(2, 2, ItemType.PAL)  # Sacred Rondache
-item_data['pad'] = ItemTypeData(2, 4, ItemType.PAL)  # Kurast Shield
-item_data['pae'] = ItemTypeData(2, 4, ItemType.PAL)  # Zakarum Shield
-item_data['paf'] = ItemTypeData(2, 2, ItemType.PAL)  # Vortex Shield
-# NEC
-item_data['ne1'] = ItemTypeData(2, 2, ItemType.NEC)  # Preserved Head
-item_data['ne2'] = ItemTypeData(2, 2, ItemType.NEC)  # Zombie Head
-item_data['ne3'] = ItemTypeData(2, 2, ItemType.NEC)  # Unraveller Head
-item_data['ne4'] = ItemTypeData(2, 2, ItemType.NEC)  # Gargoyle Head
-item_data['ne5'] = ItemTypeData(2, 2, ItemType.NEC)  # Demon Head
-item_data['ne6'] = ItemTypeData(2, 2, ItemType.NEC)  # Mummified Trphy
-item_data['ne7'] = ItemTypeData(2, 2, ItemType.NEC)  # Fetish Trophy
-item_data['ne8'] = ItemTypeData(2, 2, ItemType.NEC)  # Sexton Trophy
-item_data['ne9'] = ItemTypeData(2, 2, ItemType.NEC)  # Cantor Trophy
-item_data['nea'] = ItemTypeData(2, 2, ItemType.NEC)  # Heirophant Trphy
-item_data['neb'] = ItemTypeData(2, 2, ItemType.NEC)  # Minion Skull
-item_data['nec'] = ItemTypeData(2, 2, ItemType.NEC)  # Hellspawn Skull
-item_data['ned'] = ItemTypeData(2, 2, ItemType.NEC)  # Overseer Skull
-item_data['nee'] = ItemTypeData(2, 2, ItemType.NEC)  # Succubae Skull
-item_data['nef'] = ItemTypeData(2, 2, ItemType.NEC)  # Bloodlord Skull
-# AXE
-item_data['hax'] = ItemTypeData(1, 3, ItemType.AXE)  # Hand Axe
-item_data['axe'] = ItemTypeData(2, 3, ItemType.AXE)  # Axe
-item_data['2ax'] = ItemTypeData(2, 3, ItemType.AXE)  # Double Axe
-item_data['mpi'] = ItemTypeData(2, 3, ItemType.AXE)  # Military Pick
-item_data['wax'] = ItemTypeData(2, 3, ItemType.AXE)  # War Axe
-item_data['lax'] = ItemTypeData(2, 3, ItemType.AXE)  # Large Axe
-item_data['bax'] = ItemTypeData(2, 3, ItemType.AXE)  # Broad Axe
-item_data['btx'] = ItemTypeData(2, 3, ItemType.AXE)  # Battle Axe
-item_data['gax'] = ItemTypeData(2, 4, ItemType.AXE)  # Great Axe
-item_data['gix'] = ItemTypeData(2, 3, ItemType.AXE)  # Giant Axe
-item_data['9ha'] = ItemTypeData(1, 3, ItemType.AXE)  # Hatchet
-item_data['9ax'] = ItemTypeData(2, 3, ItemType.AXE)  # Cleaver
-item_data['92a'] = ItemTypeData(2, 3, ItemType.AXE)  # Twin Axe
-item_data['9mp'] = ItemTypeData(2, 3, ItemType.AXE)  # Crowbill
-item_data['9wa'] = ItemTypeData(2, 3, ItemType.AXE)  # Naga
-item_data['9la'] = ItemTypeData(2, 3, ItemType.AXE)  # Military Axe
-item_data['9ba'] = ItemTypeData(2, 3, ItemType.AXE)  # Bearded Axe
-item_data['9bt'] = ItemTypeData(2, 3, ItemType.AXE)  # Tabar
-item_data['9ga'] = ItemTypeData(2, 4, ItemType.AXE)  # Gothic Axe
-item_data['9gi'] = ItemTypeData(2, 3, ItemType.AXE)  # Ancient Axe
-item_data['7ha'] = ItemTypeData(1, 3, ItemType.AXE)  # Tomahawk
-item_data['7ax'] = ItemTypeData(2, 3, ItemType.AXE)  # Small Crescent
-item_data['72a'] = ItemTypeData(2, 3, ItemType.AXE)  # Ettin Axe
-item_data['7mp'] = ItemTypeData(2, 3, ItemType.AXE)  # War Spike
-item_data['7wa'] = ItemTypeData(2, 3, ItemType.AXE)  # Berserker Axe
-item_data['7la'] = ItemTypeData(2, 3, ItemType.AXE)  # Feral Axe
-item_data['7ba'] = ItemTypeData(2, 3, ItemType.AXE)  # Silver Edged Ax
-item_data['7bt'] = ItemTypeData(2, 3, ItemType.AXE)  # Decapitator
-item_data['7ga'] = ItemTypeData(2, 4, ItemType.AXE)  # Champion Axe
-item_data['7gi'] = ItemTypeData(2, 3, ItemType.AXE)  # Glorious Axe
-# MACE
-item_data['clb'] = ItemTypeData(1, 3, ItemType.MACE)  # Club
-item_data['spc'] = ItemTypeData(1, 3, ItemType.MACE)  # Spiked Club
-item_data['mac'] = ItemTypeData(1, 3, ItemType.MACE)  # Mace
-item_data['mst'] = ItemTypeData(1, 3, ItemType.MACE)  # Morning Star
-item_data['fla'] = ItemTypeData(2, 3, ItemType.MACE)  # Flail
-item_data['whm'] = ItemTypeData(2, 3, ItemType.MACE)  # War Hammer
-item_data['mau'] = ItemTypeData(2, 4, ItemType.MACE)  # Maul
-item_data['gma'] = ItemTypeData(2, 3, ItemType.MACE)  # Great Maul
-item_data['9cl'] = ItemTypeData(1, 3, ItemType.MACE)  # Cudgel
-item_data['9sp'] = ItemTypeData(1, 3, ItemType.MACE)  # Barbed Club
-item_data['9ma'] = ItemTypeData(1, 3, ItemType.MACE)  # Flanged Mace
-item_data['9mt'] = ItemTypeData(1, 3, ItemType.MACE)  # Jagged Star
-item_data['9fl'] = ItemTypeData(2, 3, ItemType.MACE)  # Knout
-item_data['9wh'] = ItemTypeData(2, 3, ItemType.MACE)  # Battle Hammer
-item_data['9m9'] = ItemTypeData(2, 4, ItemType.MACE)  # War Club
-item_data['9gm'] = ItemTypeData(2, 3, ItemType.MACE)  # Martel de Fer
-item_data['7cl'] = ItemTypeData(1, 3, ItemType.MACE)  # Truncheon
-item_data['7sp'] = ItemTypeData(1, 3, ItemType.MACE)  # Tyrant Club
-item_data['7ma'] = ItemTypeData(1, 3, ItemType.MACE)  # Reinforced Mace
-item_data['7mt'] = ItemTypeData(1, 3, ItemType.MACE)  # Devil Star
-item_data['7fl'] = ItemTypeData(2, 3, ItemType.MACE)  # Scourge
-item_data['7wh'] = ItemTypeData(2, 3, ItemType.MACE)  # Legendary Mallet
-item_data['7m7'] = ItemTypeData(2, 4, ItemType.MACE)  # Ogre Maul
-item_data['7gm'] = ItemTypeData(2, 3, ItemType.MACE)  # Thunder Maul
-# SWORD
-item_data['ssd'] = ItemTypeData(1, 3, ItemType.SWORD)  # Short Sword
-item_data['scm'] = ItemTypeData(1, 3, ItemType.SWORD)  # Scimitar
-item_data['sbr'] = ItemTypeData(1, 3, ItemType.SWORD)  # Saber
-item_data['flc'] = ItemTypeData(1, 3, ItemType.SWORD)  # Falchion
-item_data['crs'] = ItemTypeData(2, 3, ItemType.SWORD)  # Crystal Sword
-item_data['bsd'] = ItemTypeData(2, 3, ItemType.SWORD)  # Broad Sword
-item_data['lsd'] = ItemTypeData(2, 3, ItemType.SWORD)  # Long Sword
-item_data['wsd'] = ItemTypeData(1, 3, ItemType.SWORD)  # War Sword
-item_data['2hs'] = ItemTypeData(1, 4, ItemType.SWORD)  # Two-handed Swrd
-item_data['clm'] = ItemTypeData(1, 4, ItemType.SWORD)  # Claymore
-item_data['gis'] = ItemTypeData(1, 4, ItemType.SWORD)  # Giant Sword
-item_data['bsw'] = ItemTypeData(1, 4, ItemType.SWORD)  # Bastard Sword
-item_data['flb'] = ItemTypeData(2, 4, ItemType.SWORD)  # Flamberge
-item_data['gsd'] = ItemTypeData(2, 4, ItemType.SWORD)  # Great Sword
-item_data['9ss'] = ItemTypeData(1, 3, ItemType.SWORD)  # Gladius
-item_data['9sm'] = ItemTypeData(1, 3, ItemType.SWORD)  # Cutlass
-item_data['9sb'] = ItemTypeData(1, 3, ItemType.SWORD)  # Shamshir
-item_data['9fc'] = ItemTypeData(1, 3, ItemType.SWORD)  # Tulwar
-item_data['9cr'] = ItemTypeData(2, 3, ItemType.SWORD)  # Dimensional Bld
-item_data['9bs'] = ItemTypeData(2, 3, ItemType.SWORD)  # Battle Sword
-item_data['9ls'] = ItemTypeData(2, 3, ItemType.SWORD)  # Rune Sword
-item_data['9wd'] = ItemTypeData(1, 3, ItemType.SWORD)  # Ancient Sword
-item_data['92h'] = ItemTypeData(1, 4, ItemType.SWORD)  # Espadon
-item_data['9cm'] = ItemTypeData(1, 4, ItemType.SWORD)  # Dacian Falx
-item_data['9gs'] = ItemTypeData(1, 4, ItemType.SWORD)  # Tusk Sword
-item_data['9b9'] = ItemTypeData(1, 4, ItemType.SWORD)  # Gothic Sword
-item_data['9fb'] = ItemTypeData(2, 4, ItemType.SWORD)  # Zweihander
-item_data['9gd'] = ItemTypeData(2, 4, ItemType.SWORD)  # Executioner Swr
-item_data['7ss'] = ItemTypeData(1, 3, ItemType.SWORD)  # Falcata
-item_data['7sm'] = ItemTypeData(1, 3, ItemType.SWORD)  # Ataghan
-item_data['7sb'] = ItemTypeData(1, 3, ItemType.SWORD)  # Elegant Blade
-item_data['7fc'] = ItemTypeData(1, 3, ItemType.SWORD)  # Hydra Edge
-item_data['7cr'] = ItemTypeData(2, 3, ItemType.SWORD)  # Phase Blade
-item_data['7bs'] = ItemTypeData(2, 3, ItemType.SWORD)  # Conquest Sword
-item_data['7ls'] = ItemTypeData(2, 3, ItemType.SWORD)  # Cryptic Sword
-item_data['7wd'] = ItemTypeData(1, 3, ItemType.SWORD)  # Mythical Sword
-item_data['72h'] = ItemTypeData(1, 4, ItemType.SWORD)  # Legend Sword
-item_data['7cm'] = ItemTypeData(1, 4, ItemType.SWORD)  # Highland Blade
-item_data['7gs'] = ItemTypeData(1, 4, ItemType.SWORD)  # Balrog Blade
-item_data['7b7'] = ItemTypeData(1, 4, ItemType.SWORD)  # Champion Sword
-item_data['7fb'] = ItemTypeData(2, 4, ItemType.SWORD)  # Colossal Sword
-item_data['7gd'] = ItemTypeData(2, 4, ItemType.SWORD)  # Colossus Blade
-# DAGGER
-item_data['dgr'] = ItemTypeData(1, 2, ItemType.DAGGER)  # Dagger
-item_data['dir'] = ItemTypeData(1, 2, ItemType.DAGGER)  # Dirk
-item_data['kri'] = ItemTypeData(1, 3, ItemType.DAGGER)  # Kriss
-item_data['bld'] = ItemTypeData(1, 3, ItemType.DAGGER)  # Blade
-item_data['9dg'] = ItemTypeData(1, 2, ItemType.DAGGER)  # Poignard
-item_data['9di'] = ItemTypeData(1, 2, ItemType.DAGGER)  # Rondel
-item_data['9kr'] = ItemTypeData(1, 3, ItemType.DAGGER)  # Cinquedeas
-item_data['9bl'] = ItemTypeData(1, 3, ItemType.DAGGER)  # Stilleto
-item_data['7dg'] = ItemTypeData(1, 2, ItemType.DAGGER)  # Bone Knife
-item_data['7di'] = ItemTypeData(1, 2, ItemType.DAGGER)  # Mithral Point
-item_data['7kr'] = ItemTypeData(1, 3, ItemType.DAGGER)  # Fanged Knife
-item_data['7bl'] = ItemTypeData(1, 3, ItemType.DAGGER)  # Legend Spike
-# THROW
-item_data['tkf'] = ItemTypeData(1, 2, ItemType.THROW)  # Throwing Knife
-item_data['tax'] = ItemTypeData(1, 2, ItemType.THROW)  # Throwing Axe
-item_data['bkf'] = ItemTypeData(1, 2, ItemType.THROW)  # Balanced Knife
-item_data['bal'] = ItemTypeData(2, 3, ItemType.THROW)  # Balanced Axe
-item_data['9tk'] = ItemTypeData(1, 2, ItemType.THROW)  # Battle Dart
-item_data['9ta'] = ItemTypeData(1, 2, ItemType.THROW)  # Francisca
-item_data['9bk'] = ItemTypeData(1, 2, ItemType.THROW)  # War Dart
-item_data['9b8'] = ItemTypeData(2, 3, ItemType.THROW)  # Hurlbat
-item_data['7tk'] = ItemTypeData(1, 2, ItemType.THROW)  # Flying Knife
-item_data['7ta'] = ItemTypeData(1, 2, ItemType.THROW)  # Flying Axe
-item_data['7bk'] = ItemTypeData(1, 2, ItemType.THROW)  # Winged Knife
-item_data['7b8'] = ItemTypeData(2, 3, ItemType.THROW)  # Winged Axe
-# JAV
-item_data['jav'] = ItemTypeData(1, 3, ItemType.JAV)  # Javelin
-item_data['pil'] = ItemTypeData(1, 3, ItemType.JAV)  # Pilum
-item_data['ssp'] = ItemTypeData(1, 3, ItemType.JAV)  # Short Spear
-item_data['glv'] = ItemTypeData(1, 3, ItemType.JAV)  # Glaive
-item_data['tsp'] = ItemTypeData(1, 4, ItemType.JAV)  # Throwing Spear
-item_data['9ja'] = ItemTypeData(1, 3, ItemType.JAV)  # War Javelin
-item_data['9pi'] = ItemTypeData(1, 3, ItemType.JAV)  # Great Pilum
-item_data['9s9'] = ItemTypeData(1, 3, ItemType.JAV)  # Simbilan
-item_data['9gl'] = ItemTypeData(1, 3, ItemType.JAV)  # Spiculum
-item_data['9ts'] = ItemTypeData(1, 4, ItemType.JAV)  # Harpoon
-item_data['7ja'] = ItemTypeData(1, 3, ItemType.JAV)  # Hyperion Javeln
-item_data['7pi'] = ItemTypeData(1, 3, ItemType.JAV)  # Stygian Pilum
-item_data['7s7'] = ItemTypeData(1, 3, ItemType.JAV)  # Balrog Spear
-item_data['7gl'] = ItemTypeData(1, 3, ItemType.JAV)  # Ghost Glaive
-item_data['7ts'] = ItemTypeData(1, 4, ItemType.JAV)  # Winged Harpoon
-# SPEAR
-item_data['spr'] = ItemTypeData(2, 4, ItemType.SPEAR)  # Spear
-item_data['tri'] = ItemTypeData(2, 4, ItemType.SPEAR)  # Trident
-item_data['brn'] = ItemTypeData(2, 4, ItemType.SPEAR)  # Brandistock
-item_data['spt'] = ItemTypeData(2, 4, ItemType.SPEAR)  # Spetum
-item_data['pik'] = ItemTypeData(2, 4, ItemType.SPEAR)  # Pike
-item_data['9sr'] = ItemTypeData(2, 4, ItemType.SPEAR)  # War Spear
-item_data['9tr'] = ItemTypeData(2, 4, ItemType.SPEAR)  # Fuscina
-item_data['9br'] = ItemTypeData(2, 4, ItemType.SPEAR)  # War Fork
-item_data['9st'] = ItemTypeData(2, 4, ItemType.SPEAR)  # Yari
-item_data['9p9'] = ItemTypeData(2, 4, ItemType.SPEAR)  # Lance
-item_data['7sr'] = ItemTypeData(2, 4, ItemType.SPEAR)  # Hyperion Spear
-item_data['7tr'] = ItemTypeData(2, 4, ItemType.SPEAR)  # Stygian Pike
-item_data['7br'] = ItemTypeData(2, 4, ItemType.SPEAR)  # Mancatcher
-item_data['7st'] = ItemTypeData(2, 4, ItemType.SPEAR)  # Ghost Spear
-item_data['7p7'] = ItemTypeData(2, 4, ItemType.SPEAR)  # War Pike
-# POLEARM
-item_data['bar'] = ItemTypeData(2, 4, ItemType.POLEARM)  # Bardiche
-item_data['vou'] = ItemTypeData(2, 4, ItemType.POLEARM)  # Voulge
-item_data['scy'] = ItemTypeData(2, 4, ItemType.POLEARM)  # Scythe
-item_data['pax'] = ItemTypeData(2, 4, ItemType.POLEARM)  # Poleaxe
-item_data['hal'] = ItemTypeData(2, 4, ItemType.POLEARM)  # Halberd
-item_data['wsc'] = ItemTypeData(2, 4, ItemType.POLEARM)  # War Scythe
-item_data['9b7'] = ItemTypeData(2, 4, ItemType.POLEARM)  # Lochaber Axe
-item_data['9vo'] = ItemTypeData(2, 4, ItemType.POLEARM)  # Bill
-item_data['9s8'] = ItemTypeData(2, 4, ItemType.POLEARM)  # Battle Scythe
-item_data['9pa'] = ItemTypeData(2, 4, ItemType.POLEARM)  # Partizan
-item_data['9h9'] = ItemTypeData(2, 4, ItemType.POLEARM)  # Bec-de-Corbin
-item_data['9wc'] = ItemTypeData(2, 4, ItemType.POLEARM)  # Grim Scythe
-item_data['7o7'] = ItemTypeData(2, 4, ItemType.POLEARM)  # Ogre Axe
-item_data['7vo'] = ItemTypeData(2, 4, ItemType.POLEARM)  # Colossus Voulge
-item_data['7s8'] = ItemTypeData(2, 4, ItemType.POLEARM)  # Thresher
-item_data['7pa'] = ItemTypeData(2, 4, ItemType.POLEARM)  # Cryptic Axe
-item_data['7h7'] = ItemTypeData(2, 4, ItemType.POLEARM)  # Great Poleaxe
-item_data['7wc'] = ItemTypeData(2, 4, ItemType.POLEARM)  # Giant Thresher
-# BOW
-item_data['sbw'] = ItemTypeData(2, 3, ItemType.BOW)  # Short Bow
-item_data['hbw'] = ItemTypeData(2, 3, ItemType.BOW)  # Hunter’s Bow
-item_data['lbw'] = ItemTypeData(2, 4, ItemType.BOW)  # Long Bow
-item_data['cbw'] = ItemTypeData(2, 3, ItemType.BOW)  # Composite Bow
-item_data['sbb'] = ItemTypeData(2, 3, ItemType.BOW)  # Shrt Battle Bow
-item_data['lbb'] = ItemTypeData(2, 4, ItemType.BOW)  # Long Battle Bow
-item_data['swb'] = ItemTypeData(2, 3, ItemType.BOW)  # Short War Bow
-item_data['lwb'] = ItemTypeData(2, 4, ItemType.BOW)  # Long War Bow
-item_data['8sb'] = ItemTypeData(2, 3, ItemType.BOW)  # Edge Bow
-item_data['8hb'] = ItemTypeData(2, 3, ItemType.BOW)  # Razor Bow
-item_data['8lb'] = ItemTypeData(2, 4, ItemType.BOW)  # Cedar Bow
-item_data['8cb'] = ItemTypeData(2, 3, ItemType.BOW)  # Double Bow
-item_data['8s8'] = ItemTypeData(2, 3, ItemType.BOW)  # Short Siege Bow
-item_data['8l8'] = ItemTypeData(2, 4, ItemType.BOW)  # Long Siege Bow
-item_data['8sw'] = ItemTypeData(2, 3, ItemType.BOW)  # Rune Bow
-item_data['8lw'] = ItemTypeData(2, 4, ItemType.BOW)  # Gothic Bow
-item_data['6sb'] = ItemTypeData(2, 3, ItemType.BOW)  # Spider Bow
-item_data['6hb'] = ItemTypeData(2, 3, ItemType.BOW)  # Blade Bow
-item_data['6lb'] = ItemTypeData(2, 4, ItemType.BOW)  # Shadow Bow
-item_data['6cb'] = ItemTypeData(2, 3, ItemType.BOW)  # Great Bow
-item_data['6s7'] = ItemTypeData(2, 3, ItemType.BOW)  # Diamond Bow
-item_data['6l7'] = ItemTypeData(2, 4, ItemType.BOW)  # Crusader Bow
-item_data['6sw'] = ItemTypeData(2, 3, ItemType.BOW)  # Ward Bow
-item_data['6lw'] = ItemTypeData(2, 4, ItemType.BOW)  # Hydra Bow
-# XBOW
-item_data['lxb'] = ItemTypeData(2, 3, ItemType.XBOW)  # Light Crossbow
-item_data['mxb'] = ItemTypeData(2, 3, ItemType.XBOW)  # Crossbow
-item_data['hxb'] = ItemTypeData(2, 4, ItemType.XBOW)  # Heavy Crossbow
-item_data['rxb'] = ItemTypeData(2, 3, ItemType.XBOW)  # Repeating X-bow
-item_data['8lx'] = ItemTypeData(2, 3, ItemType.XBOW)  # Arbalest
-item_data['8mx'] = ItemTypeData(2, 3, ItemType.XBOW)  # Siege Crossbow
-item_data['8hx'] = ItemTypeData(2, 4, ItemType.XBOW)  # Ballista
-item_data['8rx'] = ItemTypeData(2, 3, ItemType.XBOW)  # Chu-Ko-Nu
-item_data['6lx'] = ItemTypeData(2, 3, ItemType.XBOW)  # Pellet Bow
-item_data['6mx'] = ItemTypeData(2, 3, ItemType.XBOW)  # Gorgon Crossbow
-item_data['6hx'] = ItemTypeData(2, 4, ItemType.XBOW)  # Colossus x-bow
-item_data['6rx'] = ItemTypeData(2, 3, ItemType.XBOW)  # Demon Crossbow
-# STAFF
-item_data['sst'] = ItemTypeData(1, 3, ItemType.STAFF)  # Short Staff
-item_data['lst'] = ItemTypeData(1, 4, ItemType.STAFF)  # Long Staff
-item_data['cst'] = ItemTypeData(1, 4, ItemType.STAFF)  # Gnarled Staff
-item_data['bst'] = ItemTypeData(1, 4, ItemType.STAFF)  # Battle Staff
-item_data['wst'] = ItemTypeData(2, 4, ItemType.STAFF)  # War Staff
-item_data['8ss'] = ItemTypeData(1, 3, ItemType.STAFF)  # Jo Staff
-item_data['8ls'] = ItemTypeData(1, 4, ItemType.STAFF)  # Quarterstaff
-item_data['8cs'] = ItemTypeData(1, 4, ItemType.STAFF)  # Cedar Staff
-item_data['8bs'] = ItemTypeData(1, 4, ItemType.STAFF)  # Gothic Staff
-item_data['8ws'] = ItemTypeData(2, 4, ItemType.STAFF)  # Rune Staff
-item_data['6ss'] = ItemTypeData(1, 3, ItemType.STAFF)  # Walking Stick
-item_data['6ls'] = ItemTypeData(1, 4, ItemType.STAFF)  # Stalagmite
-item_data['6cs'] = ItemTypeData(1, 4, ItemType.STAFF)  # Elder Staff
-item_data['6bs'] = ItemTypeData(1, 4, ItemType.STAFF)  # Shillelagh
-item_data['6ws'] = ItemTypeData(2, 4, ItemType.STAFF)  # Archon Staff
-# WAND
-item_data['wnd'] = ItemTypeData(1, 2, ItemType.WAND)  # Wand
-item_data['ywn'] = ItemTypeData(1, 2, ItemType.WAND)  # Yew Wand
-item_data['bwn'] = ItemTypeData(1, 2, ItemType.WAND)  # Bone Wand
-item_data['gwn'] = ItemTypeData(1, 2, ItemType.WAND)  # Grim Wand
-item_data['9wn'] = ItemTypeData(1, 2, ItemType.WAND)  # Burnt Wand
-item_data['9yw'] = ItemTypeData(1, 2, ItemType.WAND)  # Petrified Wand
-item_data['9bw'] = ItemTypeData(1, 2, ItemType.WAND)  # Tomb Wand
-item_data['9gw'] = ItemTypeData(1, 2, ItemType.WAND)  # Grave Wand
-item_data['7wn'] = ItemTypeData(1, 2, ItemType.WAND)  # Polished Wand
-item_data['7yw'] = ItemTypeData(1, 2, ItemType.WAND)  # Ghost Wand
-item_data['7bw'] = ItemTypeData(1, 2, ItemType.WAND)  # Lich Wand
-item_data['7gw'] = ItemTypeData(1, 2, ItemType.WAND)  # Unearthed Wand
-# SCEPTER
-item_data['scp'] = ItemTypeData(1, 3, ItemType.SCEPTER)  # Sceptre
-item_data['gsc'] = ItemTypeData(1, 3, ItemType.SCEPTER)  # Grand Sceptre
-item_data['wsp'] = ItemTypeData(2, 3, ItemType.SCEPTER)  # War Sceptre
-item_data['9sc'] = ItemTypeData(1, 3, ItemType.SCEPTER)  # Rune Sceptre
-item_data['9qs'] = ItemTypeData(1, 3, ItemType.SCEPTER)  # Holy Water Spri
-item_data['9ws'] = ItemTypeData(2, 3, ItemType.SCEPTER)  # Divine Sceptre
-item_data['7sc'] = ItemTypeData(1, 3, ItemType.SCEPTER)  # Mighty Sceptre
-item_data['7qs'] = ItemTypeData(1, 3, ItemType.SCEPTER)  # Seraph Rod
-item_data['7ws'] = ItemTypeData(2, 3, ItemType.SCEPTER)  # Caduceus
-# ASN
-item_data['ktr'] = ItemTypeData(1, 3, ItemType.ASN)  # Katar
-item_data['wrb'] = ItemTypeData(1, 3, ItemType.ASN)  # Wrist Blade
-item_data['axf'] = ItemTypeData(1, 3, ItemType.ASN)  # Hatchet Hands
-item_data['ces'] = ItemTypeData(1, 3, ItemType.ASN)  # Cestus
-item_data['clw'] = ItemTypeData(1, 3, ItemType.ASN)  # Claws
-item_data['btl'] = ItemTypeData(1, 3, ItemType.ASN)  # Blade Talons
-item_data['skr'] = ItemTypeData(1, 3, ItemType.ASN)  # Scissors Katar
-item_data['9ar'] = ItemTypeData(1, 3, ItemType.ASN)  # Quhab
-item_data['9wb'] = ItemTypeData(1, 3, ItemType.ASN)  # Wrist Spike
-item_data['9xf'] = ItemTypeData(1, 3, ItemType.ASN)  # Fascia
-item_data['9cs'] = ItemTypeData(1, 3, ItemType.ASN)  # Hand Scythe
-item_data['9lw'] = ItemTypeData(1, 3, ItemType.ASN)  # Greater Claws
-item_data['9tw'] = ItemTypeData(1, 3, ItemType.ASN)  # Greater Talons
-item_data['9qr'] = ItemTypeData(1, 3, ItemType.ASN)  # Scissors Quhab
-item_data['7ar'] = ItemTypeData(1, 3, ItemType.ASN)  # Suwayyah
-item_data['7wb'] = ItemTypeData(1, 3, ItemType.ASN)  # Wrist Sword
-item_data['7xf'] = ItemTypeData(1, 3, ItemType.ASN)  # War Fist
-item_data['7cs'] = ItemTypeData(1, 3, ItemType.ASN)  # Battle Cestus
-item_data['7lw'] = ItemTypeData(1, 3, ItemType.ASN)  # Feral Claws
-item_data['7tw'] = ItemTypeData(1, 3, ItemType.ASN)  # Runic Talons
-item_data['7qr'] = ItemTypeData(1, 3, ItemType.ASN)  # Scissors Suwayh
-# SORC
-item_data['ob1'] = ItemTypeData(1, 2, ItemType.SORC)  # Eagle Orb
-item_data['ob2'] = ItemTypeData(1, 2, ItemType.SORC)  # Sacred Globe
-item_data['ob3'] = ItemTypeData(1, 2, ItemType.SORC)  # Smoked Sphere
-item_data['ob4'] = ItemTypeData(1, 2, ItemType.SORC)  # Clasped Orb
-item_data['ob5'] = ItemTypeData(1, 3, ItemType.SORC)  # Jared's Stone
-item_data['ob6'] = ItemTypeData(1, 2, ItemType.SORC)  # Glowing Orb
-item_data['ob7'] = ItemTypeData(1, 2, ItemType.SORC)  # Crystalline Glb
-item_data['ob8'] = ItemTypeData(1, 2, ItemType.SORC)  # Cloudy Sphere
-item_data['ob9'] = ItemTypeData(1, 2, ItemType.SORC)  # Sparkling Ball
-item_data['oba'] = ItemTypeData(1, 3, ItemType.SORC)  # Swirling Crystl
-item_data['obb'] = ItemTypeData(1, 2, ItemType.SORC)  # Heavenly Stone
-item_data['obc'] = ItemTypeData(1, 2, ItemType.SORC)  # Eldritch Orb
-item_data['obd'] = ItemTypeData(1, 2, ItemType.SORC)  # Demon Heart
-item_data['obe'] = ItemTypeData(1, 2, ItemType.SORC)  # Vortex Orb
-item_data['obf'] = ItemTypeData(1, 3, ItemType.SORC)  # Dimensional Shrd
-# AMA
-item_data['am1'] = ItemTypeData(2, 4, ItemType.AMA)  # Stag Bow
-item_data['am2'] = ItemTypeData(2, 4, ItemType.AMA)  # Reflex Bow
-item_data['am3'] = ItemTypeData(2, 4, ItemType.AMA)  # Maiden Spear
-item_data['am4'] = ItemTypeData(2, 4, ItemType.AMA)  # Maiden Pike
-item_data['am5'] = ItemTypeData(1, 3, ItemType.AMA)  # Maiden Javelin
-item_data['am6'] = ItemTypeData(2, 4, ItemType.AMA)  # Ashwood Bow
-item_data['am7'] = ItemTypeData(2, 4, ItemType.AMA)  # Ceremonial Bow
-item_data['am8'] = ItemTypeData(2, 4, ItemType.AMA)  # Ceremonial Spr
-item_data['am9'] = ItemTypeData(2, 4, ItemType.AMA)  # Ceremonial Pike
-item_data['ama'] = ItemTypeData(1, 3, ItemType.AMA)  # Ceremonial Jav
-item_data['amb'] = ItemTypeData(2, 4, ItemType.AMA)  # Matriarchal Bow
-item_data['amc'] = ItemTypeData(2, 4, ItemType.AMA)  # Grnd Matron Bow
-item_data['amd'] = ItemTypeData(2, 4, ItemType.AMA)  # Matriarchal Spr
-item_data['ame'] = ItemTypeData(2, 4, ItemType.AMA)  # Matriarchal Pik
-item_data['amf'] = ItemTypeData(1, 3, ItemType.AMA)  # Matriarchal Jav
-# CIRCLET
-item_data['ci0'] = ItemTypeData(2, 2, ItemType.CIRCLET)  # Circlet
-item_data['ci1'] = ItemTypeData(2, 2, ItemType.CIRCLET)  # Coronet
-item_data['ci2'] = ItemTypeData(2, 2, ItemType.CIRCLET)  # Tiara
-item_data['ci3'] = ItemTypeData(2, 2, ItemType.CIRCLET)  # Diadem
-# THROWPOT
-item_data['gps'] = ItemTypeData(1, 1, ItemType.THROWPOT)  # Rancid Gas Pot
-item_data['ops'] = ItemTypeData(1, 1, ItemType.THROWPOT)  # Oil Potion
-item_data['gpm'] = ItemTypeData(1, 1, ItemType.THROWPOT)  # Choking Gas Pot
-item_data['opm'] = ItemTypeData(1, 1, ItemType.THROWPOT)  # Exploding Pot
-item_data['gpl'] = ItemTypeData(1, 1, ItemType.THROWPOT)  # Strangling Gas
-item_data['opl'] = ItemTypeData(1, 1, ItemType.THROWPOT)  # Fulminating Pot
-# QUEST
-item_data['leg'] = ItemTypeData(1, 3, ItemType.QUEST)  # Wirt’s Leg
-item_data['hdm'] = ItemTypeData(1, 2, ItemType.QUEST)  # Horadric Malus
-item_data['bks'] = ItemTypeData(2, 2, ItemType.QUEST)  # Scroll of Inifuss 1
-item_data['bkd'] = ItemTypeData(2, 2, ItemType.QUEST)  # Scroll of Inifuss 2
-item_data['ass'] = ItemTypeData(2, 2, ItemType.QUEST)  # Book of Skill
-item_data['box'] = ItemTypeData(2, 2, ItemType.QUEST)  # Horadric Cube
-item_data['tr1'] = ItemTypeData(2, 2, ItemType.QUEST)  # Horadric Scroll
-item_data['msf'] = ItemTypeData(1, 3, ItemType.QUEST)  # Staff of Kings
-item_data['vip'] = ItemTypeData(1, 1, ItemType.QUEST)  # Viper Amulet
-item_data['hst'] = ItemTypeData(1, 4, ItemType.QUEST)  # Horadric Staff
-item_data['xyz'] = ItemTypeData(1, 1, ItemType.QUEST)  # Potion of Life
-item_data['j34'] = ItemTypeData(1, 2, ItemType.QUEST)  # A Jade Figurine
-item_data['g34'] = ItemTypeData(1, 2, ItemType.QUEST)  # The Golden Bird
-item_data['bbb'] = ItemTypeData(2, 2, ItemType.QUEST)  # Lam Esen’s Tome
-item_data['g33'] = ItemTypeData(1, 2, ItemType.QUEST)  # Gidbinn
-item_data['qf1'] = ItemTypeData(2, 3, ItemType.QUEST)  # Khalim’s Flail
-item_data['qf2'] = ItemTypeData(2, 3, ItemType.QUEST)  # Khalim’s Will
-item_data['qey'] = ItemTypeData(1, 1, ItemType.QUEST)  # Khalim’s Eye
-item_data['qhr'] = ItemTypeData(1, 1, ItemType.QUEST)  # Khalim’s Heart
-item_data['qbr'] = ItemTypeData(1, 1, ItemType.QUEST)  # Khalim’s Brain
-item_data['mss'] = ItemTypeData(1, 1, ItemType.QUEST)  # Mephisto’s Soulstone
-item_data['hfh'] = ItemTypeData(2, 3, ItemType.QUEST)  # Hellforge Hammr
-item_data['ice'] = ItemTypeData(1, 1, ItemType.QUEST)  # Malah’s Potion
-item_data['tr2'] = ItemTypeData(2, 2, ItemType.QUEST)  # Scroll of Resistance
-# GEMS
-item_data['gcv'] = ItemTypeData(1, 1, ItemType.GEM_CHIPPED)  # Chipped Amethyst
-item_data['gcw'] = ItemTypeData(1, 1, ItemType.GEM_CHIPPED)  # Chipped Diamond
-item_data['gcg'] = ItemTypeData(1, 1, ItemType.GEM_CHIPPED)  # Chipped Emerald
-item_data['gcr'] = ItemTypeData(1, 1, ItemType.GEM_CHIPPED)  # Chipped Ruby
-item_data['gcb'] = ItemTypeData(1, 1, ItemType.GEM_CHIPPED)  # Chipped Saphire
-item_data['skc'] = ItemTypeData(1, 1, ItemType.GEM_CHIPPED)  # Chipped Skull
-item_data['gcy'] = ItemTypeData(1, 1, ItemType.GEM_CHIPPED)  # Chipped Topaz
-item_data['gfv'] = ItemTypeData(1, 1, ItemType.GEM_FLAWED)  # Flawed Amethyst
-item_data['gfw'] = ItemTypeData(1, 1, ItemType.GEM_FLAWED)  # Flawed Diamond
-item_data['gfg'] = ItemTypeData(1, 1, ItemType.GEM_FLAWED)  # Flawed Emerald
-item_data['gfr'] = ItemTypeData(1, 1, ItemType.GEM_FLAWED)  # Flawed Ruby
-item_data['gfb'] = ItemTypeData(1, 1, ItemType.GEM_FLAWED)  # Flawed Saphire
-item_data['skf'] = ItemTypeData(1, 1, ItemType.GEM_FLAWED)  # Flawed Skull
-item_data['gfy'] = ItemTypeData(1, 1, ItemType.GEM_FLAWED)  # Flawed Topaz
-item_data['gsv'] = ItemTypeData(1, 1, ItemType.GEM_NORMAL)  # Amethyst
-item_data['gsw'] = ItemTypeData(1, 1, ItemType.GEM_NORMAL)  # Diamond
-item_data['gsg'] = ItemTypeData(1, 1, ItemType.GEM_NORMAL)  # Emerald
-item_data['gsr'] = ItemTypeData(1, 1, ItemType.GEM_NORMAL)  # Ruby
-item_data['gsb'] = ItemTypeData(1, 1, ItemType.GEM_NORMAL)  # Saphire
-item_data['sku'] = ItemTypeData(1, 1, ItemType.GEM_NORMAL)  # Skull
-item_data['gsy'] = ItemTypeData(1, 1, ItemType.GEM_NORMAL)  # Topaz
-item_data['gzv'] = ItemTypeData(1, 1, ItemType.GEM_FLAWLESS)  # Flawless Amethyst
-item_data['glw'] = ItemTypeData(1, 1, ItemType.GEM_FLAWLESS)  # Flawless Diamond
-item_data['glg'] = ItemTypeData(1, 1, ItemType.GEM_FLAWLESS)  # Flawless Emerald
-item_data['glr'] = ItemTypeData(1, 1, ItemType.GEM_FLAWLESS)  # Flawless Ruby
-item_data['glb'] = ItemTypeData(1, 1, ItemType.GEM_FLAWLESS)  # Flawless Saphire
-item_data['skl'] = ItemTypeData(1, 1, ItemType.GEM_FLAWLESS)  # Flawless Skull
-item_data['gly'] = ItemTypeData(1, 1, ItemType.GEM_FLAWLESS)  # Flawless Topaz
-item_data['gpw'] = ItemTypeData(1, 1, ItemType.GEM_PERFECT)  # Perfect Diamond
-item_data['gpv'] = ItemTypeData(1, 1, ItemType.GEM_PERFECT)  # Perfect Amethyst
-item_data['gpb'] = ItemTypeData(1, 1, ItemType.GEM_PERFECT)  # Perfect Sapphire
-item_data['gpy'] = ItemTypeData(1, 1, ItemType.GEM_PERFECT)  # Perfect Topaz
-item_data['gpr'] = ItemTypeData(1, 1, ItemType.GEM_PERFECT)  # Perfect Ruby
-item_data['skz'] = ItemTypeData(1, 1, ItemType.GEM_PERFECT)  # Perfect Skull
-item_data['gpg'] = ItemTypeData(1, 1, ItemType.GEM_PERFECT)  # Perfect Emerald
-# RUNE
-item_data['r01'] = ItemTypeData(1, 1, ItemType.RUNE)  # El Rune
-item_data['r02'] = ItemTypeData(1, 1, ItemType.RUNE)  # Eld Rune
-item_data['r03'] = ItemTypeData(1, 1, ItemType.RUNE)  # Tir Rune
-item_data['r04'] = ItemTypeData(1, 1, ItemType.RUNE)  # Nef Rune
-item_data['r05'] = ItemTypeData(1, 1, ItemType.RUNE)  # Eth Rune
-item_data['r06'] = ItemTypeData(1, 1, ItemType.RUNE)  # Ith Rune
-item_data['r07'] = ItemTypeData(1, 1, ItemType.RUNE)  # Tal Rune
-item_data['r08'] = ItemTypeData(1, 1, ItemType.RUNE)  # Ral Rune
-item_data['r09'] = ItemTypeData(1, 1, ItemType.RUNE)  # Ort Rune
-item_data['r10'] = ItemTypeData(1, 1, ItemType.RUNE)  # Thul Rune
-item_data['r11'] = ItemTypeData(1, 1, ItemType.RUNE)  # Amn Rune
-item_data['r12'] = ItemTypeData(1, 1, ItemType.RUNE)  # Sol Rune
-item_data['r13'] = ItemTypeData(1, 1, ItemType.RUNE)  # Shael Rune
-item_data['r14'] = ItemTypeData(1, 1, ItemType.RUNE)  # Dol Rune
-item_data['r15'] = ItemTypeData(1, 1, ItemType.RUNE)  # Hel Rune
-item_data['r16'] = ItemTypeData(1, 1, ItemType.RUNE)  # Io Rune
-item_data['r17'] = ItemTypeData(1, 1, ItemType.RUNE)  # Lum Rune
-item_data['r18'] = ItemTypeData(1, 1, ItemType.RUNE)  # Ko Rune
-item_data['r19'] = ItemTypeData(1, 1, ItemType.RUNE)  # Fal Rune
-item_data['r20'] = ItemTypeData(1, 1, ItemType.RUNE)  # Lem Rune
-item_data['r21'] = ItemTypeData(1, 1, ItemType.RUNE)  # Pul Rune
-item_data['r22'] = ItemTypeData(1, 1, ItemType.RUNE)  # Um Rune
-item_data['r23'] = ItemTypeData(1, 1, ItemType.RUNE)  # Mal Rune
-item_data['r24'] = ItemTypeData(1, 1, ItemType.RUNE)  # Ist Rune
-item_data['r25'] = ItemTypeData(1, 1, ItemType.RUNE)  # Gul Rune
-item_data['r26'] = ItemTypeData(1, 1, ItemType.RUNE)  # Vex Rune
-item_data['r27'] = ItemTypeData(1, 1, ItemType.RUNE)  # Ohm Rune
-item_data['r28'] = ItemTypeData(1, 1, ItemType.RUNE)  # Lo Rune
-item_data['r29'] = ItemTypeData(1, 1, ItemType.RUNE)  # Sur Rune
-item_data['r30'] = ItemTypeData(1, 1, ItemType.RUNE)  # Ber Rune
-item_data['r31'] = ItemTypeData(1, 1, ItemType.RUNE)  # Jah Rune
-item_data['r32'] = ItemTypeData(1, 1, ItemType.RUNE)  # Cham Rune
-item_data['r33'] = ItemTypeData(1, 1, ItemType.RUNE)  # Zod Rune
-# POTION
-item_data['yps'] = ItemTypeData(1, 1, ItemType.POTION)  # Antidote Potion
-item_data['vps'] = ItemTypeData(1, 1, ItemType.POTION)  # Stamina Potion
-item_data['wms'] = ItemTypeData(1, 1, ItemType.POTION)  # Thawing Potion
-item_data['hp1'] = ItemTypeData(1, 1, ItemType.POTION)  # Minor Healing Potion
-item_data['mp1'] = ItemTypeData(1, 1, ItemType.POTION)  # Minor Mana Potion
-item_data['hp2'] = ItemTypeData(1, 1, ItemType.POTION)  # Light Healing Potion
-item_data['mp2'] = ItemTypeData(1, 1, ItemType.POTION)  # Light Mana Potion
-item_data['hp3'] = ItemTypeData(1, 1, ItemType.POTION)  # Healing Potion
-item_data['mp3'] = ItemTypeData(1, 1, ItemType.POTION)  # Mana Potion
-item_data['hp4'] = ItemTypeData(1, 1, ItemType.POTION)  # Greater Healing Potion
-item_data['mp4'] = ItemTypeData(1, 1, ItemType.POTION)  # Greater Mana Potion
-item_data['hp5'] = ItemTypeData(1, 1, ItemType.POTION)  # Super Healing Potion
-item_data['mp5'] = ItemTypeData(1, 1, ItemType.POTION)  # Super Mana Potion
-item_data['rvs'] = ItemTypeData(1, 1, ItemType.POTION)  # Rejuv Potion
-item_data['rvl'] = ItemTypeData(1, 1, ItemType.POTION)  # Full Rejuv Potion
-# CHARM
-item_data['cm1'] = ItemTypeData(1, 1, ItemType.CHARM)  # Charm Small
-item_data['cm2'] = ItemTypeData(1, 2, ItemType.CHARM)  # Charm Large
-item_data['cm3'] = ItemTypeData(1, 3, ItemType.CHARM)  # Charm Grand
-# SCROLL
-item_data['isc'] = ItemTypeData(1, 1, ItemType.SCROLL)  # Identify Scroll
-item_data['tsc'] = ItemTypeData(1, 1, ItemType.SCROLL)  # Town Portal Scroll
-item_data['tbk'] = ItemTypeData(1, 2, ItemType.SCROLL)  # Tome of Town Portal
-item_data['ibk'] = ItemTypeData(1, 2, ItemType.SCROLL)  # Tome of Identify
-# MISC
-item_data['aqv'] = ItemTypeData(1, 3, ItemType.MISC)  # Arrows
-item_data['cqv'] = ItemTypeData(1, 3, ItemType.MISC)  # Bolts
-item_data['key'] = ItemTypeData(1, 1, ItemType.MISC)  # Key
-item_data['gld'] = ItemTypeData(1, 1, ItemType.MISC)  # gold
-item_data['ear'] = ItemTypeData(1, 1, ItemType.MISC)  # Ear
-item_data['std'] = ItemTypeData(1, 1, ItemType.MISC)  # Standard of Heroes
-# JEWEL
-item_data['jew'] = ItemTypeData(1, 1, ItemType.JEWEL)  # Jewel
-# AMULET
-item_data['amu'] = ItemTypeData(1, 1, ItemType.AMULET)  # amulet
-# RING
-item_data['rin'] = ItemTypeData(1, 1, ItemType.RING)  # ring
-# UBERKEY
-item_data['pk1'] = ItemTypeData(1, 2, ItemType.UBERKEY)  # Key of Terror
-item_data['pk2'] = ItemTypeData(1, 2, ItemType.UBERKEY)  # Key of Hate
-item_data['pk3'] = ItemTypeData(1, 2, ItemType.UBERKEY)  # Key of Destruction
-# UBERPART
-item_data['bey'] = ItemTypeData(1, 2, ItemType.UBERPART)  # Baal's Eye
-item_data['dhn'] = ItemTypeData(1, 2, ItemType.UBERPART)  # Diablo's Horn
-item_data['mbr'] = ItemTypeData(1, 2, ItemType.UBERPART)  # Mephisto's Brain
-# ESSENCE
-item_data['bet'] = ItemTypeData(1, 1, ItemType.ESSENCE)  # Burning Essence of Terror
-item_data['ceh'] = ItemTypeData(1, 1, ItemType.ESSENCE)  # Charged Essence of Hatred
-item_data['fed'] = ItemTypeData(1, 1, ItemType.ESSENCE)  # Festering Essence of Destruction
-item_data['tes'] = ItemTypeData(1, 1, ItemType.ESSENCE)  # Twisted Essence of Suffering
-item_data['toa'] = ItemTypeData(1, 1, ItemType.ESSENCE)  # Token of Absolution
+item_data: Dict[str, ItemTypeData] = {
+    'cap': ItemTypeData(2, 2, ItemType.HELM, "Cap"),
+    'skp': ItemTypeData(2, 2, ItemType.HELM, "Skull Cap"),
+    'hlm': ItemTypeData(2, 2, ItemType.HELM, "Helm"),
+    'fhl': ItemTypeData(2, 2, ItemType.HELM, "Full Helm"),
+    'ghm': ItemTypeData(2, 2, ItemType.HELM, "Great Helm"),
+    'crn': ItemTypeData(2, 2, ItemType.HELM, "Crown"),
+    'msk': ItemTypeData(2, 2, ItemType.HELM, "Mask"),
+    'bhm': ItemTypeData(2, 2, ItemType.HELM, "Bone Helm"),
+    'xap': ItemTypeData(2, 2, ItemType.HELM, "War Hat"),
+    'xkp': ItemTypeData(2, 2, ItemType.HELM, "Sallet"),
+    'xlm': ItemTypeData(2, 2, ItemType.HELM, "Casque"),
+    'xhl': ItemTypeData(2, 2, ItemType.HELM, "Basinet"),
+    'xhm': ItemTypeData(2, 2, ItemType.HELM, "Winged Helm"),
+    'xrn': ItemTypeData(2, 2, ItemType.HELM, "Grand Crown"),
+    'xsk': ItemTypeData(2, 2, ItemType.HELM, "Death Mask"),
+    'xh9': ItemTypeData(2, 2, ItemType.HELM, "Grim Helm"),
+    'uap': ItemTypeData(2, 2, ItemType.HELM, "Shako"),
+    'ukp': ItemTypeData(2, 2, ItemType.HELM, "Hydraskull"),
+    'ulm': ItemTypeData(2, 2, ItemType.HELM, "Armet"),
+    'uhl': ItemTypeData(2, 2, ItemType.HELM, "Giant Conch"),
+    'uhm': ItemTypeData(2, 2, ItemType.HELM, "Spired Helm"),
+    'urn': ItemTypeData(2, 2, ItemType.HELM, "Corona"),
+    'usk': ItemTypeData(2, 2, ItemType.HELM, "Demonhead"),
+    'uh9': ItemTypeData(2, 2, ItemType.HELM, "Bone Visage"),
+    'qui': ItemTypeData(2, 3, ItemType.BODY, "Quilted Armor"),
+    'lea': ItemTypeData(2, 3, ItemType.BODY, "Leather Armor"),
+    'hla': ItemTypeData(2, 3, ItemType.BODY, "Hard Leather"),
+    'stu': ItemTypeData(2, 3, ItemType.BODY, "Studded Leather"),
+    'rng': ItemTypeData(2, 3, ItemType.BODY, "Ring Mail"),
+    'scl': ItemTypeData(2, 3, ItemType.BODY, "Scale Mail"),
+    'chn': ItemTypeData(2, 3, ItemType.BODY, "Chain Mail"),
+    'brs': ItemTypeData(2, 3, ItemType.BODY, "Breast Plate"),
+    'spl': ItemTypeData(2, 3, ItemType.BODY, "Splint Mail"),
+    'plt': ItemTypeData(2, 3, ItemType.BODY, "Plate Mail"),
+    'fld': ItemTypeData(2, 3, ItemType.BODY, "Field Plate"),
+    'gth': ItemTypeData(2, 3, ItemType.BODY, "Gothic Plate"),
+    'ful': ItemTypeData(2, 3, ItemType.BODY, "Full Plate Mail"),
+    'aar': ItemTypeData(2, 3, ItemType.BODY, "Ancient Armor"),
+    'ltp': ItemTypeData(2, 3, ItemType.BODY, "Light Plate"),
+    'xui': ItemTypeData(2, 3, ItemType.BODY, "Ghost Armor"),
+    'xea': ItemTypeData(2, 3, ItemType.BODY, "Serpentskin"),
+    'xla': ItemTypeData(2, 3, ItemType.BODY, "Demonhide Armor"),
+    'xtu': ItemTypeData(2, 3, ItemType.BODY, "Trellised Armor"),
+    'xng': ItemTypeData(2, 3, ItemType.BODY, "Linked Mail"),
+    'xcl': ItemTypeData(2, 3, ItemType.BODY, "Tigulated Mail"),
+    'xhn': ItemTypeData(2, 3, ItemType.BODY, "Mesh Armor"),
+    'xrs': ItemTypeData(2, 3, ItemType.BODY, "Cuirass"),
+    'xpl': ItemTypeData(2, 3, ItemType.BODY, "Russet Armor"),
+    'xlt': ItemTypeData(2, 3, ItemType.BODY, "Templar Coat"),
+    'xld': ItemTypeData(2, 3, ItemType.BODY, "Sharktooth"),
+    'xth': ItemTypeData(2, 3, ItemType.BODY, "Embossed Plate"),
+    'xul': ItemTypeData(2, 3, ItemType.BODY, "Chaos Armor"),
+    'xar': ItemTypeData(2, 3, ItemType.BODY, "Ornate Armor"),
+    'xtp': ItemTypeData(2, 3, ItemType.BODY, "Mage Plate"),
+    'uui': ItemTypeData(2, 3, ItemType.BODY, "Dusk Shroud"),
+    'uea': ItemTypeData(2, 3, ItemType.BODY, "Wyrmhide"),
+    'ula': ItemTypeData(2, 3, ItemType.BODY, "Scarab Husk"),
+    'utu': ItemTypeData(2, 3, ItemType.BODY, "Wire Fleece"),
+    'ung': ItemTypeData(2, 3, ItemType.BODY, "Diamond Mail"),
+    'ucl': ItemTypeData(2, 3, ItemType.BODY, "Loricated Mail"),
+    'uhn': ItemTypeData(2, 3, ItemType.BODY, "Boneweave"),
+    'urs': ItemTypeData(2, 3, ItemType.BODY, "Great Hauberk"),
+    'upl': ItemTypeData(2, 3, ItemType.BODY, "Balrog Skin"),
+    'ult': ItemTypeData(2, 3, ItemType.BODY, "Hellforge Plate"),
+    'uld': ItemTypeData(2, 3, ItemType.BODY, "Kraken Shell"),
+    'uth': ItemTypeData(2, 3, ItemType.BODY, "Lacquered Plate"),
+    'uul': ItemTypeData(2, 3, ItemType.BODY, "Shadow Plate"),
+    'uar': ItemTypeData(2, 3, ItemType.BODY, "Sacred Armor"),
+    'utp': ItemTypeData(2, 3, ItemType.BODY, "Archon Plate"),
+    'buc': ItemTypeData(2, 2, ItemType.SHIELD, "Buckler"),
+    'sml': ItemTypeData(2, 2, ItemType.SHIELD, "Small Shield"),
+    'lrg': ItemTypeData(2, 3, ItemType.SHIELD, "Large Shield"),
+    'kit': ItemTypeData(2, 3, ItemType.SHIELD, "Kite Shield"),
+    'tow': ItemTypeData(2, 3, ItemType.SHIELD, "Tower Shield"),
+    'gts': ItemTypeData(2, 4, ItemType.SHIELD, "Gothic Shield"),
+    'bsh': ItemTypeData(2, 3, ItemType.SHIELD, "Bone Shield"),
+    'spk': ItemTypeData(2, 3, ItemType.SHIELD, "Spiked Shield"),
+    'xuc': ItemTypeData(2, 2, ItemType.SHIELD, "Defender"),
+    'xml': ItemTypeData(2, 2, ItemType.SHIELD, "Round Shield"),
+    'xrg': ItemTypeData(2, 3, ItemType.SHIELD, "Scutum"),
+    'xit': ItemTypeData(2, 3, ItemType.SHIELD, "Dragon Shield"),
+    'xow': ItemTypeData(2, 3, ItemType.SHIELD, "Pavise"),
+    'xts': ItemTypeData(2, 4, ItemType.SHIELD, "Ancient Shield"),
+    'xsh': ItemTypeData(2, 3, ItemType.SHIELD, "Grim Shield"),
+    'xpk': ItemTypeData(2, 3, ItemType.SHIELD, "Barbed Shield"),
+    'uuc': ItemTypeData(2, 2, ItemType.SHIELD, "Heater"),
+    'uml': ItemTypeData(2, 2, ItemType.SHIELD, "Luna"),
+    'urg': ItemTypeData(2, 3, ItemType.SHIELD, "Hyperion"),
+    'uit': ItemTypeData(2, 3, ItemType.SHIELD, "Monarch"),
+    'uow': ItemTypeData(2, 3, ItemType.SHIELD, "Aegis"),
+    'uts': ItemTypeData(2, 4, ItemType.SHIELD, "Ward"),
+    'ush': ItemTypeData(2, 3, ItemType.SHIELD, "Troll Nest"),
+    'upk': ItemTypeData(2, 3, ItemType.SHIELD, "Blade Barrier"),
+    'lgl': ItemTypeData(2, 2, ItemType.GLOVES, "Leather Gloves"),
+    'vgl': ItemTypeData(2, 2, ItemType.GLOVES, "Heavy Gloves"),
+    'mgl': ItemTypeData(2, 2, ItemType.GLOVES, "Chain Gloves"),
+    'tgl': ItemTypeData(2, 2, ItemType.GLOVES, "Light Gauntlets"),
+    'hgl': ItemTypeData(2, 2, ItemType.GLOVES, "Gauntlets"),
+    'xlg': ItemTypeData(2, 2, ItemType.GLOVES, "Demonhide Glove"),
+    'xvg': ItemTypeData(2, 2, ItemType.GLOVES, "Sharkskin Glove"),
+    'xmg': ItemTypeData(2, 2, ItemType.GLOVES, "Heavy Bracers"),
+    'xtg': ItemTypeData(2, 2, ItemType.GLOVES, "Battle Gauntlet"),
+    'xhg': ItemTypeData(2, 2, ItemType.GLOVES, "War Gauntlets"),
+    'ulg': ItemTypeData(2, 2, ItemType.GLOVES, "Bramble Mitts"),
+    'uvg': ItemTypeData(2, 2, ItemType.GLOVES, "Vampirebone Gl"),
+    'umg': ItemTypeData(2, 2, ItemType.GLOVES, "Vambraces"),
+    'utg': ItemTypeData(2, 2, ItemType.GLOVES, "Crusader Gaunt"),
+    'uhg': ItemTypeData(2, 2, ItemType.GLOVES, "Ogre Gauntlets"),
+    'lbt': ItemTypeData(2, 2, ItemType.BOOTS, "Boots"),
+    'vbt': ItemTypeData(2, 2, ItemType.BOOTS, "Heavy Boots"),
+    'mbt': ItemTypeData(2, 2, ItemType.BOOTS, "Chain Boots"),
+    'tbt': ItemTypeData(2, 2, ItemType.BOOTS, "Light Plate"),
+    'hbt': ItemTypeData(2, 2, ItemType.BOOTS, "Greaves"),
+    'xlb': ItemTypeData(2, 2, ItemType.BOOTS, "Demonhide Boots"),
+    'xvb': ItemTypeData(2, 2, ItemType.BOOTS, "Sharkskin Boots"),
+    'xmb': ItemTypeData(2, 2, ItemType.BOOTS, "Mesh Boots"),
+    'xtb': ItemTypeData(2, 2, ItemType.BOOTS, "Battle Boots"),
+    'xhb': ItemTypeData(2, 2, ItemType.BOOTS, "War Boots"),
+    'ulb': ItemTypeData(2, 2, ItemType.BOOTS, "Wyrmhide Boots"),
+    'uvb': ItemTypeData(2, 2, ItemType.BOOTS, "Scarabshell Bts"),
+    'umb': ItemTypeData(2, 2, ItemType.BOOTS, "Boneweave Boots"),
+    'utb': ItemTypeData(2, 2, ItemType.BOOTS, "Mirrored Boots"),
+    'uhb': ItemTypeData(2, 2, ItemType.BOOTS, "Myrmidon Greave"),
+    'lbl': ItemTypeData(2, 1, ItemType.BELT, "Sash"),
+    'vbl': ItemTypeData(2, 1, ItemType.BELT, "Light Belt"),
+    'mbl': ItemTypeData(2, 1, ItemType.BELT, "Belt"),
+    'tbl': ItemTypeData(2, 1, ItemType.BELT, "Heavy Belt"),
+    'hbl': ItemTypeData(2, 1, ItemType.BELT, "Plated Belt"),
+    'zlb': ItemTypeData(2, 1, ItemType.BELT, "Demonhide Sash"),
+    'zvb': ItemTypeData(2, 1, ItemType.BELT, "Sharkskin Belt"),
+    'zmb': ItemTypeData(2, 1, ItemType.BELT, "Mesh Belt"),
+    'ztb': ItemTypeData(2, 1, ItemType.BELT, "Battle Belt"),
+    'zhb': ItemTypeData(2, 1, ItemType.BELT, "War Belt"),
+    'ulc': ItemTypeData(2, 1, ItemType.BELT, "Spiderweb Sash"),
+    'uvc': ItemTypeData(2, 1, ItemType.BELT, "Vampirefang Blt"),
+    'umc': ItemTypeData(2, 1, ItemType.BELT, "Mithril Coil"),
+    'utc': ItemTypeData(2, 1, ItemType.BELT, "Troll Belt"),
+    'uhc': ItemTypeData(2, 1, ItemType.BELT, "Colossus Girdle"),
+    'dr1': ItemTypeData(2, 2, ItemType.PELT, "Wolf Head"),
+    'dr2': ItemTypeData(2, 2, ItemType.PELT, "Hawk Helm"),
+    'dr3': ItemTypeData(2, 2, ItemType.PELT, "Antlers"),
+    'dr4': ItemTypeData(2, 2, ItemType.PELT, "Falcon Mask"),
+    'dr5': ItemTypeData(2, 2, ItemType.PELT, "Spirit Mask"),
+    'dr6': ItemTypeData(2, 2, ItemType.PELT, "Alpha Helm"),
+    'dr7': ItemTypeData(2, 2, ItemType.PELT, "Griffon Headre"),
+    'dr8': ItemTypeData(2, 2, ItemType.PELT, "Hunter’s Guise"),
+    'dr9': ItemTypeData(2, 2, ItemType.PELT, "Sacred Feather"),
+    'dra': ItemTypeData(2, 2, ItemType.PELT, "Totemic Mask"),
+    'drb': ItemTypeData(2, 2, ItemType.PELT, "Blood Spirit"),
+    'drc': ItemTypeData(2, 2, ItemType.PELT, "Sun Spirit"),
+    'drd': ItemTypeData(2, 2, ItemType.PELT, "Earth Spirit"),
+    'dre': ItemTypeData(2, 2, ItemType.PELT, "Sky Spirit"),
+    'drf': ItemTypeData(2, 2, ItemType.PELT, "Dream Spirit"),
+    'ba1': ItemTypeData(2, 2, ItemType.BARB, "Jawbone Cap"),
+    'ba2': ItemTypeData(2, 2, ItemType.BARB, "Fanged Helm"),
+    'ba3': ItemTypeData(2, 2, ItemType.BARB, "Horned Helm"),
+    'ba4': ItemTypeData(2, 2, ItemType.BARB, "Assualt Helmet"),
+    'ba5': ItemTypeData(2, 2, ItemType.BARB, "Avenger Guard"),
+    'ba6': ItemTypeData(2, 2, ItemType.BARB, "Jawbone Visor"),
+    'ba7': ItemTypeData(2, 2, ItemType.BARB, "Lion Helm"),
+    'ba8': ItemTypeData(2, 2, ItemType.BARB, "Rage Mask"),
+    'ba9': ItemTypeData(2, 2, ItemType.BARB, "Savage Helmet"),
+    'baa': ItemTypeData(2, 2, ItemType.BARB, "Slayer Guard"),
+    'bab': ItemTypeData(2, 2, ItemType.BARB, "Carnage Helm"),
+    'bac': ItemTypeData(2, 2, ItemType.BARB, "Fury Visor"),
+    'bad': ItemTypeData(2, 2, ItemType.BARB, "Destroyer Helm"),
+    'bae': ItemTypeData(2, 2, ItemType.BARB, "Conqueror Crown"),
+    'baf': ItemTypeData(2, 2, ItemType.BARB, "Guardian Crown"),
+    'pa1': ItemTypeData(2, 2, ItemType.PAL, "Targe"),
+    'pa2': ItemTypeData(2, 2, ItemType.PAL, "Rondache"),
+    'pa3': ItemTypeData(2, 4, ItemType.PAL, "Heraldic Shield"),
+    'pa4': ItemTypeData(2, 4, ItemType.PAL, "Aerin Shield"),
+    'pa5': ItemTypeData(2, 2, ItemType.PAL, "Crown Shield"),
+    'pa6': ItemTypeData(2, 2, ItemType.PAL, "Akaran Targe"),
+    'pa7': ItemTypeData(2, 2, ItemType.PAL, "Akaran Rondache"),
+    'pa8': ItemTypeData(2, 4, ItemType.PAL, "Protector Shld"),
+    'pa9': ItemTypeData(2, 4, ItemType.PAL, "Guilded Shield"),
+    'paa': ItemTypeData(2, 2, ItemType.PAL, "Royal Shield"),
+    'pab': ItemTypeData(2, 2, ItemType.PAL, "Sacred Targe"),
+    'pac': ItemTypeData(2, 2, ItemType.PAL, "Sacred Rondache"),
+    'pad': ItemTypeData(2, 4, ItemType.PAL, "Kurast Shield"),
+    'pae': ItemTypeData(2, 4, ItemType.PAL, "Zakarum Shield"),
+    'paf': ItemTypeData(2, 2, ItemType.PAL, "Vortex Shield"),
+    'ne1': ItemTypeData(2, 2, ItemType.NEC, "Preserved Head"),
+    'ne2': ItemTypeData(2, 2, ItemType.NEC, "Zombie Head"),
+    'ne3': ItemTypeData(2, 2, ItemType.NEC, "Unraveller Head"),
+    'ne4': ItemTypeData(2, 2, ItemType.NEC, "Gargoyle Head"),
+    'ne5': ItemTypeData(2, 2, ItemType.NEC, "Demon Head"),
+    'ne6': ItemTypeData(2, 2, ItemType.NEC, "Mummified Trphy"),
+    'ne7': ItemTypeData(2, 2, ItemType.NEC, "Fetish Trophy"),
+    'ne8': ItemTypeData(2, 2, ItemType.NEC, "Sexton Trophy"),
+    'ne9': ItemTypeData(2, 2, ItemType.NEC, "Cantor Trophy"),
+    'nea': ItemTypeData(2, 2, ItemType.NEC, "Heirophant Trphy"),
+    'neb': ItemTypeData(2, 2, ItemType.NEC, "Minion Skull"),
+    'nec': ItemTypeData(2, 2, ItemType.NEC, "Hellspawn Skull"),
+    'ned': ItemTypeData(2, 2, ItemType.NEC, "Overseer Skull"),
+    'nee': ItemTypeData(2, 2, ItemType.NEC, "Succubae Skull"),
+    'nef': ItemTypeData(2, 2, ItemType.NEC, "Bloodlord Skull"),
+    'hax': ItemTypeData(1, 3, ItemType.AXE, "Hand Axe"),
+    'axe': ItemTypeData(2, 3, ItemType.AXE, "Axe"),
+    '2ax': ItemTypeData(2, 3, ItemType.AXE, "Double Axe"),
+    'mpi': ItemTypeData(2, 3, ItemType.AXE, "Military Pick"),
+    'wax': ItemTypeData(2, 3, ItemType.AXE, "War Axe"),
+    'lax': ItemTypeData(2, 3, ItemType.AXE, "Large Axe"),
+    'bax': ItemTypeData(2, 3, ItemType.AXE, "Broad Axe"),
+    'btx': ItemTypeData(2, 3, ItemType.AXE, "Battle Axe"),
+    'gax': ItemTypeData(2, 4, ItemType.AXE, "Great Axe"),
+    'gix': ItemTypeData(2, 3, ItemType.AXE, "Giant Axe"),
+    '9ha': ItemTypeData(1, 3, ItemType.AXE, "Hatchet"),
+    '9ax': ItemTypeData(2, 3, ItemType.AXE, "Cleaver"),
+    '92a': ItemTypeData(2, 3, ItemType.AXE, "Twin Axe"),
+    '9mp': ItemTypeData(2, 3, ItemType.AXE, "Crowbill"),
+    '9wa': ItemTypeData(2, 3, ItemType.AXE, "Naga"),
+    '9la': ItemTypeData(2, 3, ItemType.AXE, "Military Axe"),
+    '9ba': ItemTypeData(2, 3, ItemType.AXE, "Bearded Axe"),
+    '9bt': ItemTypeData(2, 3, ItemType.AXE, "Tabar"),
+    '9ga': ItemTypeData(2, 4, ItemType.AXE, "Gothic Axe"),
+    '9gi': ItemTypeData(2, 3, ItemType.AXE, "Ancient Axe"),
+    '7ha': ItemTypeData(1, 3, ItemType.AXE, "Tomahawk"),
+    '7ax': ItemTypeData(2, 3, ItemType.AXE, "Small Crescent"),
+    '72a': ItemTypeData(2, 3, ItemType.AXE, "Ettin Axe"),
+    '7mp': ItemTypeData(2, 3, ItemType.AXE, "War Spike"),
+    '7wa': ItemTypeData(2, 3, ItemType.AXE, "Berserker Axe"),
+    '7la': ItemTypeData(2, 3, ItemType.AXE, "Feral Axe"),
+    '7ba': ItemTypeData(2, 3, ItemType.AXE, "Silver Edged Ax"),
+    '7bt': ItemTypeData(2, 3, ItemType.AXE, "Decapitator"),
+    '7ga': ItemTypeData(2, 4, ItemType.AXE, "Champion Axe"),
+    '7gi': ItemTypeData(2, 3, ItemType.AXE, "Glorious Axe"),
+    'clb': ItemTypeData(1, 3, ItemType.MACE, "Club"),
+    'spc': ItemTypeData(1, 3, ItemType.MACE, "Spiked Club"),
+    'mac': ItemTypeData(1, 3, ItemType.MACE, "Mace"),
+    'mst': ItemTypeData(1, 3, ItemType.MACE, "Morning Star"),
+    'fla': ItemTypeData(2, 3, ItemType.MACE, "Flail"),
+    'whm': ItemTypeData(2, 3, ItemType.MACE, "War Hammer"),
+    'mau': ItemTypeData(2, 4, ItemType.MACE, "Maul"),
+    'gma': ItemTypeData(2, 3, ItemType.MACE, "Great Maul"),
+    '9cl': ItemTypeData(1, 3, ItemType.MACE, "Cudgel"),
+    '9sp': ItemTypeData(1, 3, ItemType.MACE, "Barbed Club"),
+    '9ma': ItemTypeData(1, 3, ItemType.MACE, "Flanged Mace"),
+    '9mt': ItemTypeData(1, 3, ItemType.MACE, "Jagged Star"),
+    '9fl': ItemTypeData(2, 3, ItemType.MACE, "Knout"),
+    '9wh': ItemTypeData(2, 3, ItemType.MACE, "Battle Hammer"),
+    '9m9': ItemTypeData(2, 4, ItemType.MACE, "War Club"),
+    '9gm': ItemTypeData(2, 3, ItemType.MACE, "Martel de Fer"),
+    '7cl': ItemTypeData(1, 3, ItemType.MACE, "Truncheon"),
+    '7sp': ItemTypeData(1, 3, ItemType.MACE, "Tyrant Club"),
+    '7ma': ItemTypeData(1, 3, ItemType.MACE, "Reinforced Mace"),
+    '7mt': ItemTypeData(1, 3, ItemType.MACE, "Devil Star"),
+    '7fl': ItemTypeData(2, 3, ItemType.MACE, "Scourge"),
+    '7wh': ItemTypeData(2, 3, ItemType.MACE, "Legendary Mallet"),
+    '7m7': ItemTypeData(2, 4, ItemType.MACE, "Ogre Maul"),
+    '7gm': ItemTypeData(2, 3, ItemType.MACE, "Thunder Maul"),
+    'ssd': ItemTypeData(1, 3, ItemType.SWORD, "Short Sword"),
+    'scm': ItemTypeData(1, 3, ItemType.SWORD, "Scimitar"),
+    'sbr': ItemTypeData(1, 3, ItemType.SWORD, "Saber"),
+    'flc': ItemTypeData(1, 3, ItemType.SWORD, "Falchion"),
+    'crs': ItemTypeData(2, 3, ItemType.SWORD, "Crystal Sword"),
+    'bsd': ItemTypeData(2, 3, ItemType.SWORD, "Broad Sword"),
+    'lsd': ItemTypeData(2, 3, ItemType.SWORD, "Long Sword"),
+    'wsd': ItemTypeData(1, 3, ItemType.SWORD, "War Sword"),
+    '2hs': ItemTypeData(1, 4, ItemType.SWORD, "Two-handed Swrd"),
+    'clm': ItemTypeData(1, 4, ItemType.SWORD, "Claymore"),
+    'gis': ItemTypeData(1, 4, ItemType.SWORD, "Giant Sword"),
+    'bsw': ItemTypeData(1, 4, ItemType.SWORD, "Bastard Sword"),
+    'flb': ItemTypeData(2, 4, ItemType.SWORD, "Flamberge"),
+    'gsd': ItemTypeData(2, 4, ItemType.SWORD, "Great Sword"),
+    '9ss': ItemTypeData(1, 3, ItemType.SWORD, "Gladius"),
+    '9sm': ItemTypeData(1, 3, ItemType.SWORD, "Cutlass"),
+    '9sb': ItemTypeData(1, 3, ItemType.SWORD, "Shamshir"),
+    '9fc': ItemTypeData(1, 3, ItemType.SWORD, "Tulwar"),
+    '9cr': ItemTypeData(2, 3, ItemType.SWORD, "Dimensional Bld"),
+    '9bs': ItemTypeData(2, 3, ItemType.SWORD, "Battle Sword"),
+    '9ls': ItemTypeData(2, 3, ItemType.SWORD, "Rune Sword"),
+    '9wd': ItemTypeData(1, 3, ItemType.SWORD, "Ancient Sword"),
+    '92h': ItemTypeData(1, 4, ItemType.SWORD, "Espadon"),
+    '9cm': ItemTypeData(1, 4, ItemType.SWORD, "Dacian Falx"),
+    '9gs': ItemTypeData(1, 4, ItemType.SWORD, "Tusk Sword"),
+    '9b9': ItemTypeData(1, 4, ItemType.SWORD, "Gothic Sword"),
+    '9fb': ItemTypeData(2, 4, ItemType.SWORD, "Zweihander"),
+    '9gd': ItemTypeData(2, 4, ItemType.SWORD, "Executioner Swr"),
+    '7ss': ItemTypeData(1, 3, ItemType.SWORD, "Falcata"),
+    '7sm': ItemTypeData(1, 3, ItemType.SWORD, "Ataghan"),
+    '7sb': ItemTypeData(1, 3, ItemType.SWORD, "Elegant Blade"),
+    '7fc': ItemTypeData(1, 3, ItemType.SWORD, "Hydra Edge"),
+    '7cr': ItemTypeData(2, 3, ItemType.SWORD, "Phase Blade"),
+    '7bs': ItemTypeData(2, 3, ItemType.SWORD, "Conquest Sword"),
+    '7ls': ItemTypeData(2, 3, ItemType.SWORD, "Cryptic Sword"),
+    '7wd': ItemTypeData(1, 3, ItemType.SWORD, "Mythical Sword"),
+    '72h': ItemTypeData(1, 4, ItemType.SWORD, "Legend Sword"),
+    '7cm': ItemTypeData(1, 4, ItemType.SWORD, "Highland Blade"),
+    '7gs': ItemTypeData(1, 4, ItemType.SWORD, "Balrog Blade"),
+    '7b7': ItemTypeData(1, 4, ItemType.SWORD, "Champion Sword"),
+    '7fb': ItemTypeData(2, 4, ItemType.SWORD, "Colossal Sword"),
+    '7gd': ItemTypeData(2, 4, ItemType.SWORD, "Colossus Blade"),
+    'dgr': ItemTypeData(1, 2, ItemType.DAGGER, "Dagger"),
+    'dir': ItemTypeData(1, 2, ItemType.DAGGER, "Dirk"),
+    'kri': ItemTypeData(1, 3, ItemType.DAGGER, "Kriss"),
+    'bld': ItemTypeData(1, 3, ItemType.DAGGER, "Blade"),
+    '9dg': ItemTypeData(1, 2, ItemType.DAGGER, "Poignard"),
+    '9di': ItemTypeData(1, 2, ItemType.DAGGER, "Rondel"),
+    '9kr': ItemTypeData(1, 3, ItemType.DAGGER, "Cinquedeas"),
+    '9bl': ItemTypeData(1, 3, ItemType.DAGGER, "Stilleto"),
+    '7dg': ItemTypeData(1, 2, ItemType.DAGGER, "Bone Knife"),
+    '7di': ItemTypeData(1, 2, ItemType.DAGGER, "Mithral Point"),
+    '7kr': ItemTypeData(1, 3, ItemType.DAGGER, "Fanged Knife"),
+    '7bl': ItemTypeData(1, 3, ItemType.DAGGER, "Legend Spike"),
+    'tkf': ItemTypeData(1, 2, ItemType.THROW, "Throwing Knife"),
+    'tax': ItemTypeData(1, 2, ItemType.THROW, "Throwing Axe"),
+    'bkf': ItemTypeData(1, 2, ItemType.THROW, "Balanced Knife"),
+    'bal': ItemTypeData(2, 3, ItemType.THROW, "Balanced Axe"),
+    '9tk': ItemTypeData(1, 2, ItemType.THROW, "Battle Dart"),
+    '9ta': ItemTypeData(1, 2, ItemType.THROW, "Francisca"),
+    '9bk': ItemTypeData(1, 2, ItemType.THROW, "War Dart"),
+    '9b8': ItemTypeData(2, 3, ItemType.THROW, "Hurlbat"),
+    '7tk': ItemTypeData(1, 2, ItemType.THROW, "Flying Knife"),
+    '7ta': ItemTypeData(1, 2, ItemType.THROW, "Flying Axe"),
+    '7bk': ItemTypeData(1, 2, ItemType.THROW, "Winged Knife"),
+    '7b8': ItemTypeData(2, 3, ItemType.THROW, "Winged Axe"),
+    'jav': ItemTypeData(1, 3, ItemType.JAV, "Javelin"),
+    'pil': ItemTypeData(1, 3, ItemType.JAV, "Pilum"),
+    'ssp': ItemTypeData(1, 3, ItemType.JAV, "Short Spear"),
+    'glv': ItemTypeData(1, 3, ItemType.JAV, "Glaive"),
+    'tsp': ItemTypeData(1, 4, ItemType.JAV, "Throwing Spear"),
+    '9ja': ItemTypeData(1, 3, ItemType.JAV, "War Javelin"),
+    '9pi': ItemTypeData(1, 3, ItemType.JAV, "Great Pilum"),
+    '9s9': ItemTypeData(1, 3, ItemType.JAV, "Simbilan"),
+    '9gl': ItemTypeData(1, 3, ItemType.JAV, "Spiculum"),
+    '9ts': ItemTypeData(1, 4, ItemType.JAV, "Harpoon"),
+    '7ja': ItemTypeData(1, 3, ItemType.JAV, "Hyperion Javeln"),
+    '7pi': ItemTypeData(1, 3, ItemType.JAV, "Stygian Pilum"),
+    '7s7': ItemTypeData(1, 3, ItemType.JAV, "Balrog Spear"),
+    '7gl': ItemTypeData(1, 3, ItemType.JAV, "Ghost Glaive"),
+    '7ts': ItemTypeData(1, 4, ItemType.JAV, "Winged Harpoon"),
+    'spr': ItemTypeData(2, 4, ItemType.SPEAR, "Spear"),
+    'tri': ItemTypeData(2, 4, ItemType.SPEAR, "Trident"),
+    'brn': ItemTypeData(2, 4, ItemType.SPEAR, "Brandistock"),
+    'spt': ItemTypeData(2, 4, ItemType.SPEAR, "Spetum"),
+    'pik': ItemTypeData(2, 4, ItemType.SPEAR, "Pike"),
+    '9sr': ItemTypeData(2, 4, ItemType.SPEAR, "War Spear"),
+    '9tr': ItemTypeData(2, 4, ItemType.SPEAR, "Fuscina"),
+    '9br': ItemTypeData(2, 4, ItemType.SPEAR, "War Fork"),
+    '9st': ItemTypeData(2, 4, ItemType.SPEAR, "Yari"),
+    '9p9': ItemTypeData(2, 4, ItemType.SPEAR, "Lance"),
+    '7sr': ItemTypeData(2, 4, ItemType.SPEAR, "Hyperion Spear"),
+    '7tr': ItemTypeData(2, 4, ItemType.SPEAR, "Stygian Pike"),
+    '7br': ItemTypeData(2, 4, ItemType.SPEAR, "Mancatcher"),
+    '7st': ItemTypeData(2, 4, ItemType.SPEAR, "Ghost Spear"),
+    '7p7': ItemTypeData(2, 4, ItemType.SPEAR, "War Pike"),
+    'bar': ItemTypeData(2, 4, ItemType.POLEARM, "Bardiche"),
+    'vou': ItemTypeData(2, 4, ItemType.POLEARM, "Voulge"),
+    'scy': ItemTypeData(2, 4, ItemType.POLEARM, "Scythe"),
+    'pax': ItemTypeData(2, 4, ItemType.POLEARM, "Poleaxe"),
+    'hal': ItemTypeData(2, 4, ItemType.POLEARM, "Halberd"),
+    'wsc': ItemTypeData(2, 4, ItemType.POLEARM, "War Scythe"),
+    '9b7': ItemTypeData(2, 4, ItemType.POLEARM, "Lochaber Axe"),
+    '9vo': ItemTypeData(2, 4, ItemType.POLEARM, "Bill"),
+    '9s8': ItemTypeData(2, 4, ItemType.POLEARM, "Battle Scythe"),
+    '9pa': ItemTypeData(2, 4, ItemType.POLEARM, "Partizan"),
+    '9h9': ItemTypeData(2, 4, ItemType.POLEARM, "Bec-de-Corbin"),
+    '9wc': ItemTypeData(2, 4, ItemType.POLEARM, "Grim Scythe"),
+    '7o7': ItemTypeData(2, 4, ItemType.POLEARM, "Ogre Axe"),
+    '7vo': ItemTypeData(2, 4, ItemType.POLEARM, "Colossus Voulge"),
+    '7s8': ItemTypeData(2, 4, ItemType.POLEARM, "Thresher"),
+    '7pa': ItemTypeData(2, 4, ItemType.POLEARM, "Cryptic Axe"),
+    '7h7': ItemTypeData(2, 4, ItemType.POLEARM, "Great Poleaxe"),
+    '7wc': ItemTypeData(2, 4, ItemType.POLEARM, "Giant Thresher"),
+    'sbw': ItemTypeData(2, 3, ItemType.BOW, "Short Bow"),
+    'hbw': ItemTypeData(2, 3, ItemType.BOW, "Hunter’s Bow"),
+    'lbw': ItemTypeData(2, 4, ItemType.BOW, "Long Bow"),
+    'cbw': ItemTypeData(2, 3, ItemType.BOW, "Composite Bow"),
+    'sbb': ItemTypeData(2, 3, ItemType.BOW, "Shrt Battle Bow"),
+    'lbb': ItemTypeData(2, 4, ItemType.BOW, "Long Battle Bow"),
+    'swb': ItemTypeData(2, 3, ItemType.BOW, "Short War Bow"),
+    'lwb': ItemTypeData(2, 4, ItemType.BOW, "Long War Bow"),
+    '8sb': ItemTypeData(2, 3, ItemType.BOW, "Edge Bow"),
+    '8hb': ItemTypeData(2, 3, ItemType.BOW, "Razor Bow"),
+    '8lb': ItemTypeData(2, 4, ItemType.BOW, "Cedar Bow"),
+    '8cb': ItemTypeData(2, 3, ItemType.BOW, "Double Bow"),
+    '8s8': ItemTypeData(2, 3, ItemType.BOW, "Short Siege Bow"),
+    '8l8': ItemTypeData(2, 4, ItemType.BOW, "Long Siege Bow"),
+    '8sw': ItemTypeData(2, 3, ItemType.BOW, "Rune Bow"),
+    '8lw': ItemTypeData(2, 4, ItemType.BOW, "Gothic Bow"),
+    '6sb': ItemTypeData(2, 3, ItemType.BOW, "Spider Bow"),
+    '6hb': ItemTypeData(2, 3, ItemType.BOW, "Blade Bow"),
+    '6lb': ItemTypeData(2, 4, ItemType.BOW, "Shadow Bow"),
+    '6cb': ItemTypeData(2, 3, ItemType.BOW, "Great Bow"),
+    '6s7': ItemTypeData(2, 3, ItemType.BOW, "Diamond Bow"),
+    '6l7': ItemTypeData(2, 4, ItemType.BOW, "Crusader Bow"),
+    '6sw': ItemTypeData(2, 3, ItemType.BOW, "Ward Bow"),
+    '6lw': ItemTypeData(2, 4, ItemType.BOW, "Hydra Bow"),
+    'lxb': ItemTypeData(2, 3, ItemType.XBOW, "Light Crossbow"),
+    'mxb': ItemTypeData(2, 3, ItemType.XBOW, "Crossbow"),
+    'hxb': ItemTypeData(2, 4, ItemType.XBOW, "Heavy Crossbow"),
+    'rxb': ItemTypeData(2, 3, ItemType.XBOW, "Repeating X-bow"),
+    '8lx': ItemTypeData(2, 3, ItemType.XBOW, "Arbalest"),
+    '8mx': ItemTypeData(2, 3, ItemType.XBOW, "Siege Crossbow"),
+    '8hx': ItemTypeData(2, 4, ItemType.XBOW, "Ballista"),
+    '8rx': ItemTypeData(2, 3, ItemType.XBOW, "Chu-Ko-Nu"),
+    '6lx': ItemTypeData(2, 3, ItemType.XBOW, "Pellet Bow"),
+    '6mx': ItemTypeData(2, 3, ItemType.XBOW, "Gorgon Crossbow"),
+    '6hx': ItemTypeData(2, 4, ItemType.XBOW, "Colossus x-bow"),
+    '6rx': ItemTypeData(2, 3, ItemType.XBOW, "Demon Crossbow"),
+    'sst': ItemTypeData(1, 3, ItemType.STAFF, "Short Staff"),
+    'lst': ItemTypeData(1, 4, ItemType.STAFF, "Long Staff"),
+    'cst': ItemTypeData(1, 4, ItemType.STAFF, "Gnarled Staff"),
+    'bst': ItemTypeData(1, 4, ItemType.STAFF, "Battle Staff"),
+    'wst': ItemTypeData(2, 4, ItemType.STAFF, "War Staff"),
+    '8ss': ItemTypeData(1, 3, ItemType.STAFF, "Jo Staff"),
+    '8ls': ItemTypeData(1, 4, ItemType.STAFF, "Quarterstaff"),
+    '8cs': ItemTypeData(1, 4, ItemType.STAFF, "Cedar Staff"),
+    '8bs': ItemTypeData(1, 4, ItemType.STAFF, "Gothic Staff"),
+    '8ws': ItemTypeData(2, 4, ItemType.STAFF, "Rune Staff"),
+    '6ss': ItemTypeData(1, 3, ItemType.STAFF, "Walking Stick"),
+    '6ls': ItemTypeData(1, 4, ItemType.STAFF, "Stalagmite"),
+    '6cs': ItemTypeData(1, 4, ItemType.STAFF, "Elder Staff"),
+    '6bs': ItemTypeData(1, 4, ItemType.STAFF, "Shillelagh"),
+    '6ws': ItemTypeData(2, 4, ItemType.STAFF, "Archon Staff"),
+    'wnd': ItemTypeData(1, 2, ItemType.WAND, "Wand"),
+    'ywn': ItemTypeData(1, 2, ItemType.WAND, "Yew Wand"),
+    'bwn': ItemTypeData(1, 2, ItemType.WAND, "Bone Wand"),
+    'gwn': ItemTypeData(1, 2, ItemType.WAND, "Grim Wand"),
+    '9wn': ItemTypeData(1, 2, ItemType.WAND, "Burnt Wand"),
+    '9yw': ItemTypeData(1, 2, ItemType.WAND, "Petrified Wand"),
+    '9bw': ItemTypeData(1, 2, ItemType.WAND, "Tomb Wand"),
+    '9gw': ItemTypeData(1, 2, ItemType.WAND, "Grave Wand"),
+    '7wn': ItemTypeData(1, 2, ItemType.WAND, "Polished Wand"),
+    '7yw': ItemTypeData(1, 2, ItemType.WAND, "Ghost Wand"),
+    '7bw': ItemTypeData(1, 2, ItemType.WAND, "Lich Wand"),
+    '7gw': ItemTypeData(1, 2, ItemType.WAND, "Unearthed Wand"),
+    'scp': ItemTypeData(1, 3, ItemType.SCEPTER, "Sceptre"),
+    'gsc': ItemTypeData(1, 3, ItemType.SCEPTER, "Grand Sceptre"),
+    'wsp': ItemTypeData(2, 3, ItemType.SCEPTER, "War Sceptre"),
+    '9sc': ItemTypeData(1, 3, ItemType.SCEPTER, "Rune Sceptre"),
+    '9qs': ItemTypeData(1, 3, ItemType.SCEPTER, "Holy Water Spri"),
+    '9ws': ItemTypeData(2, 3, ItemType.SCEPTER, "Divine Sceptre"),
+    '7sc': ItemTypeData(1, 3, ItemType.SCEPTER, "Mighty Sceptre"),
+    '7qs': ItemTypeData(1, 3, ItemType.SCEPTER, "Seraph Rod"),
+    '7ws': ItemTypeData(2, 3, ItemType.SCEPTER, "Caduceus"),
+    'ktr': ItemTypeData(1, 3, ItemType.ASN, "Katar"),
+    'wrb': ItemTypeData(1, 3, ItemType.ASN, "Wrist Blade"),
+    'axf': ItemTypeData(1, 3, ItemType.ASN, "Hatchet Hands"),
+    'ces': ItemTypeData(1, 3, ItemType.ASN, "Cestus"),
+    'clw': ItemTypeData(1, 3, ItemType.ASN, "Claws"),
+    'btl': ItemTypeData(1, 3, ItemType.ASN, "Blade Talons"),
+    'skr': ItemTypeData(1, 3, ItemType.ASN, "Scissors Katar"),
+    '9ar': ItemTypeData(1, 3, ItemType.ASN, "Quhab"),
+    '9wb': ItemTypeData(1, 3, ItemType.ASN, "Wrist Spike"),
+    '9xf': ItemTypeData(1, 3, ItemType.ASN, "Fascia"),
+    '9cs': ItemTypeData(1, 3, ItemType.ASN, "Hand Scythe"),
+    '9lw': ItemTypeData(1, 3, ItemType.ASN, "Greater Claws"),
+    '9tw': ItemTypeData(1, 3, ItemType.ASN, "Greater Talons"),
+    '9qr': ItemTypeData(1, 3, ItemType.ASN, "Scissors Quhab"),
+    '7ar': ItemTypeData(1, 3, ItemType.ASN, "Suwayyah"),
+    '7wb': ItemTypeData(1, 3, ItemType.ASN, "Wrist Sword"),
+    '7xf': ItemTypeData(1, 3, ItemType.ASN, "War Fist"),
+    '7cs': ItemTypeData(1, 3, ItemType.ASN, "Battle Cestus"),
+    '7lw': ItemTypeData(1, 3, ItemType.ASN, "Feral Claws"),
+    '7tw': ItemTypeData(1, 3, ItemType.ASN, "Runic Talons"),
+    '7qr': ItemTypeData(1, 3, ItemType.ASN, "Scissors Suwayh"),
+    'ob1': ItemTypeData(1, 2, ItemType.SORC, "Eagle Orb"),
+    'ob2': ItemTypeData(1, 2, ItemType.SORC, "Sacred Globe"),
+    'ob3': ItemTypeData(1, 2, ItemType.SORC, "Smoked Sphere"),
+    'ob4': ItemTypeData(1, 2, ItemType.SORC, "Clasped Orb"),
+    'ob5': ItemTypeData(1, 3, ItemType.SORC, "Jared's Stone"),
+    'ob6': ItemTypeData(1, 2, ItemType.SORC, "Glowing Orb"),
+    'ob7': ItemTypeData(1, 2, ItemType.SORC, "Crystalline Glb"),
+    'ob8': ItemTypeData(1, 2, ItemType.SORC, "Cloudy Sphere"),
+    'ob9': ItemTypeData(1, 2, ItemType.SORC, "Sparkling Ball"),
+    'oba': ItemTypeData(1, 3, ItemType.SORC, "Swirling Crystl"),
+    'obb': ItemTypeData(1, 2, ItemType.SORC, "Heavenly Stone"),
+    'obc': ItemTypeData(1, 2, ItemType.SORC, "Eldritch Orb"),
+    'obd': ItemTypeData(1, 2, ItemType.SORC, "Demon Heart"),
+    'obe': ItemTypeData(1, 2, ItemType.SORC, "Vortex Orb"),
+    'obf': ItemTypeData(1, 3, ItemType.SORC, "Dimensional Shrd"),
+    'am1': ItemTypeData(2, 4, ItemType.AMA, "Stag Bow"),
+    'am2': ItemTypeData(2, 4, ItemType.AMA, "Reflex Bow"),
+    'am3': ItemTypeData(2, 4, ItemType.AMA, "Maiden Spear"),
+    'am4': ItemTypeData(2, 4, ItemType.AMA, "Maiden Pike"),
+    'am5': ItemTypeData(1, 3, ItemType.AMA, "Maiden Javelin"),
+    'am6': ItemTypeData(2, 4, ItemType.AMA, "Ashwood Bow"),
+    'am7': ItemTypeData(2, 4, ItemType.AMA, "Ceremonial Bow"),
+    'am8': ItemTypeData(2, 4, ItemType.AMA, "Ceremonial Spr"),
+    'am9': ItemTypeData(2, 4, ItemType.AMA, "Ceremonial Pike"),
+    'ama': ItemTypeData(1, 3, ItemType.AMA, "Ceremonial Jav"),
+    'amb': ItemTypeData(2, 4, ItemType.AMA, "Matriarchal Bow"),
+    'amc': ItemTypeData(2, 4, ItemType.AMA, "Grnd Matron Bow"),
+    'amd': ItemTypeData(2, 4, ItemType.AMA, "Matriarchal Spr"),
+    'ame': ItemTypeData(2, 4, ItemType.AMA, "Matriarchal Pik"),
+    'amf': ItemTypeData(1, 3, ItemType.AMA, "Matriarchal Jav"),
+    'ci0': ItemTypeData(2, 2, ItemType.CIRCLET, "Circlet"),
+    'ci1': ItemTypeData(2, 2, ItemType.CIRCLET, "Coronet"),
+    'ci2': ItemTypeData(2, 2, ItemType.CIRCLET, "Tiara"),
+    'ci3': ItemTypeData(2, 2, ItemType.CIRCLET, "Diadem"),
+    'gps': ItemTypeData(1, 1, ItemType.THROWPOT, "Rancid Gas Pot"),
+    'ops': ItemTypeData(1, 1, ItemType.THROWPOT, "Oil Potion"),
+    'gpm': ItemTypeData(1, 1, ItemType.THROWPOT, "Choking Gas Pot"),
+    'opm': ItemTypeData(1, 1, ItemType.THROWPOT, "Exploding Pot"),
+    'gpl': ItemTypeData(1, 1, ItemType.THROWPOT, "Strangling Gas"),
+    'opl': ItemTypeData(1, 1, ItemType.THROWPOT, "Fulminating Pot"),
+    'leg': ItemTypeData(1, 3, ItemType.QUEST, "Wirt’s Leg"),
+    'hdm': ItemTypeData(1, 2, ItemType.QUEST, "Horadric Malus"),
+    'bks': ItemTypeData(2, 2, ItemType.QUEST, "Scroll of Inifuss 1"),
+    'bkd': ItemTypeData(2, 2, ItemType.QUEST, "Scroll of Inifuss 2"),
+    'ass': ItemTypeData(2, 2, ItemType.QUEST, "Book of Skill"),
+    'box': ItemTypeData(2, 2, ItemType.QUEST, "Horadric Cube"),
+    'tr1': ItemTypeData(2, 2, ItemType.QUEST, "Horadric Scroll"),
+    'msf': ItemTypeData(1, 3, ItemType.QUEST, "Staff of Kings"),
+    'vip': ItemTypeData(1, 1, ItemType.QUEST, "Viper Amulet"),
+    'hst': ItemTypeData(1, 4, ItemType.QUEST, "Horadric Staff"),
+    'xyz': ItemTypeData(1, 1, ItemType.QUEST, "Potion of Life"),
+    'j34': ItemTypeData(1, 2, ItemType.QUEST, "A Jade Figurine"),
+    'g34': ItemTypeData(1, 2, ItemType.QUEST, "The Golden Bird"),
+    'bbb': ItemTypeData(2, 2, ItemType.QUEST, "Lam Esen’s Tome"),
+    'g33': ItemTypeData(1, 2, ItemType.QUEST, "Gidbinn"),
+    'qf1': ItemTypeData(2, 3, ItemType.QUEST, "Khalim’s Flail"),
+    'qf2': ItemTypeData(2, 3, ItemType.QUEST, "Khalim’s Will"),
+    'qey': ItemTypeData(1, 1, ItemType.QUEST, "Khalim’s Eye"),
+    'qhr': ItemTypeData(1, 1, ItemType.QUEST, "Khalim’s Heart"),
+    'qbr': ItemTypeData(1, 1, ItemType.QUEST, "Khalim’s Brain"),
+    'mss': ItemTypeData(1, 1, ItemType.QUEST, "Mephisto’s Soulstone"),
+    'hfh': ItemTypeData(2, 3, ItemType.QUEST, "Hellforge Hammr"),
+    'ice': ItemTypeData(1, 1, ItemType.QUEST, "Malah’s Potion"),
+    'tr2': ItemTypeData(2, 2, ItemType.QUEST, "Scroll of Resistance"),
+    'gcv': ItemTypeData(1, 1, ItemType.GEM_CHIPPED, "Chipped Amethyst"),
+    'gcw': ItemTypeData(1, 1, ItemType.GEM_CHIPPED, "Chipped Diamond"),
+    'gcg': ItemTypeData(1, 1, ItemType.GEM_CHIPPED, "Chipped Emerald"),
+    'gcr': ItemTypeData(1, 1, ItemType.GEM_CHIPPED, "Chipped Ruby"),
+    'gcb': ItemTypeData(1, 1, ItemType.GEM_CHIPPED, "Chipped Saphire"),
+    'skc': ItemTypeData(1, 1, ItemType.GEM_CHIPPED, "Chipped Skull"),
+    'gcy': ItemTypeData(1, 1, ItemType.GEM_CHIPPED, "Chipped Topaz"),
+    'gfv': ItemTypeData(1, 1, ItemType.GEM_FLAWED, "Flawed Amethyst"),
+    'gfw': ItemTypeData(1, 1, ItemType.GEM_FLAWED, "Flawed Diamond"),
+    'gfg': ItemTypeData(1, 1, ItemType.GEM_FLAWED, "Flawed Emerald"),
+    'gfr': ItemTypeData(1, 1, ItemType.GEM_FLAWED, "Flawed Ruby"),
+    'gfb': ItemTypeData(1, 1, ItemType.GEM_FLAWED, "Flawed Saphire"),
+    'skf': ItemTypeData(1, 1, ItemType.GEM_FLAWED, "Flawed Skull"),
+    'gfy': ItemTypeData(1, 1, ItemType.GEM_FLAWED, "Flawed Topaz"),
+    'gsv': ItemTypeData(1, 1, ItemType.GEM_NORMAL, "Amethyst"),
+    'gsw': ItemTypeData(1, 1, ItemType.GEM_NORMAL, "Diamond"),
+    'gsg': ItemTypeData(1, 1, ItemType.GEM_NORMAL, "Emerald"),
+    'gsr': ItemTypeData(1, 1, ItemType.GEM_NORMAL, "Ruby"),
+    'gsb': ItemTypeData(1, 1, ItemType.GEM_NORMAL, "Saphire"),
+    'sku': ItemTypeData(1, 1, ItemType.GEM_NORMAL, "Skull"),
+    'gsy': ItemTypeData(1, 1, ItemType.GEM_NORMAL, "Topaz"),
+    'gzv': ItemTypeData(1, 1, ItemType.GEM_FLAWLESS, "Flawless Amethyst"),
+    'glw': ItemTypeData(1, 1, ItemType.GEM_FLAWLESS, "Flawless Diamond"),
+    'glg': ItemTypeData(1, 1, ItemType.GEM_FLAWLESS, "Flawless Emerald"),
+    'glr': ItemTypeData(1, 1, ItemType.GEM_FLAWLESS, "Flawless Ruby"),
+    'glb': ItemTypeData(1, 1, ItemType.GEM_FLAWLESS, "Flawless Saphire"),
+    'skl': ItemTypeData(1, 1, ItemType.GEM_FLAWLESS, "Flawless Skull"),
+    'gly': ItemTypeData(1, 1, ItemType.GEM_FLAWLESS, "Flawless Topaz"),
+    'gpw': ItemTypeData(1, 1, ItemType.GEM_PERFECT, "Perfect Diamond"),
+    'gpv': ItemTypeData(1, 1, ItemType.GEM_PERFECT, "Perfect Amethyst"),
+    'gpb': ItemTypeData(1, 1, ItemType.GEM_PERFECT, "Perfect Sapphire"),
+    'gpy': ItemTypeData(1, 1, ItemType.GEM_PERFECT, "Perfect Topaz"),
+    'gpr': ItemTypeData(1, 1, ItemType.GEM_PERFECT, "Perfect Ruby"),
+    'skz': ItemTypeData(1, 1, ItemType.GEM_PERFECT, "Perfect Skull"),
+    'gpg': ItemTypeData(1, 1, ItemType.GEM_PERFECT, "Perfect Emerald"),
+    'r01': ItemTypeData(1, 1, ItemType.RUNE, "El Rune"),
+    'r02': ItemTypeData(1, 1, ItemType.RUNE, "Eld Rune"),
+    'r03': ItemTypeData(1, 1, ItemType.RUNE, "Tir Rune"),
+    'r04': ItemTypeData(1, 1, ItemType.RUNE, "Nef Rune"),
+    'r05': ItemTypeData(1, 1, ItemType.RUNE, "Eth Rune"),
+    'r06': ItemTypeData(1, 1, ItemType.RUNE, "Ith Rune"),
+    'r07': ItemTypeData(1, 1, ItemType.RUNE, "Tal Rune"),
+    'r08': ItemTypeData(1, 1, ItemType.RUNE, "Ral Rune"),
+    'r09': ItemTypeData(1, 1, ItemType.RUNE, "Ort Rune"),
+    'r10': ItemTypeData(1, 1, ItemType.RUNE, "Thul Rune"),
+    'r11': ItemTypeData(1, 1, ItemType.RUNE, "Amn Rune"),
+    'r12': ItemTypeData(1, 1, ItemType.RUNE, "Sol Rune"),
+    'r13': ItemTypeData(1, 1, ItemType.RUNE, "Shael Rune"),
+    'r14': ItemTypeData(1, 1, ItemType.RUNE, "Dol Rune"),
+    'r15': ItemTypeData(1, 1, ItemType.RUNE, "Hel Rune"),
+    'r16': ItemTypeData(1, 1, ItemType.RUNE, "Io Rune"),
+    'r17': ItemTypeData(1, 1, ItemType.RUNE, "Lum Rune"),
+    'r18': ItemTypeData(1, 1, ItemType.RUNE, "Ko Rune"),
+    'r19': ItemTypeData(1, 1, ItemType.RUNE, "Fal Rune"),
+    'r20': ItemTypeData(1, 1, ItemType.RUNE, "Lem Rune"),
+    'r21': ItemTypeData(1, 1, ItemType.RUNE, "Pul Rune"),
+    'r22': ItemTypeData(1, 1, ItemType.RUNE, "Um Rune"),
+    'r23': ItemTypeData(1, 1, ItemType.RUNE, "Mal Rune"),
+    'r24': ItemTypeData(1, 1, ItemType.RUNE, "Ist Rune"),
+    'r25': ItemTypeData(1, 1, ItemType.RUNE, "Gul Rune"),
+    'r26': ItemTypeData(1, 1, ItemType.RUNE, "Vex Rune"),
+    'r27': ItemTypeData(1, 1, ItemType.RUNE, "Ohm Rune"),
+    'r28': ItemTypeData(1, 1, ItemType.RUNE, "Lo Rune"),
+    'r29': ItemTypeData(1, 1, ItemType.RUNE, "Sur Rune"),
+    'r30': ItemTypeData(1, 1, ItemType.RUNE, "Ber Rune"),
+    'r31': ItemTypeData(1, 1, ItemType.RUNE, "Jah Rune"),
+    'r32': ItemTypeData(1, 1, ItemType.RUNE, "Cham Rune"),
+    'r33': ItemTypeData(1, 1, ItemType.RUNE, "Zod Rune"),
+    'yps': ItemTypeData(1, 1, ItemType.POTION, "Antidote Potion"),
+    'vps': ItemTypeData(1, 1, ItemType.POTION, "Stamina Potion"),
+    'wms': ItemTypeData(1, 1, ItemType.POTION, "Thawing Potion"),
+    'hp1': ItemTypeData(1, 1, ItemType.POTION, "Minor Healing Potion"),
+    'mp1': ItemTypeData(1, 1, ItemType.POTION, "Minor Mana Potion"),
+    'hp2': ItemTypeData(1, 1, ItemType.POTION, "Light Healing Potion"),
+    'mp2': ItemTypeData(1, 1, ItemType.POTION, "Light Mana Potion"),
+    'hp3': ItemTypeData(1, 1, ItemType.POTION, "Healing Potion"),
+    'mp3': ItemTypeData(1, 1, ItemType.POTION, "Mana Potion"),
+    'hp4': ItemTypeData(1, 1, ItemType.POTION, "Greater Healing Potion"),
+    'mp4': ItemTypeData(1, 1, ItemType.POTION, "Greater Mana Potion"),
+    'hp5': ItemTypeData(1, 1, ItemType.POTION, "Super Healing Potion"),
+    'mp5': ItemTypeData(1, 1, ItemType.POTION, "Super Mana Potion"),
+    'rvs': ItemTypeData(1, 1, ItemType.POTION, "Rejuv Potion"),
+    'rvl': ItemTypeData(1, 1, ItemType.POTION, "Full Rejuv Potion"),
+    'cm1': ItemTypeData(1, 1, ItemType.CHARM_SMALL, "Charm Small"),
+    'cm2': ItemTypeData(1, 2, ItemType.CHARM_LARGE, "Charm Large"),
+    'cm3': ItemTypeData(1, 3, ItemType.CHARM_GRAND, "Charm Grand"),
+    'isc': ItemTypeData(1, 1, ItemType.SCROLL, "Identify Scroll"),
+    'tsc': ItemTypeData(1, 1, ItemType.SCROLL, "Town Portal Scroll"),
+    'tbk': ItemTypeData(1, 2, ItemType.SCROLL, "Tome of Town Portal"),
+    'ibk': ItemTypeData(1, 2, ItemType.SCROLL, "Tome of Identify"),
+    'aqv': ItemTypeData(1, 3, ItemType.MISC, "Arrows"),
+    'cqv': ItemTypeData(1, 3, ItemType.MISC, "Bolts"),
+    'key': ItemTypeData(1, 1, ItemType.MISC, "Key"),
+    'gld': ItemTypeData(1, 1, ItemType.MISC, "gold"),
+    'ear': ItemTypeData(1, 1, ItemType.MISC, "Ear"),
+    'std': ItemTypeData(1, 1, ItemType.MISC, "Standard of Heroes"),
+    'jew': ItemTypeData(1, 1, ItemType.JEWEL, "Jewel"),
+    'amu': ItemTypeData(1, 1, ItemType.AMULET, "Amulet"),
+    'rin': ItemTypeData(1, 1, ItemType.RING, "Ring"),
+    'pk1': ItemTypeData(1, 2, ItemType.UBERKEY, "Key of Terror"),
+    'pk2': ItemTypeData(1, 2, ItemType.UBERKEY, "Key of Hate"),
+    'pk3': ItemTypeData(1, 2, ItemType.UBERKEY, "Key of Destruction"),
+    'bey': ItemTypeData(1, 2, ItemType.UBERPART, "Baal's Eye"),
+    'dhn': ItemTypeData(1, 2, ItemType.UBERPART, "Diablo's Horn"),
+    'mbr': ItemTypeData(1, 2, ItemType.UBERPART, "Mephisto's Brain"),
+    'bet': ItemTypeData(1, 1, ItemType.ESSENCE, "Burning Essence of Terror"),
+    'ceh': ItemTypeData(1, 1, ItemType.ESSENCE, "Charged Essence of Hatred"),
+    'fed': ItemTypeData(1, 1, ItemType.ESSENCE, "Festering Essence of Destruction"),
+    'tes': ItemTypeData(1, 1, ItemType.ESSENCE, "Twisted Essence of Suffering"),
+    'toa': ItemTypeData(1, 1, ItemType.ESSENCE, "Token of Absolution")
+}
 
 
-def get_set_id(specific_set_id):
-    return set_id[specific_set_id]
+def get_set_data(set_id):
+    return set_data[set_id]
 
 
-set_id: Dict[int, int] = {}
-set_id[0] = 1  # Civerb's Ward
-set_id[1] = 1  # Civerb's Icon
-set_id[2] = 1  # Civerb's Cudgel
-set_id[3] = 2  # Hsarus' Iron Heel
-set_id[4] = 2  # Hsarus' Iron Fist
-set_id[5] = 2  # Hsarus' Iron Stay
-set_id[6] = 3  # Cleglaw's Tooth
-set_id[7] = 3  # Cleglaw's Claw
-set_id[8] = 3  # Cleglaw's Pincers
-set_id[9] = 4  # Iratha's Collar
-set_id[10] = 4  # Iratha's Cuff
-set_id[11] = 4  # Iratha's Coil
-set_id[12] = 4  # Iratha's Cord
-set_id[13] = 5  # Isenhart's Lightbrand
-set_id[14] = 5  # Isenhart's Parry
-set_id[15] = 5  # Isenhart's Case
-set_id[16] = 5  # Isenhart's Horns
-set_id[17] = 6  # Vidala's Barb
-set_id[18] = 6  # Vidala's Fetlock
-set_id[19] = 6  # Vidala's Ambush
-set_id[20] = 6  # Vidala's Snare
-set_id[21] = 7  # Milabrega's Orb
-set_id[22] = 7  # Milabrega's Rod
-set_id[23] = 7  # Milabrega's Diadem
-set_id[24] = 7  # Milabrega's Robe
-set_id[25] = 8  # Cathan's Rule
-set_id[26] = 8  # Cathan's Mesh
-set_id[27] = 8  # Cathan's Visage
-set_id[28] = 8  # Cathan's Sigil
-set_id[29] = 8  # Cathan's Seal
-set_id[30] = 9  # Tancred's Crowbill
-set_id[31] = 9  # Tancred's Spine
-set_id[32] = 9  # Tancred's Hobnails
-set_id[33] = 9  # Tancred's Weird
-set_id[34] = 9  # Tancred's Skull
-set_id[35] = 10  # Sigon's Gage
-set_id[36] = 10  # Sigon's Visor
-set_id[37] = 10  # Sigon's Shelter
-set_id[38] = 10  # Sigon's Sabot
-set_id[39] = 10  # Sigon's Wrap
-set_id[40] = 10  # Sigon's Guard
-set_id[41] = 11  # Infernal Cranium
-set_id[42] = 11  # Infernal Torch
-set_id[43] = 11  # Infernal Sign
-set_id[44] = 12  # Berserker's Headgear
-set_id[45] = 12  # Berserker's Hauberk
-set_id[46] = 12  # Berserker's Hatchet
-set_id[47] = 13  # Death's Hand
-set_id[48] = 13  # Death's Guard
-set_id[49] = 13  # Death's Touch
-set_id[50] = 14  # Angelic Sickle
-set_id[51] = 14  # Angelic Mantle
-set_id[52] = 14  # Angelic Halo
-set_id[53] = 14  # Angelic Wings
-set_id[54] = 15  # Arctic Horn
-set_id[55] = 15  # Arctic Furs
-set_id[56] = 15  # Arctic Binding
-set_id[57] = 15  # Arctic Mitts
-set_id[58] = 16  # Arcanna's Sign
-set_id[59] = 16  # Arcanna's Deathwand
-set_id[60] = 16  # Arcanna's Head
-set_id[61] = 16  # Arcanna's Flesh
-set_id[62] = 17  # Natalya's Totem
-set_id[63] = 17  # Natalya's Mark
-set_id[64] = 17  # Natalya's Shadow
-set_id[65] = 17  # Natalya's Soul
-set_id[66] = 18  # Aldur's Stony Gaze
-set_id[67] = 18  # Aldur's Deception
-set_id[68] = 18  # Aldur's Gauntlet
-set_id[69] = 18  # Aldur's Advance
-set_id[70] = 19  # Immortal King's Will
-set_id[71] = 19  # Immortal King's Soul Cage
-set_id[72] = 19  # Immortal King's Detail
-set_id[73] = 19  # Immortal King's Forge
-set_id[74] = 19  # Immortal King's Pillar
-set_id[75] = 19  # Immortal King's Stone
-set_id[76] = 20  # Tal Rasha's Fire-Spun Cloth
-set_id[77] = 20  # Tal Rasha's Adjudication
-set_id[78] = 20  # Tal Rasha's Lidless Eye
-set_id[79] = 20  # Tal Rasha's Guardianship
-set_id[80] = 20  # Tal Rasha's Horadric Crest
-set_id[81] = 21  # Griswold's Valor
-set_id[82] = 21  # Griswold's Heart
-set_id[83] = 21  # Griswolds's Redemption
-set_id[84] = 21  # Griswold's Honor
-set_id[85] = 22  # Trang-Oul's Guise
-set_id[86] = 22  # Trang-Oul's Scales
-set_id[87] = 22  # Trang-Oul's Wing
-set_id[88] = 22  # Trang-Oul's Claws
-set_id[89] = 22  # Trang-Oul's Girth
-set_id[90] = 23  # M'avina's True Sight
-set_id[91] = 23  # M'avina's Embrace
-set_id[92] = 23  # M'avina's Icy Clutch
-set_id[93] = 23  # M'avina's Tenet
-set_id[94] = 23  # M'avina's Caster
-set_id[95] = 24  # Telling of Beads
-set_id[96] = 24  # Laying of Hands
-set_id[97] = 24  # Rite of Passage
-set_id[98] = 24  # Dark Adherent
-set_id[99] = 24  # Credendum
-set_id[100] = 25  # Dangoon's Teaching
-set_id[101] = 25  # Heaven's Taebaek
-set_id[102] = 25  # Haemosu's Adament
-set_id[103] = 25  # Ondal's Almighty
-set_id[104] = 26  # Guillaume's Face
-set_id[105] = 26  # Wilhelm's Pride
-set_id[106] = 26  # Magnus' Skin
-set_id[107] = 26  # Wihtstan's Guard
-set_id[108] = 27  # Hwanin's Splendor
-set_id[109] = 27  # Hwanin's Refuge
-set_id[110] = 27  # Hwanin's Seal
-set_id[111] = 27  # Hwanin's Justice
-set_id[112] = 28  # Sazabi's Cobalt Redeemer
-set_id[113] = 28  # Sazabi's Ghost Liberator
-set_id[114] = 28  # Sazabi's Mental Sheath
-set_id[115] = 29  # Bul-Kathos' Sacred Charge
-set_id[116] = 29  # Bul-Kathos' Tribal Guardian
-set_id[117] = 30  # Cow King's Horns
-set_id[118] = 30  # Cow King's Hide
-set_id[119] = 30  # Cow King's Hoofs
-set_id[120] = 31  # Naj's Puzzler
-set_id[121] = 31  # Naj's Light Plate
-set_id[122] = 31  # Naj's Circlet
-set_id[123] = 32  # Sander's Paragon
-set_id[124] = 32  # Sander's Riprap
-set_id[125] = 32  # Sander's Taboo
-set_id[126] = 32  # Sander's Superstition
+class SetData:
+    def __init__(self, set_name, difficulty):
+        self.set_name = set_name
+        self.difficulty = difficulty
+
+
+set_data: Dict[int, SetData] = {
+    0: SetData("Civerb's Vestments", 0),
+    1: SetData("Hsarus' Defense", 0),
+    2: SetData("Cleglaw's Brace", 0),
+    3: SetData("Iratha's Finery", 0),
+    4: SetData("Isenhart's Armory", 0),
+    5: SetData("Vidala's Rig", 0),
+    6: SetData("Milabrega's Regalia", 0),
+    7: SetData("Cathan's Traps", 0),
+    8: SetData("Tancred's Battlegear", 0),
+    9: SetData("Sigon's Complete Steel", 0),
+    10: SetData("Infernal Tools", 0),
+    11: SetData("Berserker's Arsenal", 0),
+    12: SetData("Death's Disguise", 0),
+    13: SetData("Angelic Raiment", 0),
+    14: SetData("Arctic Gear", 0),
+    15: SetData("Arcanna's Tricks", 0),
+    16: SetData("Natalya's Odium", 2),
+    17: SetData("Aldur's Watchtower", 2),
+    18: SetData("Immortal King", 2),
+    19: SetData("Tal Rasha's Wrappings", 2),
+    20: SetData("Griswold's Legacy", 2),
+    21: SetData("Trang-Oul's Avatar", 2),
+    22: SetData("M'avina's Battle Hymn", 2),
+    23: SetData("The Disciple", 1),
+    24: SetData("Heaven's Brethren", 1),
+    25: SetData("Orphan's Call", 1),
+    26: SetData("Hwanin's Majesty", 1),
+    27: SetData("Sazabi's Grand Tribute", 1),
+    28: SetData("Bul-Kathos' Children", 2),
+    29: SetData("Cow King's Leathers", 1),
+    30: SetData("Naj's Ancient Vestige", 1),
+    31: SetData("Sander's Folly", 1)
+}
+
+
+def get_set_item_data(set_item_id):
+    return set_item_data[set_item_id]
+
+
+class SetItemData:
+    def __init__(self, set_item_name, set_id):
+        self.set_item_name = set_item_name
+        self.set_id = set_id
+
+
+set_item_data: Dict[int, SetItemData] = {
+    0: SetItemData("Civerb's Ward", 0),
+    1: SetItemData("Civerb's Icon", 0),
+    2: SetItemData("Civerb's Cudgel", 0),
+    3: SetItemData("Hsarus' Iron Heel", 1),
+    4: SetItemData("Hsarus' Iron Fist", 1),
+    5: SetItemData("Hsarus' Iron Stay", 1),
+    6: SetItemData("Cleglaw's Tooth", 2),
+    7: SetItemData("Cleglaw's Claw", 2),
+    8: SetItemData("Cleglaw's Pincers", 2),
+    9: SetItemData("Iratha's Collar", 3),
+    10: SetItemData("Iratha's Cuff", 3),
+    11: SetItemData("Iratha's Coil", 3),
+    12: SetItemData("Iratha's Cord", 3),
+    13: SetItemData("Isenhart's Lightbrand", 4),
+    14: SetItemData("Isenhart's Parry", 4),
+    15: SetItemData("Isenhart's Case", 4),
+    16: SetItemData("Isenhart's Horns", 4),
+    17: SetItemData("Vidala's Barb", 5),
+    18: SetItemData("Vidala's Fetlock", 5),
+    19: SetItemData("Vidala's Ambush", 5),
+    20: SetItemData("Vidala's Snare", 5),
+    21: SetItemData("Milabrega's Orb", 6),
+    22: SetItemData("Milabrega's Rod", 6),
+    23: SetItemData("Milabrega's Diadem", 6),
+    24: SetItemData("Milabrega's Robe", 6),
+    25: SetItemData("Cathan's Rule", 7),
+    26: SetItemData("Cathan's Mesh", 7),
+    27: SetItemData("Cathan's Visage", 7),
+    28: SetItemData("Cathan's Sigil", 7),
+    29: SetItemData("Cathan's Seal", 7),
+    30: SetItemData("Tancred's Crowbill", 8),
+    31: SetItemData("Tancred's Spine", 8),
+    32: SetItemData("Tancred's Hobnails", 8),
+    33: SetItemData("Tancred's Weird", 8),
+    34: SetItemData("Tancred's Skull", 8),
+    35: SetItemData("Sigon's Gage", 9),
+    36: SetItemData("Sigon's Visor", 9),
+    37: SetItemData("Sigon's Shelter", 9),
+    38: SetItemData("Sigon's Sabot", 9),
+    39: SetItemData("Sigon's Wrap", 9),
+    40: SetItemData("Sigon's Guard", 9),
+    41: SetItemData("Infernal Cranium", 10),
+    42: SetItemData("Infernal Torch", 10),
+    43: SetItemData("Infernal Sign", 10),
+    44: SetItemData("Berserker's Headgear", 11),
+    45: SetItemData("Berserker's Hauberk", 11),
+    46: SetItemData("Berserker's Hatchet", 11),
+    47: SetItemData("Death's Hand", 12),
+    48: SetItemData("Death's Guard", 12),
+    49: SetItemData("Death's Touch", 12),
+    50: SetItemData("Angelic Sickle", 13),
+    51: SetItemData("Angelic Mantle", 13),
+    52: SetItemData("Angelic Halo", 13),
+    53: SetItemData("Angelic Wings", 13),
+    54: SetItemData("Arctic Horn", 14),
+    55: SetItemData("Arctic Furs", 14),
+    56: SetItemData("Arctic Binding", 14),
+    57: SetItemData("Arctic Mitts", 14),
+    58: SetItemData("Arcanna's Sign", 15),
+    59: SetItemData("Arcanna's Deathwand", 15),
+    60: SetItemData("Arcanna's Head", 15),
+    61: SetItemData("Arcanna's Flesh", 15),
+    62: SetItemData("Natalya's Totem", 16),
+    63: SetItemData("Natalya's Mark", 16),
+    64: SetItemData("Natalya's Shadow", 16),
+    65: SetItemData("Natalya's Soul", 16),
+    66: SetItemData("Aldur's Stony Gaze", 17),
+    67: SetItemData("Aldur's Deception", 17),
+    68: SetItemData("Aldur's Gauntlet", 17),
+    69: SetItemData("Aldur's Advance", 17),
+    70: SetItemData("Immortal King's Will", 18),
+    71: SetItemData("Immortal King's Soul Cage", 18),
+    72: SetItemData("Immortal King's Detail", 18),
+    73: SetItemData("Immortal King's Forge", 18),
+    74: SetItemData("Immortal King's Pillar", 18),
+    75: SetItemData("Immortal King's Stone", 18),
+    76: SetItemData("Tal Rasha's Fire-Spun Cloth", 19),
+    77: SetItemData("Tal Rasha's Adjudication", 19),
+    78: SetItemData("Tal Rasha's Lidless Eye", 19),
+    79: SetItemData("Tal Rasha's Guardianship", 19),
+    80: SetItemData("Tal Rasha's Horadric Crest", 19),
+    81: SetItemData("Griswold's Valor", 20),
+    82: SetItemData("Griswold's Heart", 20),
+    83: SetItemData("Griswolds's Redemption", 20),
+    84: SetItemData("Griswold's Honor", 20),
+    85: SetItemData("Trang-Oul's Guise", 21),
+    86: SetItemData("Trang-Oul's Scales", 21),
+    87: SetItemData("Trang-Oul's Wing", 21),
+    88: SetItemData("Trang-Oul's Claws", 21),
+    89: SetItemData("Trang-Oul's Girth", 21),
+    90: SetItemData("M'avina's True Sight", 22),
+    91: SetItemData("M'avina's Embrace", 22),
+    92: SetItemData("M'avina's Icy Clutch", 22),
+    93: SetItemData("M'avina's Tenet", 22),
+    94: SetItemData("M'avina's Caster", 22),
+    95: SetItemData("Telling of Beads", 23),
+    96: SetItemData("Laying of Hands", 23),
+    97: SetItemData("Rite of Passage", 23),
+    98: SetItemData("Dark Adherent", 23),
+    99: SetItemData("Credendum", 23),
+    100: SetItemData("Dangoon's Teaching", 24),
+    101: SetItemData("Heaven's Taebaek", 24),
+    102: SetItemData("Haemosu's Adament", 24),
+    103: SetItemData("Ondal's Almighty", 24),
+    104: SetItemData("Guillaume's Face", 25),
+    105: SetItemData("Wilhelm's Pride", 25),
+    106: SetItemData("Magnus' Skin", 25),
+    107: SetItemData("Wihtstan's Guard", 25),
+    108: SetItemData("Hwanin's Splendor", 26),
+    109: SetItemData("Hwanin's Refuge", 26),
+    110: SetItemData("Hwanin's Seal", 26),
+    111: SetItemData("Hwanin's Justice", 26),
+    112: SetItemData("Sazabi's Cobalt Redeemer", 27),
+    113: SetItemData("Sazabi's Ghost Liberator", 27),
+    114: SetItemData("Sazabi's Mental Sheath", 27),
+    115: SetItemData("Bul-Kathos' Sacred Charge", 28),
+    116: SetItemData("Bul-Kathos' Tribal Guardian", 28),
+    117: SetItemData("Cow King's Horns", 29),
+    118: SetItemData("Cow King's Hide", 29),
+    119: SetItemData("Cow King's Hoofs", 29),
+    120: SetItemData("Naj's Puzzler", 30),
+    121: SetItemData("Naj's Light Plate", 30),
+    122: SetItemData("Naj's Circlet", 30),
+    123: SetItemData("Sander's Paragon", 31),
+    124: SetItemData("Sander's Riprap", 31),
+    125: SetItemData("Sander's Taboo", 31),
+    126: SetItemData("Sander's Superstition", 31)
+}
 
 
 def get_unique_name(unique_id):
     return unique_names[unique_id]
 
 
-unique_names: Dict[int, str] = {}
-unique_names[0] = "The Gnasher"
-unique_names[1] = "Deathspade"
-unique_names[2] = "Bladebone"
-unique_names[3] = "Skull splitter"
-unique_names[4] = "Rakescar"
-unique_names[5] = "Axe of Fechmar"
-unique_names[6] = "Goreshovel"
-unique_names[7] = "The Chiefthan"
-unique_names[8] = "Brainhew"
-unique_names[9] = "Humongous"
-unique_names[10] = "Torch of Iros"
-unique_names[11] = "Maelstorm"
-unique_names[12] = "Gravenspine"
-unique_names[13] = "Umes Lament"
-unique_names[14] = "Felloak"
-unique_names[15] = "Knell Striker"
-unique_names[16] = "Rusthandle"
-unique_names[17] = "Stormeye"
-unique_names[18] = "Stoutnail"
-unique_names[19] = "Crushflange"
-unique_names[20] = "Bloodrise"
-unique_names[21] = "The Generals Tan Do Li Ga"
-unique_names[22] = "Ironstone"
-unique_names[23] = "Bonesnap"
-unique_names[24] = "Steeldriver"
-unique_names[25] = "Rixot's Keen"
-unique_names[26] = "Blood Crescent"
-unique_names[27] = "Skewer of Krintiz"
-unique_names[28] = "Gleamscythe"
-unique_names[29] = "Azurewrath"
-unique_names[30] = "Griswold's Edge"
-unique_names[31] = "Hellplague"
-unique_names[32] = "Culwens Point"
-unique_names[33] = "Shadowfang"
-unique_names[34] = "Soulflay"
-unique_names[35] = "Kinemils Awl"
-unique_names[36] = "Blacktongue"
-unique_names[37] = "Ripsaw"
-unique_names[38] = "The Patriarch"
-unique_names[39] = "Gull"
-unique_names[40] = "The Diggler"
-unique_names[41] = "The Jade Tan Do"
-unique_names[42] = "Spectral Shard"
-unique_names[43] = "The Dragon Chang"
-unique_names[44] = "Razortine"
-unique_names[45] = "Bloodthief"
-unique_names[46] = "Lance of Yaggai"
-unique_names[47] = "The Tannr Gorerod"
-unique_names[48] = "Dimoaks Hew"
-unique_names[49] = "Steelgoad"
-unique_names[50] = "Soul Harvest"
-unique_names[51] = "The Battlebranch"
-unique_names[52] = "Woestave"
-unique_names[53] = "The Grim Reaper"
-unique_names[54] = "Bane Ash"
-unique_names[55] = "Serpent Lord"
-unique_names[56] = "Spire of Lazarus"
-unique_names[57] = "The Salamander"
-unique_names[58] = "The Iron Jang Bong"
-unique_names[59] = "Pluckeye"
-unique_names[60] = "Witherstring"
-unique_names[61] = "Raven Claw"
-unique_names[62] = "Rogue's Bow"
-unique_names[63] = "Stormstrike"
-unique_names[64] = "Wizendraw"
-unique_names[65] = "Hellclap"
-unique_names[66] = "Blastbark"
-unique_names[67] = "Leadcrow"
-unique_names[68] = "Ichorsting"
-unique_names[69] = "Hellcast"
-unique_names[70] = "Doomslinger"
-unique_names[71] = "Biggin's Bonnet"
-unique_names[72] = "Tarnhelm"
-unique_names[73] = "Coif of Glory"
-unique_names[74] = "Duskdeep"
-unique_names[75] = "Wormskull"
-unique_names[76] = "Howltusk"
-unique_names[77] = "Undead Crown"
-unique_names[78] = "The Face of Horror"
-unique_names[79] = "Greyform"
-unique_names[80] = "Blinkbat's Form"
-unique_names[81] = "The Centurion"
-unique_names[82] = "Twitchthroe"
-unique_names[83] = "Darkglow"
-unique_names[84] = "Hawkmail"
-unique_names[85] = "Sparking Mail"
-unique_names[86] = "Venom Ward"
-unique_names[87] = "Iceblink"
-unique_names[88] = "Boneflesh"
-unique_names[89] = "Rockfleece"
-unique_names[90] = "Rattlecage"
-unique_names[91] = "Goldskin"
-unique_names[92] = "Victors Silk"
-unique_names[93] = "Heavenly Garb"
-unique_names[94] = "Pelta Lunata"
-unique_names[95] = "Umbral Disk"
-unique_names[96] = "Stormguild"
-unique_names[97] = "Wall of the Eyeless"
-unique_names[98] = "Swordback Hold"
-unique_names[99] = "Steelclash"
-unique_names[100] = "Bverrit Keep"
-unique_names[101] = "The Ward"
-unique_names[102] = "The Hand of Broc"
-unique_names[103] = "Bloodfist"
-unique_names[104] = "Chance Guards"
-unique_names[105] = "Magefist"
-unique_names[106] = "Frostburn"
-unique_names[107] = "Hotspur"
-unique_names[108] = "Gorefoot"
-unique_names[109] = "Treads of Cthon"
-unique_names[110] = "Goblin Toe"
-unique_names[111] = "Tearhaunch"
-unique_names[112] = "Lenymo"
-unique_names[113] = "Snakecord"
-unique_names[114] = "Nightsmoke"
-unique_names[115] = "Goldwrap"
-unique_names[116] = "Bladebuckle"
-unique_names[117] = "Nokozan Relic"
-unique_names[118] = "The Eye of Etlich"
-unique_names[119] = "The Mahim-Oak Curio"
-unique_names[120] = "Nagelring"
-unique_names[121] = "Manald Heal"
-unique_names[122] = "The Stone of Jordan"
-unique_names[123] = "Amulet of the Viper"
-unique_names[124] = "Staff of Kings"
-unique_names[125] = "Horadric Staff"
-unique_names[126] = "Hell Forge Hammer"
-unique_names[127] = "Khalim's Flail"
-unique_names[128] = "Super Khalim's Flail"
-unique_names[129] = "Coldkill"
-unique_names[130] = "Butcher's Pupil"
-unique_names[131] = "Islestrike"
-unique_names[132] = "Pompe's Wrath"
-unique_names[133] = "Guardian Naga"
-unique_names[134] = "Warlord's Trust"
-unique_names[135] = "Spellsteel"
-unique_names[136] = "Stormrider"
-unique_names[137] = "Boneslayer Blade"
-unique_names[138] = "The Minataur"
-unique_names[139] = "Suicide Branch"
-unique_names[140] = "Carin Shard"
-unique_names[141] = "Arm of King Leoric"
-unique_names[142] = "Blackhand Key"
-unique_names[143] = "Dark Clan Crusher"
-unique_names[144] = "Zakarum's Hand"
-unique_names[145] = "The Fetid Sprinkler"
-unique_names[146] = "Hand of Blessed Light"
-unique_names[147] = "Fleshrender"
-unique_names[148] = "Sureshrill Frost"
-unique_names[149] = "Moonfall"
-unique_names[150] = "Baezil's Vortex"
-unique_names[151] = "Earthshaker"
-unique_names[152] = "Bloodtree Stump"
-unique_names[153] = "The Gavel of Pain"
-unique_names[154] = "Bloodletter"
-unique_names[155] = "Coldsteel Eye"
-unique_names[156] = "Hexfire"
-unique_names[157] = "Blade of Ali Baba"
-unique_names[158] = "Ginther's Rift"
-unique_names[159] = "Headstriker"
-unique_names[160] = "Plague Bearer"
-unique_names[161] = "The Atlantian"
-unique_names[162] = "Crainte Vomir"
-unique_names[163] = "Bing Sz Wang"
-unique_names[164] = "The Vile Husk"
-unique_names[165] = "Cloudcrack"
-unique_names[166] = "Todesfaelle Flamme"
-unique_names[167] = "Swordguard"
-unique_names[168] = "Spineripper"
-unique_names[169] = "Heart Carver"
-unique_names[170] = "Blackbog's Sharp"
-unique_names[171] = "Stormspike"
-unique_names[172] = "The Impaler"
-unique_names[173] = "Kelpie Snare"
-unique_names[174] = "Soulfeast Tine"
-unique_names[175] = "Hone Sundan"
-unique_names[176] = "Spire of Honor"
-unique_names[177] = "The Meat Scraper"
-unique_names[178] = "Blackleach Blade"
-unique_names[179] = "Athena's Wrath"
-unique_names[180] = "Pierre Tombale Couant"
-unique_names[181] = "Husoldal Evo"
-unique_names[182] = "Grim's Burning Dead"
-unique_names[183] = "Razorswitch"
-unique_names[184] = "Ribcracker"
-unique_names[185] = "Chromatic Ire"
-unique_names[186] = "Warpspear"
-unique_names[187] = "Skullcollector"
-unique_names[188] = "Skystrike"
-unique_names[189] = "Riphook"
-unique_names[190] = "Kuko Shakaku"
-unique_names[191] = "Endlesshail"
-unique_names[192] = "Whichwild String"
-unique_names[193] = "Cliffkiller"
-unique_names[194] = "Magewrath"
-unique_names[195] = "Godstrike Arch"
-unique_names[196] = "Langer Briser"
-unique_names[197] = "Pus Spiter"
-unique_names[198] = "Buriza-Do Kyanon"
-unique_names[199] = "Demon Machine"
-unique_names[200] = "Armor (Unknown)"
-unique_names[201] = "Peasent Crown"
-unique_names[202] = "Rockstopper"
-unique_names[203] = "Stealskull"
-unique_names[204] = "Darksight Helm"
-unique_names[205] = "Valkyrie Wing"
-unique_names[206] = "Crown of Thieves"
-unique_names[207] = "Blckhorn's Face"
-unique_names[208] = "Vampire Gaze"
-unique_names[209] = "The Spirit Shroud"
-unique_names[210] = "Skin of the Vipermagi"
-unique_names[211] = "Skin of the Flayed One"
-unique_names[212] = "Ironpelt"
-unique_names[213] = "Spiritforge"
-unique_names[214] = "Crow Caw"
-unique_names[215] = "Shaftstop"
-unique_names[216] = "Duriel's Shell"
-unique_names[217] = "Skullder's Ire"
-unique_names[218] = "Guardian Angel"
-unique_names[219] = "Toothrow"
-unique_names[220] = "Atma's Wail"
-unique_names[221] = "Black Hades"
-unique_names[222] = "Corpsemourn"
-unique_names[223] = "Que-Hegan's Wisdom"
-unique_names[224] = "Visceratuant"
-unique_names[225] = "Mosers Blessed Circle"
-unique_names[226] = "Stormchaser"
-unique_names[227] = "Tiamat's Rebuke"
-unique_names[228] = "Gerke's Sanctuary"
-unique_names[229] = "Radimant's Sphere"
-unique_names[230] = "Lidless Wall"
-unique_names[231] = "Lance Guard"
-unique_names[232] = "Venom Grip"
-unique_names[233] = "Gravepalm"
-unique_names[234] = "Ghoulhide"
-unique_names[235] = "Lavagout"
-unique_names[236] = "Hellmouth"
-unique_names[237] = "Infernostride"
-unique_names[238] = "Waterwalk"
-unique_names[239] = "Silkweave"
-unique_names[240] = "Wartraveler"
-unique_names[241] = "Gorerider"
-unique_names[242] = "String of Ears"
-unique_names[243] = "Razortail"
-unique_names[244] = "Gloomstrap"
-unique_names[245] = "Snowclash"
-unique_names[246] = "Thundergod's Vigor"
-unique_names[247] = "Elite unique"
-unique_names[248] = "Harlequin Crest"
-unique_names[249] = "Veil of Steel"
-unique_names[250] = "The Gladiator's Bane"
-unique_names[251] = "Arkaine's Valor"
-unique_names[252] = "Blackoak Shield"
-unique_names[253] = "Stormshield"
-unique_names[254] = "Hellslayer"
-unique_names[255] = "Messerschmidt's Reaver"
-unique_names[256] = "Baranar's Star"
-unique_names[257] = "Schaefer's Hammer"
-unique_names[258] = "The Cranium Basher"
-unique_names[259] = "Lightsabre"
-unique_names[260] = "Doombringer"
-unique_names[261] = "The Grandfather"
-unique_names[262] = "Wizardspike"
-unique_names[263] = "Constricting Ring"
-unique_names[264] = "Stormspire"
-unique_names[265] = "Eaglehorn"
-unique_names[266] = "Windforce"
-unique_names[267] = "Ring"
-unique_names[268] = "Bul Katho's Wedding Band"
-unique_names[269] = "The Cat's Eye"
-unique_names[270] = "The Rising Sun"
-unique_names[271] = "Crescent Moon"
-unique_names[272] = "Mara's Kaleidoscope"
-unique_names[273] = "Atma's Scarab"
-unique_names[274] = "Dwarf Star"
-unique_names[275] = "Raven Frost"
-unique_names[276] = "Highlord's Wrath"
-unique_names[277] = "Saracen's Chance"
-unique_names[278] = "Class specific"
-unique_names[279] = "Arreat's Face"
-unique_names[280] = "Homunculus"
-unique_names[281] = "Titan's Revenge"
-unique_names[282] = "Lycander's Aim"
-unique_names[283] = "Lycander's Flank"
-unique_names[284] = "The Oculus"
-unique_names[285] = "Herald of Zakarum"
-unique_names[286] = "Bartuc's Cut-Throat"
-unique_names[287] = "Jalal's Mane"
-unique_names[288] = "The Scalper"
-unique_names[289] = "Bloodmoon"
-unique_names[290] = "Djinnslayer"
-unique_names[291] = "Deathbit"
-unique_names[292] = "Warshrike"
-unique_names[293] = "Gutsiphon"
-unique_names[294] = "Razoredge"
-unique_names[295] = "Gore Ripper"
-unique_names[296] = "Demon Limb"
-unique_names[297] = "Steel Shade"
-unique_names[298] = "Tomb Reaver"
-unique_names[299] = "Death's Web"
-unique_names[300] = "Nature's Peace"
-unique_names[301] = "Azurewrath"
-unique_names[302] = "Seraph's Hymn"
-unique_names[303] = "Zakarum's Salvation"
-unique_names[304] = "Fleshripper"
-unique_names[305] = "Odium"
-unique_names[306] = "Horizon's Tornado"
-unique_names[307] = "Stone Crusher"
-unique_names[308] = "Jade Talon"
-unique_names[309] = "Shadow Dancer"
-unique_names[310] = "Cerebus' Bite"
-unique_names[311] = "Tyrael's Might"
-unique_names[312] = "Soul Drainer"
-unique_names[313] = "Rune Master"
-unique_names[314] = "Death Cleaver"
-unique_names[315] = "Executioner's Justice"
-unique_names[316] = "Stoneraven"
-unique_names[317] = "Leviathan"
-unique_names[318] = "Larzuk's Champion"
-unique_names[319] = "Wisp Projector"
-unique_names[320] = "Gargoyle's Bite"
-unique_names[321] = "Lacerator"
-unique_names[322] = "Mang Song's Lesson"
-unique_names[323] = "Viperfork"
-unique_names[324] = "Ethereal Edge"
-unique_names[325] = "Demonhorn's Edge"
-unique_names[326] = "The Reaper's Toll"
-unique_names[327] = "Spiritkeeper"
-unique_names[328] = "Hellrack"
-unique_names[329] = "Alma Negra"
-unique_names[330] = "Darkforge Spawn"
-unique_names[331] = "Widowmaker"
-unique_names[332] = "Bloodraven's Charge"
-unique_names[333] = "Ghostflame"
-unique_names[334] = "Shadowkiller"
-unique_names[335] = "Gimmershred"
-unique_names[336] = "Griffon's Eye"
-unique_names[337] = "Windhammer"
-unique_names[338] = "Thunderstroke"
-unique_names[339] = "Giant Maimer"
-unique_names[340] = "Demon's Arch"
-unique_names[341] = "Boneflame"
-unique_names[342] = "Steelpillar"
-unique_names[343] = "Nightwing's Veil"
-unique_names[344] = "Crown of Ages"
-unique_names[345] = "Andariel's Visage"
-unique_names[346] = "Darkfear"
-unique_names[347] = "Dragonscale"
-unique_names[348] = "Steel Carapice"
-unique_names[349] = "Medusa's Gaze"
-unique_names[350] = "Ravenlore"
-unique_names[351] = "Boneshade"
-unique_names[352] = "Nethercrow"
-unique_names[353] = "Flamebellow"
-unique_names[354] = "Fathom"
-unique_names[355] = "Wolfhowl"
-unique_names[356] = "Spirit Ward"
-unique_names[357] = "Kira's Guardian"
-unique_names[358] = "Ormus Robes"
-unique_names[359] = "Gheed's Fortune"
-unique_names[360] = "Stormlash"
-unique_names[361] = "Halaberd's Reign"
-unique_names[362] = "Warriv's Warder"
-unique_names[363] = "Spike Thorn"
-unique_names[364] = "Dracul's Grasp"
-unique_names[365] = "Frostwind"
-unique_names[366] = "Templar's Might"
-unique_names[367] = "Eschuta's Temper"
-unique_names[368] = "Firelizard's Talons"
-unique_names[369] = "Sandstorm Trek"
-unique_names[370] = "Marrowwalk"
-unique_names[371] = "Heaven's Light"
-unique_names[372] = "Merman's Speed"
-unique_names[373] = "Arachnid Mesh"
-unique_names[374] = "Nosferatu's Coil"
-unique_names[375] = "Metalgrid"
-unique_names[376] = "Verdugo's Hearty Cord"
-unique_names[377] = "Sigurd's Staunch"
-unique_names[378] = "Carrion Wind"
-unique_names[379] = "Giantskull"
-unique_names[380] = "Ironward"
-unique_names[381] = "Annihilus"
-unique_names[382] = "Arioc's Needle"
-unique_names[383] = "Cranebeak"
-unique_names[384] = "Nord's Tenderizer"
-unique_names[385] = "Earthshifter"
-unique_names[386] = "Wraithflight"
-unique_names[387] = "Bonehew"
-unique_names[388] = "Ondal's Wisdom"
-unique_names[389] = "The Reedeemer"
-unique_names[390] = "Headhunter's Glory"
-unique_names[391] = "Steelrend"
-unique_names[392] = "Rainbow Facet"
-unique_names[393] = "Rainbow Facet"
-unique_names[394] = "Rainbow Facet"
-unique_names[395] = "Rainbow Facet"
-unique_names[396] = "Rainbow Facet"
-unique_names[397] = "Rainbow Facet"
-unique_names[398] = "Rainbow Facet"
-unique_names[399] = "Rainbow Facet"
-unique_names[400] = "Hellfire Torch"
+unique_names: Dict[int, str] = {
+    0: "The Gnasher",
+    1: "Deathspade",
+    2: "Bladebone",
+    3: "Skull splitter",
+    4: "Rakescar",
+    5: "Axe of Fechmar",
+    6: "Goreshovel",
+    7: "The Chiefthan",
+    8: "Brainhew",
+    9: "Humongous",
+    10: "Torch of Iros",
+    11: "Maelstorm",
+    12: "Gravenspine",
+    13: "Umes Lament",
+    14: "Felloak",
+    15: "Knell Striker",
+    16: "Rusthandle",
+    17: "Stormeye",
+    18: "Stoutnail",
+    19: "Crushflange",
+    20: "Bloodrise",
+    21: "The Generals Tan Do Li Ga",
+    22: "Ironstone",
+    23: "Bonesnap",
+    24: "Steeldriver",
+    25: "Rixot's Keen",
+    26: "Blood Crescent",
+    27: "Skewer of Krintiz",
+    28: "Gleamscythe",
+    29: "Azurewrath",
+    30: "Griswold's Edge",
+    31: "Hellplague",
+    32: "Culwens Point",
+    33: "Shadowfang",
+    34: "Soulflay",
+    35: "Kinemils Awl",
+    36: "Blacktongue",
+    37: "Ripsaw",
+    38: "The Patriarch",
+    39: "Gull",
+    40: "The Diggler",
+    41: "The Jade Tan Do",
+    42: "Spectral Shard",
+    43: "The Dragon Chang",
+    44: "Razortine",
+    45: "Bloodthief",
+    46: "Lance of Yaggai",
+    47: "The Tannr Gorerod",
+    48: "Dimoaks Hew",
+    49: "Steelgoad",
+    50: "Soul Harvest",
+    51: "The Battlebranch",
+    52: "Woestave",
+    53: "The Grim Reaper",
+    54: "Bane Ash",
+    55: "Serpent Lord",
+    56: "Spire of Lazarus",
+    57: "The Salamander",
+    58: "The Iron Jang Bong",
+    59: "Pluckeye",
+    60: "Witherstring",
+    61: "Raven Claw",
+    62: "Rogue's Bow",
+    63: "Stormstrike",
+    64: "Wizendraw",
+    65: "Hellclap",
+    66: "Blastbark",
+    67: "Leadcrow",
+    68: "Ichorsting",
+    69: "Hellcast",
+    70: "Doomslinger",
+    71: "Biggin's Bonnet",
+    72: "Tarnhelm",
+    73: "Coif of Glory",
+    74: "Duskdeep",
+    75: "Wormskull",
+    76: "Howltusk",
+    77: "Undead Crown",
+    78: "The Face of Horror",
+    79: "Greyform",
+    80: "Blinkbat's Form",
+    81: "The Centurion",
+    82: "Twitchthroe",
+    83: "Darkglow",
+    84: "Hawkmail",
+    85: "Sparking Mail",
+    86: "Venom Ward",
+    87: "Iceblink",
+    88: "Boneflesh",
+    89: "Rockfleece",
+    90: "Rattlecage",
+    91: "Goldskin",
+    92: "Victors Silk",
+    93: "Heavenly Garb",
+    94: "Pelta Lunata",
+    95: "Umbral Disk",
+    96: "Stormguild",
+    97: "Wall of the Eyeless",
+    98: "Swordback Hold",
+    99: "Steelclash",
+    100: "Bverrit Keep",
+    101: "The Ward",
+    102: "The Hand of Broc",
+    103: "Bloodfist",
+    104: "Chance Guards",
+    105: "Magefist",
+    106: "Frostburn",
+    107: "Hotspur",
+    108: "Gorefoot",
+    109: "Treads of Cthon",
+    110: "Goblin Toe",
+    111: "Tearhaunch",
+    112: "Lenymo",
+    113: "Snakecord",
+    114: "Nightsmoke",
+    115: "Goldwrap",
+    116: "Bladebuckle",
+    117: "Nokozan Relic",
+    118: "The Eye of Etlich",
+    119: "The Mahim-Oak Curio",
+    120: "Nagelring",
+    121: "Manald Heal",
+    122: "The Stone of Jordan",
+    123: "Amulet of the Viper",
+    124: "Staff of Kings",
+    125: "Horadric Staff",
+    126: "Hell Forge Hammer",
+    127: "Khalim's Flail",
+    128: "Super Khalim's Flail",
+    129: "Coldkill",
+    130: "Butcher's Pupil",
+    131: "Islestrike",
+    132: "Pompe's Wrath",
+    133: "Guardian Naga",
+    134: "Warlord's Trust",
+    135: "Spellsteel",
+    136: "Stormrider",
+    137: "Boneslayer Blade",
+    138: "The Minataur",
+    139: "Suicide Branch",
+    140: "Carin Shard",
+    141: "Arm of King Leoric",
+    142: "Blackhand Key",
+    143: "Dark Clan Crusher",
+    144: "Zakarum's Hand",
+    145: "The Fetid Sprinkler",
+    146: "Hand of Blessed Light",
+    147: "Fleshrender",
+    148: "Sureshrill Frost",
+    149: "Moonfall",
+    150: "Baezil's Vortex",
+    151: "Earthshaker",
+    152: "Bloodtree Stump",
+    153: "The Gavel of Pain",
+    154: "Bloodletter",
+    155: "Coldsteel Eye",
+    156: "Hexfire",
+    157: "Blade of Ali Baba",
+    158: "Ginther's Rift",
+    159: "Headstriker",
+    160: "Plague Bearer",
+    161: "The Atlantian",
+    162: "Crainte Vomir",
+    163: "Bing Sz Wang",
+    164: "The Vile Husk",
+    165: "Cloudcrack",
+    166: "Todesfaelle Flamme",
+    167: "Swordguard",
+    168: "Spineripper",
+    169: "Heart Carver",
+    170: "Blackbog's Sharp",
+    171: "Stormspike",
+    172: "The Impaler",
+    173: "Kelpie Snare",
+    174: "Soulfeast Tine",
+    175: "Hone Sundan",
+    176: "Spire of Honor",
+    177: "The Meat Scraper",
+    178: "Blackleach Blade",
+    179: "Athena's Wrath",
+    180: "Pierre Tombale Couant",
+    181: "Husoldal Evo",
+    182: "Grim's Burning Dead",
+    183: "Razorswitch",
+    184: "Ribcracker",
+    185: "Chromatic Ire",
+    186: "Warpspear",
+    187: "Skullcollector",
+    188: "Skystrike",
+    189: "Riphook",
+    190: "Kuko Shakaku",
+    191: "Endlesshail",
+    192: "Witchwild String",
+    193: "Cliffkiller",
+    194: "Magewrath",
+    195: "Godstrike Arch",
+    196: "Langer Briser",
+    197: "Pus Spiter",
+    198: "Buriza-Do Kyanon",
+    199: "Demon Machine",
+    200: "Armor (Unknown)",
+    201: "Peasent Crown",
+    202: "Rockstopper",
+    203: "Stealskull",
+    204: "Darksight Helm",
+    205: "Valkyrie Wing",
+    206: "Crown of Thieves",
+    207: "Blckhorn's Face",
+    208: "Vampire Gaze",
+    209: "The Spirit Shroud",
+    210: "Skin of the Vipermagi",
+    211: "Skin of the Flayed One",
+    212: "Ironpelt",
+    213: "Spiritforge",
+    214: "Crow Caw",
+    215: "Shaftstop",
+    216: "Duriel's Shell",
+    217: "Skullder's Ire",
+    218: "Guardian Angel",
+    219: "Toothrow",
+    220: "Atma's Wail",
+    221: "Black Hades",
+    222: "Corpsemourn",
+    223: "Que-Hegan's Wisdom",
+    224: "Visceratuant",
+    225: "Mosers Blessed Circle",
+    226: "Stormchaser",
+    227: "Tiamat's Rebuke",
+    228: "Gerke's Sanctuary",
+    229: "Radimant's Sphere",
+    230: "Lidless Wall",
+    231: "Lance Guard",
+    232: "Venom Grip",
+    233: "Gravepalm",
+    234: "Ghoulhide",
+    235: "Lavagout",
+    236: "Hellmouth",
+    237: "Infernostride",
+    238: "Waterwalk",
+    239: "Silkweave",
+    240: "Wartraveler",
+    241: "Gorerider",
+    242: "String of Ears",
+    243: "Razortail",
+    244: "Gloomstrap",
+    245: "Snowclash",
+    246: "Thundergod's Vigor",
+    247: "Elite unique",
+    248: "Harlequin Crest",
+    249: "Veil of Steel",
+    250: "The Gladiator's Bane",
+    251: "Arkaine's Valor",
+    252: "Blackoak Shield",
+    253: "Stormshield",
+    254: "Hellslayer",
+    255: "Messerschmidt's Reaver",
+    256: "Baranar's Star",
+    257: "Schaefer's Hammer",
+    258: "The Cranium Basher",
+    259: "Lightsabre",
+    260: "Doombringer",
+    261: "The Grandfather",
+    262: "Wizardspike",
+    263: "Constricting Ring",
+    264: "Stormspire",
+    265: "Eaglehorn",
+    266: "Windforce",
+    267: "Ring",
+    268: "Bul Katho's Wedding Band",
+    269: "The Cat's Eye",
+    270: "The Rising Sun",
+    271: "Crescent Moon",
+    272: "Mara's Kaleidoscope",
+    273: "Atma's Scarab",
+    274: "Dwarf Star",
+    275: "Raven Frost",
+    276: "Highlord's Wrath",
+    277: "Saracen's Chance",
+    278: "Class specific",
+    279: "Arreat's Face",
+    280: "Homunculus",
+    281: "Titan's Revenge",
+    282: "Lycander's Aim",
+    283: "Lycander's Flank",
+    284: "The Oculus",
+    285: "Herald of Zakarum",
+    286: "Bartuc's Cut-Throat",
+    287: "Jalal's Mane",
+    288: "The Scalper",
+    289: "Bloodmoon",
+    290: "Djinnslayer",
+    291: "Deathbit",
+    292: "Warshrike",
+    293: "Gutsiphon",
+    294: "Razoredge",
+    295: "Gore Ripper",
+    296: "Demon Limb",
+    297: "Steel Shade",
+    298: "Tomb Reaver",
+    299: "Death's Web",
+    300: "Nature's Peace",
+    301: "Azurewrath",
+    302: "Seraph's Hymn",
+    303: "Zakarum's Salvation",
+    304: "Fleshripper",
+    305: "Odium",
+    306: "Horizon's Tornado",
+    307: "Stone Crusher",
+    308: "Jade Talon",
+    309: "Shadow Dancer",
+    310: "Cerebus' Bite",
+    311: "Tyrael's Might",
+    312: "Soul Drainer",
+    313: "Rune Master",
+    314: "Death Cleaver",
+    315: "Executioner's Justice",
+    316: "Stoneraven",
+    317: "Leviathan",
+    318: "Larzuk's Champion",
+    319: "Wisp Projector",
+    320: "Gargoyle's Bite",
+    321: "Lacerator",
+    322: "Mang Song's Lesson",
+    323: "Viperfork",
+    324: "Ethereal Edge",
+    325: "Demonhorn's Edge",
+    326: "The Reaper's Toll",
+    327: "Spiritkeeper",
+    328: "Hellrack",
+    329: "Alma Negra",
+    330: "Darkforge Spawn",
+    331: "Widowmaker",
+    332: "Bloodraven's Charge",
+    333: "Ghostflame",
+    334: "Shadowkiller",
+    335: "Gimmershred",
+    336: "Griffon's Eye",
+    337: "Windhammer",
+    338: "Thunderstroke",
+    339: "Giant Maimer",
+    340: "Demon's Arch",
+    341: "Boneflame",
+    342: "Steelpillar",
+    343: "Nightwing's Veil",
+    344: "Crown of Ages",
+    345: "Andariel's Visage",
+    346: "Darkfear",
+    347: "Dragonscale",
+    348: "Steel Carapice",
+    349: "Medusa's Gaze",
+    350: "Ravenlore",
+    351: "Boneshade",
+    352: "Nethercrow",
+    353: "Flamebellow",
+    354: "Fathom",
+    355: "Wolfhowl",
+    356: "Spirit Ward",
+    357: "Kira's Guardian",
+    358: "Ormus Robes",
+    359: "Gheed's Fortune",
+    360: "Stormlash",
+    361: "Halaberd's Reign",
+    362: "Warriv's Warder",
+    363: "Spike Thorn",
+    364: "Dracul's Grasp",
+    365: "Frostwind",
+    366: "Templar's Might",
+    367: "Eschuta's Temper",
+    368: "Firelizard's Talons",
+    369: "Sandstorm Trek",
+    370: "Marrowwalk",
+    371: "Heaven's Light",
+    372: "Merman's Speed",
+    373: "Arachnid Mesh",
+    374: "Nosferatu's Coil",
+    375: "Metalgrid",
+    376: "Verdugo's Hearty Cord",
+    377: "Sigurd's Staunch",
+    378: "Carrion Wind",
+    379: "Giantskull",
+    380: "Ironward",
+    381: "Annihilus",
+    382: "Arioc's Needle",
+    383: "Cranebeak",
+    384: "Nord's Tenderizer",
+    385: "Earthshifter",
+    386: "Wraithflight",
+    387: "Bonehew",
+    388: "Ondal's Wisdom",
+    389: "The Reedeemer",
+    390: "Headhunter's Glory",
+    391: "Steelrend",
+    392: "Rainbow Facet",
+    393: "Rainbow Facet",
+    394: "Rainbow Facet",
+    395: "Rainbow Facet",
+    396: "Rainbow Facet",
+    397: "Rainbow Facet",
+    398: "Rainbow Facet",
+    399: "Rainbow Facet",
+    400: "Hellfire Torch"
+}
+
+
+def get_runeword_name(runeword_id):
+    return runeword_names[runeword_id]
+
+
+runeword_names: Dict[int, str] = {
+    27: "Ancient's Pledge",
+    30: "Beast",
+    32: "Black",
+    34: "Bone",
+    35: "Bramble",
+    36: "Brand",
+    37: "Breath of the Dying",
+    39: "Call to Arms",
+    40: "Chains of Honor",
+    42: "Chaos",
+    43: "Crescent Moon",
+    46: "Death",
+    51: "Destruction",
+    52: "Doom",
+    53: "Dragon",
+    55: "Dream",
+    56: "Duress",
+    57: "Edge",
+    59: "Enigma",
+    60: "Enlightenment",
+    62: "Eternity",
+    63: "Exile",
+    64: "Faith",
+    65: "Famine",
+    67: "Fortitude",
+    70: "Fury",
+    71: "Gloom",
+    73: "Grief",
+    74: "Hand of Justice",
+    75: "Harmory",
+    77: "Heart of the Oak",
+    80: "Holy Thunder",
+    81: "Honor",
+    85: "Ice",
+    86: "Infinity",
+    88: "Insight",
+    91: "King's Grace",
+    92: "Kingslayer",
+    95: "Last Wish",
+    97: "Lawbringer",
+    98: "Leaf",
+    100: "Lionheart",
+    101: "Lore",
+    106: "Malice",
+    107: "Melody",
+    108: "Memory",
+    112: "Myth",
+    113: "Nadir",
+    116: "Oath",
+    117: "Obedience",
+    120: "Passion",
+    123: "Peace",
+    124: "Winter",
+    128: "Phoenix",
+    131: "Plague",
+    134: "Pride",
+    135: "Principle",
+    137: "Prudence",
+    141: "Radiance",
+    142: "Rain",
+    145: "Rhyme",
+    146: "Rift",
+    147: "Sanctuary",
+    151: "Silence",
+    153: "Smoke",
+    155: "Spirit",
+    156: "Splendor",
+    158: "Stealth",
+    159: "Steel",
+    162: "Stone",
+    164: "Strength",
+    173: "Treachery",
+    179: "Venom",
+    185: "Wealth",
+    187: "White",
+    188: "Wind",
+    193: "Wrath",
+    195: "Zephyr",
+    271: "Delirium"
+}
+
+
+def get_rare_name(rare_name_id):
+    return rare_names[rare_name_id]
+
+
+rare_names: Dict[int, str] = {
+    1: "Bite",
+    2: "Scratch",
+    3: "Scalpel",
+    4: "Fang",
+    5: "Gutter",
+    6: "Thirst",
+    7: "Razor",
+    8: "Scythe",
+    9: "Edge",
+    10: "Saw",
+    11: "Splitter",
+    12: "Cleaver",
+    13: "Sever",
+    14: "Sunder",
+    15: "Rend",
+    16: "Mangler",
+    17: "Slayer",
+    18: "Reaver",
+    19: "Spawn",
+    20: "Gnash",
+    21: "Star",
+    22: "Blow",
+    23: "Smasher",
+    24: "Bane",
+    25: "Crusher",
+    26: "Breaker",
+    27: "Grinder",
+    28: "Crack",
+    29: "Mallet",
+    30: "Knell",
+    31: "Lance",
+    32: "Spike",
+    33: "Impaler",
+    34: "Skewer",
+    35: "Prod",
+    36: "Scourge",
+    37: "Wand",
+    38: "Wrack",
+    39: "Barb",
+    40: "Needle",
+    41: "Dart",
+    42: "Bolt",
+    43: "Quarrel",
+    44: "Fletch",
+    45: "Flight",
+    46: "Nock",
+    47: "Horn",
+    48: "Stinger",
+    49: "Quill",
+    50: "Goad",
+    51: "Branch",
+    52: "Spire",
+    53: "Song",
+    54: "Call",
+    55: "Cry",
+    56: "Spell",
+    57: "Chant",
+    58: "Weaver",
+    59: "Gnarl",
+    60: "Visage",
+    61: "Crest",
+    62: "Circlet",
+    63: "Veil",
+    64: "Hood",
+    65: "Mask",
+    66: "Brow",
+    67: "Casque",
+    68: "Visor",
+    69: "Cowl",
+    70: "Hide",
+    71: "Pelt",
+    72: "Carapace",
+    73: "Coat",
+    74: "Wrap",
+    75: "Suit",
+    76: "Cloak",
+    77: "Shroud",
+    78: "Jack",
+    79: "Mantle",
+    80: "Guard",
+    81: "Badge",
+    82: "Rock",
+    83: "Aegis",
+    84: "Ward",
+    85: "Tower",
+    86: "Shield",
+    87: "Wing",
+    88: "Mark",
+    89: "Emblem",
+    90: "Hand",
+    91: "Fist",
+    92: "Claw",
+    93: "Clutches",
+    94: "Grip",
+    95: "Grasp",
+    96: "Hold",
+    97: "Torch",
+    98: "Finger",
+    99: "Knuckle",
+    100: "Shank",
+    101: "Spur",
+    102: "Tread",
+    103: "Stalker",
+    104: "Greave",
+    105: "Blazer",
+    106: "Nails",
+    107: "Trample",
+    108: "Brogues",
+    109: "Track",
+    110: "Slippers",
+    111: "Clasp",
+    112: "Buckle",
+    113: "Harness",
+    114: "Lock",
+    115: "Fringe",
+    116: "Winding",
+    117: "Chain",
+    118: "Strap",
+    119: "Lash",
+    120: "Cord",
+    121: "Knot",
+    122: "Circle",
+    123: "Loop",
+    124: "Eye",
+    125: "Turn",
+    126: "Spiral",
+    127: "Coil",
+    128: "Gyre",
+    129: "Band",
+    130: "Whorl",
+    131: "Talisman",
+    132: "Heart",
+    133: "Noose",
+    134: "Necklace",
+    135: "Collar",
+    136: "Beads",
+    137: "Torc",
+    138: "Gorget",
+    139: "Scarab",
+    140: "Wood",
+    141: "Brand",
+    142: "Bludgeon",
+    143: "Cudgel",
+    144: "Loom",
+    145: "Harp",
+    146: "Master",
+    147: "Barl",
+    148: "Hew",
+    149: "Crook",
+    150: "Mar",
+    151: "Shell",
+    152: "Stake",
+    153: "Picket",
+    154: "Pale",
+    155: "Flange",
+    156: "Beast",
+    157: "Eagle",
+    158: "Raven",
+    159: "Viper",
+    160: "Ghoul",
+    161: "Skull",
+    162: "Blood",
+    163: "Dread",
+    164: "Doom",
+    165: "Grim",
+    166: "Bone",
+    167: "Death",
+    168: "Shadow",
+    169: "Storm",
+    170: "Rune",
+    171: "Plague",
+    172: "Stone",
+    173: "Wraith",
+    174: "Spirit",
+    175: "Storm",
+    176: "Demon",
+    177: "Cruel",
+    178: "Empyrion",
+    179: "Bramble",
+    180: "Pain",
+    181: "Loath",
+    182: "Glyph",
+    183: "Imp",
+    184: "Fiendra",
+    185: "Hailstone",
+    186: "Gale",
+    187: "Dire",
+    188: "Soul",
+    189: "Brimstone",
+    190: "Corpse",
+    191: "Carrion",
+    192: "Armageddon",
+    193: "Havoc",
+    194: "Bitter",
+    195: "Entropy",
+    196: "Chaos",
+    197: "Order",
+    198: "Rule",
+    199: "Warp",
+    200: "Rift",
+    201: "Corruption"
+}
+
+
+def get_set_list_count(set_list_count_id):
+    return set_list_counts[set_list_count_id]
+
+
+set_list_counts: Dict[int, int] = {
+    0: 0,
+    1: 1,
+    2: 1,
+    3: 2,
+    4: 1,
+    6: 2,
+    7: 3,
+    10: 2,
+    12: 2,
+    15: 4,
+    31: 5
+}
+
+
+def get_magic_property(property_id):
+    prop = None
+    try:
+        prop = magic_properties[property_id]
+    except KeyError:
+        print("Invalid propertyId " + str(property_id))
+    return prop
+
+
+class MagicProperty:
+    def __init__(self, bits, bias, name):
+        self.bits = bits
+        self.bias = bias
+        self.name = name
+
+
+magic_properties: Dict[int, MagicProperty] = {
+    0: MagicProperty([8], 32, "+{0} to Strength"),
+    1: MagicProperty([7], 32, "+{0} to Energy"),
+    2: MagicProperty([7], 32, "+{0} to Dexterity"),
+    3: MagicProperty([7], 32, "+{0} to Vitality"),
+    7: MagicProperty([9], 32, "+{0} to Life"),
+    9: MagicProperty([8], 32, "+{0} to Mana"),
+    11: MagicProperty([8], 32, "+{0} to Maximum Stamina"),
+    16: MagicProperty([9], 0, "+{0}% Enhanced Defense"),
+    17: MagicProperty([9, 9], 0, "+{0}% Enhanced Damage"),
+    19: MagicProperty([10], 0, "+{0} to Attack rating"),
+    20: MagicProperty([6], 0, "+{0}% Increased chance of blocking"),
+    21: MagicProperty([6], 0, "+{0} to Minimum 1-handed damage"),
+    22: MagicProperty([7], 0, "+{0} to Maximum 1-handed damage"),
+    23: MagicProperty([6], 0, "+{0} to Minimum 2-handed damage"),
+    24: MagicProperty([7], 0, "+{0} to Maximum 2-handed damage"),
+    25: MagicProperty([8], 0, "Unknown (Invisible)"),  # damagepercent
+    26: MagicProperty([8], 0, "Unknown (Invisible)"),  # manarecovery
+    27: MagicProperty([8], 0, "Regenerate Mana {0}%"),
+    28: MagicProperty([8], 0, "Heal Stamina {0}%"),
+    31: MagicProperty([11], 10, "+{0} Defense"),
+    32: MagicProperty([9], 0, "+{0} vs. Missile"),
+    33: MagicProperty([8], 10, "+{0} vs. Melee"),
+    34: MagicProperty([6], 0, "Damage Reduced by {0}"),
+    35: MagicProperty([6], 0, "Magic Damage Reduced by {0}"),
+    36: MagicProperty([8], 0, "Damage Reduced by {0}%"),
+    37: MagicProperty([8], 0, "Magic Resist +{0}%"),
+    38: MagicProperty([8], 0, "+{0}% to Maximum Magic Resist"),
+    39: MagicProperty([8], 50, "Fire Resist +{0}%"),
+    40: MagicProperty([5], 0, "+{0}% to Maximum Fire Resist"),
+    41: MagicProperty([8], 50, "Lightning Resist +{0}%"),
+    42: MagicProperty([5], 0, "+{0}% to Maximum Lightning Resist"),
+    43: MagicProperty([8], 50, "Cold Resist +{0}%"),
+    44: MagicProperty([5], 0, "+{0}% to Maximum Cold Resist"),
+    45: MagicProperty([8], 50, "Poison Resist +{0}%"),
+    46: MagicProperty([5], 0, "+{0}% to Maximum Poison Resist"),
+    48: MagicProperty([8, 9], 0, "Adds {0}-{1} Fire Damage"),
+    49: MagicProperty([9], 0, "+{0} to Maximum Fire Damage"),
+    50: MagicProperty([6, 10], 0, "Adds {0}-{1} Lightning Damage"),
+    52: MagicProperty([8, 9], 0, "Adds {0}-{1} Magic Damage"),
+    54: MagicProperty([8, 9, 8], 0, "Adds {0}-{1} Cold Damage"),
+    57: MagicProperty([10, 10, 9], 0, "Adds {0}-{1} Poison Damage over {2} Seconds"),
+    60: MagicProperty([7], 0, "{0}% Life Stolen Per Hit"),
+    62: MagicProperty([7], 0, "{0}% Mana Stolen Per Hit"),
+    67: MagicProperty([7], 30, "Unknown (Invisible)"),  # velocitypercent
+    68: MagicProperty([7], 30, "Unknown (Invisible)"),  # attackrate
+    71: MagicProperty([8], 100, "Unknown (Invisible)"),  # value
+    72: MagicProperty([9], 0, "Unknown (Invisible)"),  # durability
+    73: MagicProperty([8], 0, "+{0} Maximum Durability"),
+    74: MagicProperty([6], 30, "Replenish Life +{0}"),
+    75: MagicProperty([7], 20, "Increase Maximum Durability {0}%"),
+    76: MagicProperty([6], 10, "Increase Maximum Life {0}%"),
+    77: MagicProperty([6], 10, "Increase Maximum Mana {0}%"),
+    78: MagicProperty([7], 0, "Attacker Takes Damage of {0}"),
+    79: MagicProperty([9], 100, "{0}% Extra Gold from Monsters"),
+    80: MagicProperty([8], 100, "{0}% Better Chance of Getting Magic Items"),
+    81: MagicProperty([7], 0, "Knockback"),
+    82: MagicProperty([9], 20, "Unknown (Invisible)"),  # item_timeduration
+    83: MagicProperty([3, 3], 0, "+{1} to {0} Skill Levels"),
+    84: MagicProperty([3, 3], 0, "+{1} to {0} Skill Levels"),
+    85: MagicProperty([9], 50, "{0}% To Experience Gained"),  # TODO: Check if experience gained really have a bias of 50.
+    86: MagicProperty([7], 0, "+{0} Life After Each Kill"),
+    87: MagicProperty([7], 0, "Reduces Prices {0}%"),
+    88: MagicProperty([1], 0, "Unknown (Invisible)"),  # item_doubleherbduration
+    89: MagicProperty([4], 4, "+{0} to Light Radius"),
+    90: MagicProperty([5], 0, "Ambient light"),  # This property is not displayed on the item, but its effect is to alter the color of the ambient light.
+    91: MagicProperty([8], 100, "Requirements {0}%"),  # After subtracting the bias, this is usually a negative number.
+    92: MagicProperty([7], 0, "Level requirements +{0} (Invisible)"),
+    93: MagicProperty([7], 20, "{0}% Increased Attack Speed"),
+    94: MagicProperty([7], 64, "Unknown (Invisible)"),  # item_levelreqpct
+    96: MagicProperty([7], 20, "{0}% Faster Run/Walk"),
+    97: MagicProperty([9, 6], 0, "+{1} To {0}"),  # Number of levels to a certain skill, e.g. +1 To Teleport.
+    98: MagicProperty([8, 1], 0, "{1}+ to {0} (Visual effect only)"),  # NVSTATE Charm attributes.
+    99: MagicProperty([7], 20, "{0}% Faster Hit Recovery"),
+    102: MagicProperty([7], 20, "{0}% Faster Block Rate"),
+    105: MagicProperty([7], 20, "{0}% Faster Cast Rate"),
+    107: MagicProperty([9, 3], 0, "+{1} To {0}"),  # oskill
+    108: MagicProperty([1], 0, "Rest In Peace"),
+    109: MagicProperty([9, 5], 0, "+{1} to spell {0} (char_class Only)"),
+    181: MagicProperty([9, 5], 0, "+{1} to spell {0} (char_class Only)"),
+    182: MagicProperty([9, 5], 0, "+{1} to spell {0} (char_class Only)"),
+    183: MagicProperty([9, 5], 0, "+{1} to spell {0} (char_class Only)"),
+    184: MagicProperty([9, 5], 0, "+{1} to spell {0} (char_class Only)"),
+    185: MagicProperty([9, 5], 0, "+{1} to spell {0} (char_class Only)"),
+    186: MagicProperty([9, 5], 0, "+{1} to spell {0} (char_class Only)"),
+    187: MagicProperty([9, 5], 0, "+{1} to spell {0} (char_class Only)"),
+    110: MagicProperty([8], 20, "Poison Length Reduced by {0}%"),
+    111: MagicProperty([9], 20, "Damage +{0}"),
+    112: MagicProperty([7], 0, "Hit Causes Monsters to Flee {0}%"),
+    113: MagicProperty([7], 0, "Hit Blinds Target +{0}"),
+    114: MagicProperty([6], 0, "{0}% Damage Taken Goes to Mana"),
+    115: MagicProperty([1], 0, "Ignore Target Defense"),
+    116: MagicProperty([7], 0, "{0}% Target Defense"),
+    117: MagicProperty([7], 0, "Prevent Monster Heal"),
+    118: MagicProperty([1], 0, "Half Freeze Duration"),
+    119: MagicProperty([9], 20, "{0}% Bonus to Attack Rating"),
+    120: MagicProperty([7], 128, "{0} to Monster Defense Per Hit"),
+    121: MagicProperty([9], 20, "+{0}% Damage to Demons"),
+    122: MagicProperty([9], 20, "+{0}% Damage to Undead"),
+    123: MagicProperty([10], 128, "+{0} to Attack Rating against Demons"),
+    124: MagicProperty([10], 128, "+{0} to Attack Rating against Undead"),
+    125: MagicProperty([1], 0, "Throwable"),
+    126: MagicProperty([3, 3], 0, "+{0} to Fire Skills"),
+    127: MagicProperty([3], 0, "+{0} to All Skill Levels"),
+    128: MagicProperty([5], 0, "Attacker Takes Lightning Damage of {0}"),
+    134: MagicProperty([5], 0, "Freezes Target +{0}"),
+    135: MagicProperty([7], 0, "{0}% Chance of Open Wounds"),
+    136: MagicProperty([7], 0, "{0}% Chance of Crushing Blow"),
+    137: MagicProperty([7], 0, "+{0} Kick Damage"),
+    138: MagicProperty([7], 0, "+{0} to Mana After Each Kill"),
+    139: MagicProperty([7], 0, "+{0} Life after each Demon Kill"),
+    140: MagicProperty([7], 0, "Extra Blood (Invisible)"),  # item_extrablood
+    141: MagicProperty([7], 0, "{0}% Deadly Strike"),
+    142: MagicProperty([7], 0, "Fire Absorb {0}%"),
+    143: MagicProperty([7], 0, "+{0} Fire Absorb"),
+    144: MagicProperty([7], 0, "Lightning Absorb {0}%"),
+    145: MagicProperty([7], 0, "+{0} Lightning Absorb"),
+    146: MagicProperty([7], 0, "Magic Absorb {0}%"),
+    147: MagicProperty([7], 0, "+{0} Magic Absorb"),
+    148: MagicProperty([7], 0, "Cold Absorb {0}%"),
+    149: MagicProperty([7], 0, "+{0} Cold Absorb"),
+    150: MagicProperty([7], 0, "Slows Target by {0}%"),
+    151: MagicProperty([9, 5], 0, "Level +{1} {0} When Equipped"),
+    152: MagicProperty([1], 0, "Indestructible"),
+    153: MagicProperty([1], 0, "Cannot Be Frozen"),
+    154: MagicProperty([7], 20, "{0}% Slower Stamina Drain"),
+    155: MagicProperty([10, 7], 0, "{0}% Chance to Reanimate Target"),
+    156: MagicProperty([7], 0, "Piercing Attack"),
+    157: MagicProperty([7], 0, "Fires Magic Arrows"),
+    158: MagicProperty([7], 0, "Fires Explosive Arrows or Bolts"),
+    159: MagicProperty([6], 0, "+{0} to Minimum Throw Damage"),
+    160: MagicProperty([7], 0, "+{0} to Maximum Throw Damage"),
+    179: MagicProperty([3], 0, "+{0} to Druid Skill Levels"),
+    180: MagicProperty([3], 0, "+{0} to Assassin Skill Levels"),
+    188: MagicProperty([3, 13, 3], 0, "+{2} to {0} Skills ({1} only)"),
+    189: MagicProperty([10, 9], 0, "+{0} to {1} Skills (char_class Only)"),
+    190: MagicProperty([10, 9], 0, "+{0} to {1} Skills (char_class Only)"),
+    191: MagicProperty([10, 9], 0, "+{0} to {1} Skills (char_class Only)"),
+    192: MagicProperty([10, 9], 0, "+{0} to {1} Skills (char_class Only)"),
+    193: MagicProperty([10, 9], 0, "+{0} to {1} Skills (char_class Only)"),
+    194: MagicProperty([4], 0, "Adds {0} extra sockets to the item"),
+    195: MagicProperty([6, 10, 7], 0, "{2}% Chance to Cast Level {0} {1} When you die"),
+    196: MagicProperty([6, 10, 7], 0, "{2}% Chance to Cast Level {0} {1} When you die"),
+    197: MagicProperty([6, 10, 7], 0, "{2}% Chance to Cast Level {0} {1} When you die"),
+    198: MagicProperty([6, 10, 7], 0, "{2}% Chance to Cast Level {0} {1} On Striking"),
+    199: MagicProperty([6, 10, 7], 0, "{2}% Chance to Cast Level {0} {1} On Striking"),
+    200: MagicProperty([6, 10, 7], 0, "{2}% Chance to Cast Level {0} {1} On Striking"),
+    201: MagicProperty([6, 10, 7], 0, "{2}% Chance to Cast Level {0} {1} When Struck"),
+    202: MagicProperty([6, 10, 7], 0, "{2}% Chance to Cast Level {0} {1} When Struck"),
+    203: MagicProperty([6, 10, 7], 0, "{2}% Chance to Cast Level {0} {1} When Struck"),
+    204: MagicProperty([6, 10, 8, 8], 0, "Level {0} {1} ({2}/{3} Charges)"),
+    205: MagicProperty([6, 10, 8, 8], 0, "Level {0} {1} ({2}/{3} Charges)"),
+    206: MagicProperty([6, 10, 8, 8], 0, "Level {0} {1} ({2}/{3} Charges)"),
+    207: MagicProperty([6, 10, 8, 8], 0, "Level {0} {1} ({2}/{3} Charges)"),
+    208: MagicProperty([6, 10, 8, 8], 0, "Level {0} {1} ({2}/{3} Charges)"),
+    209: MagicProperty([6, 10, 8, 8], 0, "Level {0} {1} ({2}/{3} Charges)"),
+    210: MagicProperty([6, 10, 8, 8], 0, "Level {0} {1} ({2}/{3} Charges)"),
+    211: MagicProperty([6, 10, 8, 8], 0, "Level {0} {1} ({2}/{3} Charges)"),
+    212: MagicProperty([6, 10, 8, 8], 0, "Level {0} {1} ({2}/{3} Charges)"),
+    213: MagicProperty([6, 10, 8, 8], 0, "Level {0} {1} ({2}/{3} Charges)"),
+    214: MagicProperty([6], 0, "+{0} to Defense (Based on Character Level)"),  # x / 8 = real value
+    215: MagicProperty([6], 0, "{0}% Enhanced Defense (Based on Character Level)"),  # x / 8 = real value
+    216: MagicProperty([6], 0, "+{0} to Life (Based on Character Level)"),  # x / 8 = real value
+    217: MagicProperty([6], 0, "+{0} to Mana (Based on Character Level)"),  # x / 8 = real value
+    218: MagicProperty([6], 0, "+{0} to Maximum Damage (Based on Character Level)"),  # x / 8 = real value
+    219: MagicProperty([6], 0, "{0}% Enhanced Maximum Damage (Based on Character Level)"),  # x / 8 = real value
+    220: MagicProperty([6], 0, "+{0} to Strength (Based on Character Level)"),  # x / 8 = real value
+    221: MagicProperty([6], 0, "+{0} to Dexterity (Based on Character Level)"),  # x / 8 = real value
+    222: MagicProperty([6], 0, "+{0} to Energy (Based on Character Level)"),  # x / 8 = real value
+    223: MagicProperty([6], 0, "+{0} to Vitality (Based on Character Level)"),  # x / 8 = real value
+    224: MagicProperty([6], 0, "+{0} to Attack Rating (Based on Character Level)"),  # x / 8 = real value
+    225: MagicProperty([6], 0, "{0}% Bonus to Attack Rating (Based on Character Level)"),  # x / 8 = real value
+    226: MagicProperty([6], 0, "+{0} Cold Damage (Based on Character Level)"),  # x / 8 = real value
+    227: MagicProperty([6], 0, "+{0} Fire Damage (Based on Character Level)"),  # x / 8 = real value
+    228: MagicProperty([6], 0, "+{0} Lightning Damage (Based on Character Level)"),  # x / 8 = real value
+    229: MagicProperty([6], 0, "+{0} Poison Damage (Based on Character Level)"),  # x / 8 = real value
+    230: MagicProperty([6], 0, "Cold Resist +{0}% (Based on Character Level)"),  # x / 8 = real value
+    231: MagicProperty([6], 0, "Fire Resist +{0}% (Based on Character Level)"),  # x / 8 = real value
+    232: MagicProperty([6], 0, "Lightning Resist +{0}% (Based on Character Level)"),  # x / 8 = real value
+    233: MagicProperty([6], 0, "Poison Resist +{0}% (Based on Character Level)"),  # x / 8 = real value
+    234: MagicProperty([6], 0, "+{0} Cold Absorb (Based on Character Level)"),  # x / 8 = real value
+    235: MagicProperty([6], 0, "+{0} Fire Absorb (Based on Character Level)"),  # x / 8 = real value
+    236: MagicProperty([6], 0, "+{0} Lightning Absorb (Based on Character Level)"),  # x / 8 = real value
+    237: MagicProperty([6], 0, "{0} Poison Absorb (Based on Character Level)"),  # x / 8 = real value
+    238: MagicProperty([5], 0, "Attacker Takes Damage of {0} (Based on Character Level)"),  # x / 8 = real value
+    239: MagicProperty([6], 0, "{0}% Extra Gold from Monsters (Based on Character Level)"),  # x / 8 = real value
+    240: MagicProperty([6], 0, "{0}% Better Chance of Getting Magic Items (Based on Character Level)"),  # x / 8 = real value
+    241: MagicProperty([6], 0, "Heal Stamina Plus {0}% (Based on Character Level)"),  # x / 8 = real value
+    242: MagicProperty([6], 0, "+{0} Maxmium Stamina (Based on Character Level)"),  # x / 8 = real value
+    243: MagicProperty([6], 0, "{0}% Damage to Demons (Based on Character Level)"),  # x / 8 = real value
+    244: MagicProperty([6], 0, "{0}% Damage to Undead (Based on Character Level)"),  # x / 8 = real value
+    245: MagicProperty([6], 0, "+{0} to Attack Rating against Demons (Based on Character Level)"),  # x / 8 = real value
+    246: MagicProperty([6], 0, "+{0} to Attack Rating against Undead (Based on Character Level)"),  # x / 8 = real value
+    247: MagicProperty([6], 0, "{0}% Chance of Crushing Blow (Based on Character Level)"),  # x / 8 = real value
+    248: MagicProperty([6], 0, "{0}% Chance of Open Wounds (Based on Character Level)"),  # x / 8 = real value
+    249: MagicProperty([6], 0, "+{0} Kick Damage (Based on Character Level)"),  # x / 8 = real value
+    250: MagicProperty([6], 0, "{0}% to Deadly Strike (Based on Character Level)"),  # x / 8 = real value
+    252: MagicProperty([6], 0, "Repairs 1 Durability in {0} Seconds"),  # 100 / x = real value
+    253: MagicProperty([6], 0, "Replenishes Quantity"),  # 100 / x = real value
+    254: MagicProperty([8], 0, "Increased Stack Size"),
+    305: MagicProperty([8], 50, "{0} Pierce Cold"),
+    306: MagicProperty([8], 50, "{0} Pierce Fire"),
+    307: MagicProperty([8], 50, "{0} Pierce Lightning"),
+    308: MagicProperty([8], 50, "{0} Pierce Poision"),
+    324: MagicProperty([6], 0, "Unknown (Invisible)"),  # item_extra_charges
+    329: MagicProperty([9], 50, "{0}% To Fire Skill Damage"),
+    330: MagicProperty([9], 50, "{0}% To Lightning Skill Damage"),
+    331: MagicProperty([9], 50, "{0}% To Cold Skill Damage"),
+    332: MagicProperty([9], 50, "{0}% To Poison Skill Damage"),
+    333: MagicProperty([8], 0, "-{0}% To Enemy Fire Resistance"),
+    334: MagicProperty([8], 0, "-{0}% To Enemy Lightning Resistance"),
+    335: MagicProperty([8], 0, "-{0}% To Enemy Cold Resistance"),
+    336: MagicProperty([8], 0, "-{0}% To Enemy Poison Resistance"),
+    356: MagicProperty([2], 0, "Quest Item Difficulty +{0} (Invisible)")
+}
+
+
+class SocketableItemData:
+    # Class for storing size and type of items
+    def __init__(self, name, weapon_properties, armor_properties, shield_properties):
+        self.name = name
+        self.weapon_properties = weapon_properties
+        self.armor_properties = armor_properties
+        self.shield_properties = shield_properties
+
+
+def get_socketable_item_data(code):
+    prop = None
+    try:
+        prop = socketable_item_data[code]
+    except KeyError:
+        print("Invalid item code " + str(code))
+    return prop
+
+
+socketable_item_data: Dict[str, SocketableItemData] = {
+    "r01": SocketableItemData("El Rune", {19: [50], 89: [1]}, {31: [15], 89: [1]}, {31: [15], 89: [1]}),
+    "r02": SocketableItemData("Eld Rune", {122: [75], 124: [50]}, {154: [15]}, {20: [7]}),
+    "r03": SocketableItemData("Tir Rune", {138: [2]}, {138: [2]}, {138: [2]}),
+    "r04": SocketableItemData("Nef Rune", {81: [1]}, {32: [30]}, {32: [30]}),
+    "r05": SocketableItemData("Eth Rune", {116: [-25]}, {27: [15]}, {27: [15]}),
+    "r06": SocketableItemData("Ith Rune", {22: [9], 24: [9]}, {114: [15]}, {114: [15]}),
+    "r07": SocketableItemData("Tal Rune", {57: [154, 154, 125]}, {45: [35]}, {45: [35]}),
+    "r08": SocketableItemData("Ral Rune", {48: [5, 30]}, {39: [35]}, {39: [35]}),
+    "r09": SocketableItemData("Ort Rune", {50: [1, 50]}, {41: [35]}, {41: [35]}),
+    "r10": SocketableItemData("Thul Rune", {54: [3, 14, 75]}, {43: [35]}, {43: [35]}),
+    "r11": SocketableItemData("Amn Rune", {60: [7]}, {78: [14]}, {78: [14]}),
+    "r12": SocketableItemData("Sol Rune", {21: [9], 23: [9]}, {34: [7]}, {34: [7]}),
+    "r13": SocketableItemData("Shael Rune", {93: [20]}, {99: [20]}, {102: [20]}),
+    "r14": SocketableItemData("Dol Rune", {112: [25]}, {74: [7]}, {74: [7]}),
+    "r15": SocketableItemData("Hel Rune", {91: [-20]}, {91: [-15]}, {91: [-15]}),
+    "r16": SocketableItemData("Io Rune", {3: [10]}, {3: [10]}, {3: [10]}),
+    "r17": SocketableItemData("Lum Rune", {1: [10]}, {1: [10]}, {1: [10]}),
+    "r18": SocketableItemData("Ko Rune", {2: [10]}, {2: [10]}, {2: [10]}),
+    "r19": SocketableItemData("Fal Rune", {0: [10]}, {0: [10]}, {0: [10]}),
+    "r20": SocketableItemData("Lem Rune", {79: [75]}, {79: [50]}, {79: [50]}),
+    "r21": SocketableItemData("Pul Rune", {121: [75], 123: [100]}, {16: [30]}, {16: [30]}),
+    "r22": SocketableItemData("Um Rune", {135: [25]}, {39: [15], 41: [15], 43: [15], 45: [15]}, {39: [22], 41: [22], 43: [22], 45: [22]}),
+    "r23": SocketableItemData("Mal Rune", {117: [1]}, {35: [7]}, {35: [7]}),
+    "r24": SocketableItemData("Ist Rune", {80: [30]}, {80: [25]}, {80: [25]}),
+    "r25": SocketableItemData("Gul Rune", {119: [20]}, {46: [5]}, {46: [5]}),
+    "r26": SocketableItemData("Vex Rune", {62: [7]}, {40: [5]}, {40: [5]}),
+    "r27": SocketableItemData("Ohm Rune", {17: [50, 50]}, {44: [5]}, {44: [5]}),
+    "r28": SocketableItemData("Lo Rune", {141: [20]}, {42: [5]}, {42: [5]}),
+    "r29": SocketableItemData("Sur Rune", {113: [20]}, {77: [5]}, {9: [50]}),
+    "r30": SocketableItemData("Ber Rune", {136: [20]}, {36: [8]}, {36: [8]}),
+    "r31": SocketableItemData("Jah Rune", {115: [1]}, {76: [5]}, {7: [50]}),
+    "r32": SocketableItemData("Cham Rune", {134: [3]}, {153: [1]}, {153: [1]}),
+    "r33": SocketableItemData("Zod Rune", {152: [1]}, {152: [1]}, {152: [1]}),
+    "gcv": SocketableItemData("Chipped Amethyst", {19: [40]}, {0: [3]}, {31: [8]}),
+    "gcw": SocketableItemData("Chipped Diamond", {122: [28]}, {19: [20]}, {39: [6], 41: [6], 43: [6], 45: [6]}),
+    "gcg": SocketableItemData("Chipped Emerald", {57: [35, 35, 75]}, {2: [3]}, {45: [12]}),
+    "gcr": SocketableItemData("Chipped Ruby", {48: [3, 4]}, {7: [10]}, {39: [12]}),
+    "gcb": SocketableItemData("Chipped Sapphire", {54: [1, 3]}, {9: [10]}, {43: [12]}),
+    "skc": SocketableItemData("Chipped Skull", {60: [2], 62: [1]}, {74: [2], 27: [8]}, {78: [4]}),
+    "gcy": SocketableItemData("Chipped Topaz", {50: [1, 8]}, {80: [9]}, {41: [12]}),
+    "gfv": SocketableItemData("Flawed Amethyst", {19: [60]}, {0: [4]}, {31: [12]}),
+    "gfw": SocketableItemData("Flawed Diamond", {122: [34]}, {19: [40]}, {39: [8], 41: [8], 43: [8], 45: [8]}),
+    "gfg": SocketableItemData("Flawed Emerald", {57: [52, 52, 100]}, {2: [4]}, {45: [16]}),
+    "gfr": SocketableItemData("Flawed Ruby", {48: [5, 8]}, {7: [17]}, {39: [16]}),
+    "gfb": SocketableItemData("Flawed Sapphire", {54: [3, 5]}, {9: [17]}, {43: [16]}),
+    "skf": SocketableItemData("Flawed Skull", {60: [2], 62: [2]}, {74: [3], 27: [8]}, {78: [8]}),
+    "gfy": SocketableItemData("Flawed Topaz", {50: [1, 14]}, {80: [13]}, {41: [16]}),
+    "gsv": SocketableItemData("Amethyst", {19: [80]}, {0: [6]}, {31: [18]}),
+    "gsw": SocketableItemData("Diamond", {122: [44]}, {19: [60]}, {39: [11], 41: [11], 43: [11], 45: [11]}),
+    "gsg": SocketableItemData("Emerald", {57: [82, 82, 125]}, {2: [6]}, {45: [22]}),
+    "gsr": SocketableItemData("Ruby", {48: [8, 12]}, {7: [24]}, {39: [22]}),
+    "gsb": SocketableItemData("Sapphire", {54: [4, 7]}, {9: [24]}, {43: [22]}),
+    "sku": SocketableItemData("Skull", {60: [3], 62: [2]}, {74: [3], 27: [12]}, {78: [12]}),
+    "gsy": SocketableItemData("Topaz", {50: [1, 22]}, {80: [16]}, {41: [22]}),
+    "gzv": SocketableItemData("Flawless Amethyst", {19: [100]}, {0: [8]}, {31: [24]}),
+    "glw": SocketableItemData("Flawless Diamond", {122: [54]}, {19: [80]}, {39: [14], 41: [14], 43: [14], 45: [14]}),
+    "glg": SocketableItemData("Flawless Emerald", {57: [103, 103, 150]}, {2: [8]}, {45: [28]}),
+    "glb": SocketableItemData("Flawless Sapphire", {54: [6, 10]}, {9: [31]}, {43: [28]}),
+    "glr": SocketableItemData("Flawless Ruby", {48: [10, 16]}, {7: [31]}, {39: [28]}),
+    "skl": SocketableItemData("Flawless Skull", {60: [3], 62: [3]}, {74: [4], 27: [12]}, {78: [16]}),
+    "gly": SocketableItemData("Flawless Topaz", {50: [1, 30]}, {80: [20]}, {41: [28]}),
+    "gpw": SocketableItemData("Perfect Amethyst", {19: [150]}, {0: [10]}, {31: [30]}),
+    "gpv": SocketableItemData("Perfect Diamond", {122: [68]}, {19: [100]}, {39: [19], 41: [19], 43: [19], 45: [19]}),
+    "gpb": SocketableItemData("Perfect Emerald", {57: [147, 147, 175]}, {2: [10]}, {45: [40]}),
+    "gpy": SocketableItemData("Perfect Ruby", {48: [15, 20]}, {7: [38]}, {39: [40]}),
+    "gpr": SocketableItemData("Perfect Sapphire", {54: [10, 14]}, {9: [38]}, {43: [40]}),
+    "skz": SocketableItemData("Perfect Skull", {60: [4], 62: [3]}, {74: [5], 27: [19]}, {78: [20]}),
+    "gpg": SocketableItemData("Perfect Topaz", {50: [1, 40]}, {80: [24]}, {41: [40]})
+}
