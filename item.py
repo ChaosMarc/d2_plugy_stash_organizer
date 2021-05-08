@@ -1,4 +1,5 @@
 import item_data
+from copy import deepcopy
 from bit_utils import read_bits, write_bits, get_data_chunks
 
 
@@ -150,24 +151,46 @@ class Item:
             self.socketable_properties = {}
             for chunk in chunks:
                 item_in_socket = Item(chunk)
-                self.socketables.append(item_in_socket)
                 socketable_item_data = item_data.get_socketable_item_data(item_in_socket.code)
-                socketable_item_properties = {}
-                if self.is_weapon():
-                    socketable_item_properties = socketable_item_data.weapon_properties
-                elif self.is_armor():
-                    socketable_item_properties = socketable_item_data.armor_properties
-                elif self.is_shield():
-                    socketable_item_properties = socketable_item_data.shield_properties
-                self.socketable_properties = self.merge_properties_dicts(self.socketable_properties, socketable_item_properties)
+                if socketable_item_data is not None:
+                    item_in_socket.name = socketable_item_data.name
+                    if self.is_weapon():
+                        item_in_socket.magic_properties = socketable_item_data.weapon_properties
+                    elif self.is_armor():
+                        item_in_socket.magic_properties = socketable_item_data.armor_properties
+                    elif self.is_shield():
+                        item_in_socket.magic_properties = socketable_item_data.shield_properties
+                    item_in_socket.translated_magic_properties = self.translate_properties(item_in_socket.magic_properties)
+                self.socketables.append(item_in_socket)
 
             self.all_properties = self.merge_properties_dicts({}, self.magic_properties)
             self.all_properties = self.merge_properties_dicts(self.all_properties, self.set_properties)
             self.all_properties = self.merge_properties_dicts(self.all_properties, self.runeword_properties)
+            self.socketable_properties = {}
+            for socketable in self.socketables:
+                self.socketable_properties = self.merge_properties_dicts(self.socketable_properties, socketable.magic_properties)
             self.all_properties = self.merge_properties_dicts(self.all_properties, self.socketable_properties)
+
+            self.translated_magic_properties = self.translate_properties(self.magic_properties)
+            self.translated_set_properties = self.translate_properties(self.set_properties)
+            self.translated_runeword_properties = self.translate_properties(self.runeword_properties)
+            self.translated_socketable_properties = self.translate_properties(self.socketable_properties)
+            self.translated_all_properties = self.translate_properties(self.all_properties)
 
         self.x_size = item_data.get_item_size_x(self.code)  # How many horizontal slots does the item take
         self.y_size = item_data.get_item_size_y(self.code)  # How many vertical slots does the item take
+
+
+    @staticmethod
+    def translate_properties(properties):
+        props = deepcopy(properties)
+        translated_properties = []
+        for prop_id in props:
+            if 195 <= prop_id <= 203:
+                props[prop_id][1] = item_data.get_skill_name(props[prop_id][1])
+            # TODO handle all other special cases. see comments in magic_properties
+            translated_properties.append(item_data.get_magic_property(prop_id).name.format(*props[prop_id]))
+        return translated_properties
 
     @staticmethod
     def merge_properties_dicts(dict1, dict2):
@@ -264,8 +287,5 @@ class Item:
                 arr.append("[" + ', '.join(socketables) + "]")
             if self.is_runeword == 1:
                 arr.append(self.runeword_name)
-            props = []
-            for prop_id in self.all_properties:
-                props.append(item_data.get_magic_property(prop_id).name.format(*self.all_properties[prop_id]))
-            arr.append("[" + ', '.join(props) + "]")
+            arr.append("[" + ', '.join(self.translated_all_properties) + "]")
         return ', '.join(str(i) for i in arr)
