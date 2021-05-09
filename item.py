@@ -188,7 +188,11 @@ class Item:
         for prop_id in props:
             if 195 <= prop_id <= 203:
                 props[prop_id][1] = item_data.get_skill_name(props[prop_id][1])
-            # TODO handle all other special cases. see comments in magic_properties
+            if 214 <= prop_id <= 250:
+                props[prop_id][0] = props[prop_id][0] / 8
+            if 252 <= prop_id <= 253:
+                props[prop_id][0] = 100 / props[prop_id][0]
+            # TODO handle all other special cases. see comments in magic_properties and https://github.com/nokka/d2s/blob/master/item.go
             translated_properties.append(item_data.get_magic_property(prop_id).name.format(*props[prop_id]))
         return translated_properties
 
