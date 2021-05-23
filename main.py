@@ -1,14 +1,13 @@
 import configparser
 import struct
 import tkinter as tk
-from copy import copy
-from shutil import copy
-from tkinter import filedialog
-
 from bit_utils import find_next_null, write_bits, get_data_chunks
+from copy import copy
 from item import Item
 from item_data import ItemType, ItemQuality, GemQuality, get_gem_data_by_code, get_gem_data_by_type_and_quality, gems_types, rune_codes, get_rune_upgrade_recipe
 from page import Page
+from shutil import copy
+from tkinter import filedialog
 
 root = tk.Tk()
 root.withdraw()
