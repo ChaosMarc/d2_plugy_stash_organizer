@@ -63,11 +63,13 @@ class ItemType(IntEnum):
     UBERKEY = 41
     UBERPART = 42
     ESSENCE = 43
-    GEM_CHIPPED = 44
-    GEM_FLAWED = 45
-    GEM_NORMAL = 46
-    GEM_FLAWLESS = 47
-    GEM_PERFECT = 48
+    GEM_AMETHYST = 44
+    GEM_DIAMOND = 45
+    GEM_EMERALD = 46
+    GEM_RUBY = 47
+    GEM_SAPPHIRE = 48
+    GEM_TOPAZ = 49
+    GEM_SKULL = 50
 
 
 class ItemTypeData:
@@ -618,41 +620,41 @@ item_data: Dict[str, ItemTypeData] = {
     'hfh': ItemTypeData(2, 3, ItemType.QUEST, "Hellforge Hammr"),
     'ice': ItemTypeData(1, 1, ItemType.QUEST, "Malah’s Potion"),
     'tr2': ItemTypeData(2, 2, ItemType.QUEST, "Scroll of Resistance"),
-    'gcv': ItemTypeData(1, 1, ItemType.GEM_CHIPPED, "Chipped Amethyst"),
-    'gcw': ItemTypeData(1, 1, ItemType.GEM_CHIPPED, "Chipped Diamond"),
-    'gcg': ItemTypeData(1, 1, ItemType.GEM_CHIPPED, "Chipped Emerald"),
-    'gcr': ItemTypeData(1, 1, ItemType.GEM_CHIPPED, "Chipped Ruby"),
-    'gcb': ItemTypeData(1, 1, ItemType.GEM_CHIPPED, "Chipped Saphire"),
-    'skc': ItemTypeData(1, 1, ItemType.GEM_CHIPPED, "Chipped Skull"),
-    'gcy': ItemTypeData(1, 1, ItemType.GEM_CHIPPED, "Chipped Topaz"),
-    'gfv': ItemTypeData(1, 1, ItemType.GEM_FLAWED, "Flawed Amethyst"),
-    'gfw': ItemTypeData(1, 1, ItemType.GEM_FLAWED, "Flawed Diamond"),
-    'gfg': ItemTypeData(1, 1, ItemType.GEM_FLAWED, "Flawed Emerald"),
-    'gfr': ItemTypeData(1, 1, ItemType.GEM_FLAWED, "Flawed Ruby"),
-    'gfb': ItemTypeData(1, 1, ItemType.GEM_FLAWED, "Flawed Saphire"),
-    'skf': ItemTypeData(1, 1, ItemType.GEM_FLAWED, "Flawed Skull"),
-    'gfy': ItemTypeData(1, 1, ItemType.GEM_FLAWED, "Flawed Topaz"),
-    'gsv': ItemTypeData(1, 1, ItemType.GEM_NORMAL, "Amethyst"),
-    'gsw': ItemTypeData(1, 1, ItemType.GEM_NORMAL, "Diamond"),
-    'gsg': ItemTypeData(1, 1, ItemType.GEM_NORMAL, "Emerald"),
-    'gsr': ItemTypeData(1, 1, ItemType.GEM_NORMAL, "Ruby"),
-    'gsb': ItemTypeData(1, 1, ItemType.GEM_NORMAL, "Saphire"),
-    'sku': ItemTypeData(1, 1, ItemType.GEM_NORMAL, "Skull"),
-    'gsy': ItemTypeData(1, 1, ItemType.GEM_NORMAL, "Topaz"),
-    'gzv': ItemTypeData(1, 1, ItemType.GEM_FLAWLESS, "Flawless Amethyst"),
-    'glw': ItemTypeData(1, 1, ItemType.GEM_FLAWLESS, "Flawless Diamond"),
-    'glg': ItemTypeData(1, 1, ItemType.GEM_FLAWLESS, "Flawless Emerald"),
-    'glr': ItemTypeData(1, 1, ItemType.GEM_FLAWLESS, "Flawless Ruby"),
-    'glb': ItemTypeData(1, 1, ItemType.GEM_FLAWLESS, "Flawless Saphire"),
-    'skl': ItemTypeData(1, 1, ItemType.GEM_FLAWLESS, "Flawless Skull"),
-    'gly': ItemTypeData(1, 1, ItemType.GEM_FLAWLESS, "Flawless Topaz"),
-    'gpw': ItemTypeData(1, 1, ItemType.GEM_PERFECT, "Perfect Diamond"),
-    'gpv': ItemTypeData(1, 1, ItemType.GEM_PERFECT, "Perfect Amethyst"),
-    'gpb': ItemTypeData(1, 1, ItemType.GEM_PERFECT, "Perfect Sapphire"),
-    'gpy': ItemTypeData(1, 1, ItemType.GEM_PERFECT, "Perfect Topaz"),
-    'gpr': ItemTypeData(1, 1, ItemType.GEM_PERFECT, "Perfect Ruby"),
-    'skz': ItemTypeData(1, 1, ItemType.GEM_PERFECT, "Perfect Skull"),
-    'gpg': ItemTypeData(1, 1, ItemType.GEM_PERFECT, "Perfect Emerald"),
+    'gcv': ItemTypeData(1, 1, ItemType.GEM_AMETHYST, "Chipped Amethyst"),
+    'gfv': ItemTypeData(1, 1, ItemType.GEM_AMETHYST, "Flawed Amethyst"),
+    'gsv': ItemTypeData(1, 1, ItemType.GEM_AMETHYST, "Amethyst"),
+    'gzv': ItemTypeData(1, 1, ItemType.GEM_AMETHYST, "Flawless Amethyst"),
+    'gpv': ItemTypeData(1, 1, ItemType.GEM_AMETHYST, "Perfect Amethyst"),
+    'gcw': ItemTypeData(1, 1, ItemType.GEM_DIAMOND, "Chipped Diamond"),
+    'gfw': ItemTypeData(1, 1, ItemType.GEM_DIAMOND, "Flawed Diamond"),
+    'gsw': ItemTypeData(1, 1, ItemType.GEM_DIAMOND, "Diamond"),
+    'glw': ItemTypeData(1, 1, ItemType.GEM_DIAMOND, "Flawless Diamond"),
+    'gpw': ItemTypeData(1, 1, ItemType.GEM_DIAMOND, "Perfect Diamond"),
+    'gcg': ItemTypeData(1, 1, ItemType.GEM_EMERALD, "Chipped Emerald"),
+    'gfg': ItemTypeData(1, 1, ItemType.GEM_EMERALD, "Flawed Emerald"),
+    'gsg': ItemTypeData(1, 1, ItemType.GEM_EMERALD, "Emerald"),
+    'glg': ItemTypeData(1, 1, ItemType.GEM_EMERALD, "Flawless Emerald"),
+    'gpg': ItemTypeData(1, 1, ItemType.GEM_EMERALD, "Perfect Emerald"),
+    'gcr': ItemTypeData(1, 1, ItemType.GEM_RUBY, "Chipped Ruby"),
+    'gfr': ItemTypeData(1, 1, ItemType.GEM_RUBY, "Flawed Ruby"),
+    'gsr': ItemTypeData(1, 1, ItemType.GEM_RUBY, "Ruby"),
+    'glr': ItemTypeData(1, 1, ItemType.GEM_RUBY, "Flawless Ruby"),
+    'gpr': ItemTypeData(1, 1, ItemType.GEM_RUBY, "Perfect Ruby"),
+    'gcb': ItemTypeData(1, 1, ItemType.GEM_SAPPHIRE, "Chipped Sapphire"),
+    'gfb': ItemTypeData(1, 1, ItemType.GEM_SAPPHIRE, "Flawed Sapphire"),
+    'gsb': ItemTypeData(1, 1, ItemType.GEM_SAPPHIRE, "Sapphire"),
+    'glb': ItemTypeData(1, 1, ItemType.GEM_SAPPHIRE, "Flawless Sapphire"),
+    'gpb': ItemTypeData(1, 1, ItemType.GEM_SAPPHIRE, "Perfect Sapphire"),
+    'skc': ItemTypeData(1, 1, ItemType.GEM_SKULL, "Chipped Skull"),
+    'skf': ItemTypeData(1, 1, ItemType.GEM_SKULL, "Flawed Skull"),
+    'sku': ItemTypeData(1, 1, ItemType.GEM_SKULL, "Skull"),
+    'skl': ItemTypeData(1, 1, ItemType.GEM_SKULL, "Flawless Skull"),
+    'skz': ItemTypeData(1, 1, ItemType.GEM_SKULL, "Perfect Skull"),
+    'gcy': ItemTypeData(1, 1, ItemType.GEM_TOPAZ, "Chipped Topaz"),
+    'gfy': ItemTypeData(1, 1, ItemType.GEM_TOPAZ, "Flawed Topaz"),
+    'gsy': ItemTypeData(1, 1, ItemType.GEM_TOPAZ, "Topaz"),
+    'gly': ItemTypeData(1, 1, ItemType.GEM_TOPAZ, "Flawless Topaz"),
+    'gpy': ItemTypeData(1, 1, ItemType.GEM_TOPAZ, "Perfect Topaz"),
     'r01': ItemTypeData(1, 1, ItemType.RUNE, "El Rune"),
     'r02': ItemTypeData(1, 1, ItemType.RUNE, "Eld Rune"),
     'r03': ItemTypeData(1, 1, ItemType.RUNE, "Tir Rune"),
@@ -729,6 +731,121 @@ item_data: Dict[str, ItemTypeData] = {
     'tes': ItemTypeData(1, 1, ItemType.ESSENCE, "Twisted Essence of Suffering"),
     'toa': ItemTypeData(1, 1, ItemType.ESSENCE, "Token of Absolution")
 }
+
+gems_types = [ItemType.GEM_AMETHYST, ItemType.GEM_DIAMOND, ItemType.GEM_EMERALD, ItemType.GEM_RUBY, ItemType.GEM_SAPPHIRE, ItemType.GEM_TOPAZ, ItemType.GEM_SKULL]
+rune_codes = ['r01', 'r02', 'r03', 'r04', 'r05', 'r06', 'r07', 'r08', 'r09', 'r10',
+              'r11', 'r12', 'r13', 'r14', 'r15', 'r16', 'r17', 'r18', 'r19', 'r20',
+              'r21', 'r22', 'r23', 'r24', 'r25', 'r26', 'r27', 'r28', 'r29', 'r30',
+              'r31', 'r32', 'r33']
+
+
+def get_rune_upgrade_recipe(rune_code):
+    return rune_upgrade_recipes[rune_code]
+
+
+class RuneUpgradeRecipe:
+    def __init__(self, amount, gem_code, next_rune_code):
+        self.amount = amount
+        self.gem_code = gem_code
+        self.next_rune_code = next_rune_code
+
+
+rune_upgrade_recipes: Dict[str, RuneUpgradeRecipe] = {
+    'r01': RuneUpgradeRecipe(3, None, 'r02'),
+    'r02': RuneUpgradeRecipe(3, None, 'r03'),
+    'r03': RuneUpgradeRecipe(3, None, 'r04'),
+    'r04': RuneUpgradeRecipe(3, None, 'r05'),
+    'r05': RuneUpgradeRecipe(3, None, 'r06'),
+    'r06': RuneUpgradeRecipe(3, None, 'r07'),
+    'r07': RuneUpgradeRecipe(3, None, 'r08'),
+    'r08': RuneUpgradeRecipe(3, None, 'r09'),
+    'r09': RuneUpgradeRecipe(3, None, 'r10'),
+    'r10': RuneUpgradeRecipe(3, 'gcy', 'r11'),
+    'r11': RuneUpgradeRecipe(3, 'gcv', 'r12'),
+    'r12': RuneUpgradeRecipe(3, 'gcb', 'r13'),
+    'r13': RuneUpgradeRecipe(3, 'gcr', 'r14'),
+    'r14': RuneUpgradeRecipe(3, 'gcg', 'r15'),
+    'r15': RuneUpgradeRecipe(3, 'gcw', 'r16'),
+    'r16': RuneUpgradeRecipe(3, 'gfy', 'r17'),
+    'r17': RuneUpgradeRecipe(3, 'gfv', 'r18'),
+    'r18': RuneUpgradeRecipe(3, 'gfb', 'r19'),
+    'r19': RuneUpgradeRecipe(3, 'gfr', 'r20'),
+    'r20': RuneUpgradeRecipe(3, 'gfg', 'r21'),
+    'r21': RuneUpgradeRecipe(2, 'gfw', 'r22'),
+    'r22': RuneUpgradeRecipe(2, 'gsy', 'r23'),
+    'r23': RuneUpgradeRecipe(2, 'gsv', 'r24'),
+    'r24': RuneUpgradeRecipe(2, 'gsb', 'r25'),
+    'r25': RuneUpgradeRecipe(2, 'gsr', 'r26'),
+    'r26': RuneUpgradeRecipe(2, 'gsg', 'r27'),
+    'r27': RuneUpgradeRecipe(2, 'gsw', 'r28'),
+    'r28': RuneUpgradeRecipe(2, 'gly', 'r29'),
+    'r29': RuneUpgradeRecipe(2, 'gzv', 'r30'),
+    'r30': RuneUpgradeRecipe(2, 'glb', 'r31'),
+    'r31': RuneUpgradeRecipe(2, 'glr', 'r32'),
+    'r32': RuneUpgradeRecipe(2, 'glg', 'r32')
+}
+
+
+class GemQuality(IntEnum):
+    CHIPPED = 1
+    FLAWED = 2
+    NORMAL = 3
+    FLAWLESS = 4
+    PERFECT = 5
+
+
+class GemData:
+    def __init__(self, code, gem_type, quality):
+        self.code = code
+        self.type = gem_type
+        self.quality = quality
+
+
+gem_data_list = [
+    GemData('gcv', ItemType.GEM_AMETHYST, GemQuality.CHIPPED),
+    GemData('gfv', ItemType.GEM_AMETHYST, GemQuality.FLAWED),
+    GemData('gsv', ItemType.GEM_AMETHYST, GemQuality.NORMAL),
+    GemData('gzv', ItemType.GEM_AMETHYST, GemQuality.FLAWLESS),
+    GemData('gpv', ItemType.GEM_AMETHYST, GemQuality.PERFECT),
+    GemData('gcw', ItemType.GEM_DIAMOND, GemQuality.CHIPPED),
+    GemData('gfw', ItemType.GEM_DIAMOND, GemQuality.FLAWED),
+    GemData('gsw', ItemType.GEM_DIAMOND, GemQuality.NORMAL),
+    GemData('glw', ItemType.GEM_DIAMOND, GemQuality.FLAWLESS),
+    GemData('gpw', ItemType.GEM_DIAMOND, GemQuality.PERFECT),
+    GemData('gcg', ItemType.GEM_EMERALD, GemQuality.CHIPPED),
+    GemData('gfg', ItemType.GEM_EMERALD, GemQuality.FLAWED),
+    GemData('gsg', ItemType.GEM_EMERALD, GemQuality.NORMAL),
+    GemData('glg', ItemType.GEM_EMERALD, GemQuality.FLAWLESS),
+    GemData('gpg', ItemType.GEM_EMERALD, GemQuality.PERFECT),
+    GemData('gcr', ItemType.GEM_RUBY, GemQuality.CHIPPED),
+    GemData('gfr', ItemType.GEM_RUBY, GemQuality.FLAWED),
+    GemData('gsr', ItemType.GEM_RUBY, GemQuality.NORMAL),
+    GemData('glr', ItemType.GEM_RUBY, GemQuality.FLAWLESS),
+    GemData('gpr', ItemType.GEM_RUBY, GemQuality.PERFECT),
+    GemData('gcb', ItemType.GEM_SAPPHIRE, GemQuality.CHIPPED),
+    GemData('gfb', ItemType.GEM_SAPPHIRE, GemQuality.FLAWED),
+    GemData('gsb', ItemType.GEM_SAPPHIRE, GemQuality.NORMAL),
+    GemData('glb', ItemType.GEM_SAPPHIRE, GemQuality.FLAWLESS),
+    GemData('gpb', ItemType.GEM_SAPPHIRE, GemQuality.PERFECT),
+    GemData('skc', ItemType.GEM_SKULL, GemQuality.CHIPPED),
+    GemData('skf', ItemType.GEM_SKULL, GemQuality.FLAWED),
+    GemData('sku', ItemType.GEM_SKULL, GemQuality.NORMAL),
+    GemData('skl', ItemType.GEM_SKULL, GemQuality.FLAWLESS),
+    GemData('skz', ItemType.GEM_SKULL, GemQuality.PERFECT),
+    GemData('gcy', ItemType.GEM_TOPAZ, GemQuality.CHIPPED),
+    GemData('gfy', ItemType.GEM_TOPAZ, GemQuality.FLAWED),
+    GemData('gsy', ItemType.GEM_TOPAZ, GemQuality.NORMAL),
+    GemData('gly', ItemType.GEM_TOPAZ, GemQuality.FLAWLESS),
+    GemData('gpy', ItemType.GEM_TOPAZ, GemQuality.PERFECT),
+]
+
+
+def get_gem_data_by_code(item_code):
+    return next(filter(lambda gem: gem.code == item_code, gem_data_list), None)
+
+
+def get_gem_data_by_type_and_quality(gem_type, quality):
+    return next(filter(lambda gem_data: gem_data.type == gem_type and gem_data.quality == quality, gem_data_list), None)
 
 
 def get_set_data(set_id):

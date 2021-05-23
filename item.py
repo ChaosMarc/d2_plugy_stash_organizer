@@ -1,6 +1,8 @@
-import item_data
 from copy import deepcopy
+
+import item_data
 from bit_utils import read_bits, write_bits, get_data_chunks
+from item_data import ItemType, ItemQuality, ItemVersion
 
 
 # Item class, holding the various relevant item-related attributes and methods
@@ -41,11 +43,14 @@ class Item:
         else:
             self.code, offset = self.read_attribute_as_char(data, offset, 4, 8)  # offset: 76
             self.type = item_data.get_item_data(self.code).type
-            self.num_filled_sockets, offset = self.read_attribute(data, offset, 3)  # offset: 108
+            if self.is_gem():
+                self.gem_quality = item_data.get_gem_data_by_code(self.code).quality
 
         if self.is_simple == 1:
             self.quality = None
+            self.num_filled_sockets = 0
         else:
+            self.num_filled_sockets, offset = self.read_attribute(data, offset, 3)  # offset: 108
             self.identifier, offset = self.read_attribute(data, offset, 32)  # offset: 111
             self.level, offset = self.read_attribute(data, offset, 7)  # offset: 143
             self.quality, offset = self.read_quality(self, offset, 4)  # offset: 150
@@ -58,12 +63,12 @@ class Item:
             if self.is_class_specific == 1:
                 self.class_specific_data, offset = self.read_attribute(data, offset, 11)
 
-            if self.quality in (item_data.ItemQuality.LOW_QUALITY, item_data.ItemQuality.HIGH_QUALITY):
+            if self.quality in (ItemQuality.LOW_QUALITY, ItemQuality.HIGH_QUALITY):
                 offset += 3  # irrelevant bits
-            elif self.quality == item_data.ItemQuality.MAGIC:
+            elif self.quality == ItemQuality.MAGIC:
                 self.prefix_id, offset = self.read_attribute(data, offset, 11)
                 self.suffix_id, offset = self.read_attribute(data, offset, 11)
-            elif self.quality == item_data.ItemQuality.SET:
+            elif self.quality == ItemQuality.SET:
                 self.set_item_id, offset = self.read_attribute(data, offset, 12)
                 set_item_data = item_data.get_set_item_data(self.set_item_id)
                 self.set_item_name = set_item_data.set_item_name
@@ -71,10 +76,10 @@ class Item:
                 set_data = item_data.get_set_data(self.set_id)
                 self.set_name = set_data.set_name
                 self.set_difficulty = set_data.difficulty
-            elif self.quality == item_data.ItemQuality.UNIQUE:
+            elif self.quality == ItemQuality.UNIQUE:
                 self.unique_id, offset = self.read_attribute(data, offset, 12)
                 self.unique_name = item_data.get_unique_name(self.unique_id)
-            elif self.quality in (item_data.ItemQuality.RARE, item_data.ItemQuality.CRAFTED):
+            elif self.quality in (ItemQuality.RARE, ItemQuality.CRAFTED):
                 self.rare_name_id1, offset = self.read_attribute(data, offset, 8)
                 self.rare_name1 = item_data.get_rare_name(self.rare_name_id1)
                 self.rare_name_id2, offset = self.read_attribute(data, offset, 8)
@@ -120,7 +125,7 @@ class Item:
                 self.num_total_sockets, offset = self.read_attribute(data, offset, 4)
 
             set_list_count_value = 0
-            if self.quality == item_data.ItemQuality.SET:
+            if self.quality == ItemQuality.SET:
                 set_list_count_value, offset = self.read_attribute(data, offset, 5)
                 self.set_list_count = item_data.get_set_list_count(set_list_count_value)
 
@@ -128,7 +133,7 @@ class Item:
             self.magic_properties = properties
 
             self.set_properties = {}
-            if self.quality == item_data.ItemQuality.SET and self.set_list_count > 0:
+            if self.quality == ItemQuality.SET and self.set_list_count > 0:
                 for i in range(self.set_list_count):
                     offset, properties = self.read_magic_properties(self, offset)
                     self.set_properties = self.merge_properties_dicts(self.set_properties, properties)
@@ -180,7 +185,6 @@ class Item:
         self.x_size = item_data.get_item_size_x(self.code)  # How many horizontal slots does the item take
         self.y_size = item_data.get_item_size_y(self.code)  # How many vertical slots does the item take
 
-
     @staticmethod
     def translate_properties(properties):
         props = deepcopy(properties)
@@ -212,12 +216,12 @@ class Item:
     @staticmethod
     def read_version(self, offset, bits_to_read):
         version_id, _ = self.read_attribute(self.data, offset, bits_to_read)
-        return item_data.ItemVersion(version_id), offset + bits_to_read
+        return ItemVersion(version_id), offset + bits_to_read
 
     @staticmethod
     def read_quality(self, offset, bits_to_read):
         quality_id, _ = self.read_attribute(self.data, offset, bits_to_read)
-        return item_data.ItemQuality(quality_id), offset + bits_to_read
+        return ItemQuality(quality_id), offset + bits_to_read
 
     @staticmethod
     def read_attribute_as_char(item, offset, char_count, bits_per_char):
@@ -255,7 +259,7 @@ class Item:
         self.data = write_bits(self.data, 69, 4, y)
 
     def is_stackable(self):
-        return self.type in [item_data.ItemType.THROW, item_data.ItemType.THROWPOT, item_data.ItemType.JAV] or \
+        return self.type in [ItemType.THROW, ItemType.THROWPOT, ItemType.JAV] or \
                self.code in ["am5", "ama", "amf", "key", "aqv", "cqv"] or \
                self.is_tome()
 
@@ -263,25 +267,35 @@ class Item:
         return self.code in ["tkb", "ibk"]
 
     def is_armor(self):
-        return self.type in [item_data.ItemType.BARB, item_data.ItemType.BELT, item_data.ItemType.BODY, item_data.ItemType.BODY, item_data.ItemType.BOOTS, item_data.ItemType.CIRCLET,
-                             item_data.ItemType.GLOVES, item_data.ItemType.HELM, item_data.ItemType.PELT]
+        return self.type in [ItemType.BARB, ItemType.BELT, ItemType.BODY, ItemType.BODY, ItemType.BOOTS, ItemType.CIRCLET,
+                             ItemType.GLOVES, ItemType.HELM, ItemType.PELT]
 
     def is_shield(self):
-        return self.type in [item_data.ItemType.NEC, item_data.ItemType.PAL, item_data.ItemType.SHIELD]
+        return self.type in [ItemType.NEC, ItemType.PAL, ItemType.SHIELD]
 
     def is_weapon(self):
-        return self.type in [item_data.ItemType.AMA, item_data.ItemType.ASN, item_data.ItemType.AXE, item_data.ItemType.BOW, item_data.ItemType.DAGGER, item_data.ItemType.JAV, item_data.ItemType.MACE,
-                             item_data.ItemType.POLEARM, item_data.ItemType.SCEPTER, item_data.ItemType.SORC, item_data.ItemType.SPEAR, item_data.ItemType.STAFF, item_data.ItemType.SWORD,
-                             item_data.ItemType.THROW, item_data.ItemType.WAND, item_data.ItemType.XBOW]
+        return self.type in [ItemType.AMA, ItemType.ASN, ItemType.AXE, ItemType.BOW, ItemType.DAGGER, ItemType.JAV, ItemType.MACE,
+                             ItemType.POLEARM, ItemType.SCEPTER, ItemType.SORC, ItemType.SPEAR, ItemType.STAFF, ItemType.SWORD,
+                             ItemType.THROW, ItemType.WAND, ItemType.XBOW]
+
+    def is_gem(self):
+        return self.type in item_data.gems_types
+
+    def set_code(self, new_code):
+        # Get new 3-letter item code and replace the old one
+        for i in range(3):
+            self.data = write_bits(self.data, 76 + i * 8, 8, ord(new_code[i]))
+        self.data = write_bits(self.data, 100, 8, ord(' '))
+        self.code = new_code
 
     def __str__(self):
         arr = [self.type, self.quality, item_data.get_item_data(self.code).name]
         if self.is_simple == 0:
             arr.append(self.level)
-            if self.quality == item_data.ItemQuality.SET:
+            if self.quality == ItemQuality.SET:
                 arr.append(self.set_name)
                 arr.append(self.set_item_name)
-            if self.quality == item_data.ItemQuality.UNIQUE:
+            if self.quality == ItemQuality.UNIQUE:
                 arr.append(self.unique_name)
             if self.is_socketed:
                 arr.append('/'.join(str(i) for i in [self.num_filled_sockets, self.num_total_sockets]))

@@ -1,12 +1,13 @@
 import configparser
 import struct
 import tkinter as tk
+from copy import copy
 from shutil import copy
 from tkinter import filedialog
 
 from bit_utils import find_next_null, write_bits, get_data_chunks
 from item import Item
-from item_data import ItemType, ItemQuality
+from item_data import ItemType, ItemQuality, GemQuality, get_gem_data_by_code, get_gem_data_by_type_and_quality, gems_types, rune_codes, get_rune_upgrade_recipe
 from page import Page
 
 root = tk.Tk()
@@ -126,6 +127,139 @@ def append_supergroup(groups, supergroup):
         groups.append(supergroup[item])
 
 
+def upgrade_gems(item_list, qualities_to_cube, keep_at_least):
+    # Get gems from item list
+    gem_list = list(filter(lambda item: item.is_gem(), item_list))
+
+    # get item list without gems
+    item_list = list(filter(lambda item: not item.is_gem(), item_list))
+
+    # Initialize a dictionary with keys [gem_type][gem_quality] with empty lists
+    gems = {}
+    for gem_type in gems_types:
+        gems[gem_type] = {}
+        for gem_quality in GemQuality:
+            gems[gem_type][gem_quality] = []
+
+    # Add gems to gem dictionary
+    for gem in gem_list:
+        gems[gem.type][gem.gem_quality].append(gem)
+
+    # Upgrade Gems
+    for gem_type in gems_types:
+        for gem_quality in qualities_to_cube:
+            while len(gems[gem_type][gem_quality]) >= (3 + int(keep_at_least)):
+                gems[gem_type][gem_quality].pop()
+                gems[gem_type][gem_quality].pop()
+                g = gems[gem_type][gem_quality].pop()
+                g.gem_quality += 1
+                g.set_code(get_gem_data_by_type_and_quality(gem_type, g.gem_quality).code)
+                gems[gem_type][g.gem_quality].append(g)
+
+    # Turn the dictionary back into a list
+    gem_list = []
+    for gem_type in gems_types:
+        for gem_quality in GemQuality:
+            gem_list.extend(gems[gem_type][gem_quality])
+
+    # Add gems back to item list and return it
+    return item_list + gem_list
+
+
+def upgrade_runes(item_list, runes_to_upgrade, keep_at_least, downgrade_gems, ignore_gems):
+    # Get runes from item list
+    rune_list = list(filter(lambda item: item.type == ItemType.RUNE, item_list))
+
+    # get item list without runes
+    item_list = list(filter(lambda item: item.type != ItemType.RUNE, item_list))
+
+    # Initialize a dictionary with keys [rune_code] with empty lists
+    runes = {}
+    for rune_code in rune_codes:
+        runes[rune_code] = []
+
+    # Add runes to rune dictionary
+    for rune in rune_list:
+        runes[rune.code].append(rune)
+
+    # Upgrade Runes
+    for rune_code in runes_to_upgrade:
+        recipe = get_rune_upgrade_recipe(rune_code)
+        while len(runes[rune_code]) >= (recipe.amount + int(keep_at_least)) and has_gem_for_rune_upgrade(item_list, recipe.gem_code, downgrade_gems, ignore_gems):
+            item_list = remove_gem_for_rune_upgrade(item_list, recipe.gem_code, downgrade_gems, ignore_gems)
+            r = None
+            for _ in range(recipe.amount):
+                r = runes[rune_code].pop()
+            r.set_code(recipe.next_rune_code)
+            runes[recipe.next_rune_code].append(r)
+
+    # Turn the dictionary back into a list
+    rune_list = []
+    for rune_code in rune_codes:
+        rune_list.extend(runes[rune_code])
+
+    # Add runes back to item list and return it
+    return item_list + rune_list
+
+
+def has_gem_for_rune_upgrade(item_list, gem_code, downgrade_gems, ignore_gems):
+    if gem_code is None or ignore_gems == '1':
+        return True
+
+    gem_codes_to_check = get_gem_codes_to_check(gem_code, downgrade_gems)
+    return len(list(filter(lambda item: item.code in gem_codes_to_check, item_list))) > 0
+
+
+def downgrade_gem_to(item_list, gem_code_from, gem_code_to):
+    gem_data_from = get_gem_data_by_code(gem_code_from)
+    while gem_data_from.code != gem_code_to:
+        for item in item_list:
+            if item.code == gem_data_from.code:
+                item_list.remove(item)
+                item.gem_quality -= 1
+                gem_data_from = get_gem_data_by_type_and_quality(item.type, item.gem_quality)
+                item.set_code(gem_data_from.code)
+                for _ in range(3):
+                    item_list.append(copy(item))
+                break
+    return item_list
+
+
+def get_gem_codes_to_check(gem_code, downgrade_gems):
+    gem_codes_to_check = [gem_code]
+    if downgrade_gems == '1':
+        gem_data = get_gem_data_by_code(gem_code)
+        while True:
+            gem_data = get_gem_data_by_type_and_quality(gem_data.type, gem_data.quality + 1)
+            if gem_data is None:
+                break
+            else:
+                gem_codes_to_check.append(gem_data.code)
+    return gem_codes_to_check
+
+
+def remove_gem_for_rune_upgrade(item_list, gem_code, downgrade_gems, ignore_gems):
+    if gem_code is None or ignore_gems == '1':
+        return item_list
+
+    downgrade_needed = False
+    gem_removed = False
+    for gem_code_to_check in get_gem_codes_to_check(gem_code, downgrade_gems):
+        if gem_removed:
+            break
+        for item in item_list:
+            if item.code == gem_code_to_check:
+                if downgrade_needed:
+                    item_list = downgrade_gem_to(item_list, gem_code_to_check, gem_code)
+                    del item_list[-1]
+                else:
+                    item_list.remove(item)
+                gem_removed = True
+                break
+        downgrade_needed = True
+    return item_list
+
+
 def to_groups(item_list, config):
     # Sort the items into groups. Each group is sorted internally with some criteria, and different groups will never
     # be on the same stash page.
@@ -219,6 +353,8 @@ def to_pages(groups):
     for group in groups:
         current_page = Page()  # For each group, create a new stash page
         for item in group:  # Then for each item, attempt to insert it somewhere in the page
+            if item.num_filled_sockets > 0:
+                print(item.to_json())
             if not current_page.insert_item(item):  # If insertion fails, add current page to list of "ready" stash
                 # pages, create a new page, and insert item into the new page
                 pages.append(current_page)
@@ -286,6 +422,16 @@ def main():
     # Read stash file and parse items
     header, ver, gold, num_pages, stash_data = read_stash_file(stash_file_path)
     pages_to_ignore, item_list = parse_stash_data(stash_data, config)
+
+    # Upgrade runes
+    if (config["UPGRADE_RUNES"]["Enabled"]) == '1':
+        runes_to_upgrade = [x.strip() for x in config["UPGRADE_RUNES"]['UpgradeOnly'].split(',')]
+        item_list = upgrade_runes(item_list, runes_to_upgrade, config["UPGRADE_RUNES"]["KeepAtLeast"], config["UPGRADE_RUNES"]["DowngradeGems"], config["UPGRADE_RUNES"]["IgnoreGems"])
+
+    # Upgrade gems
+    if (config["UPGRADE_GEMS"]["Enabled"]) == '1':
+        qualities_to_cube = [GemQuality[x.strip()] for x in config["UPGRADE_GEMS"]['UpgradeOnly'].split(',')]
+        item_list = upgrade_gems(item_list, qualities_to_cube, config["UPGRADE_GEMS"]['KeepAtLeast'])
 
     # Sort items into different groups, and sort each group
     groups = to_groups(item_list, config)
