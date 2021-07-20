@@ -126,7 +126,28 @@ def append_supergroup(groups, supergroup):
         groups.append(supergroup[item])
 
 
-def upgrade_gems(item_list, qualities_to_cube, keep_at_least):
+def upgrade_rejuvenation_potions(item_list):
+    # Get potions from item list
+    potion_list = list(filter(lambda item: item.code == 'rvs', item_list))
+
+    # get item list without gems
+    item_list = list(filter(lambda item: item.code != 'rvs', item_list))
+
+    full, normal = divmod(len(potion_list), 3)
+
+    for x in range(full):
+        potion = potion_list[x]
+        potion.set_code('rvl')
+        item_list.append(potion)
+
+    for x in range(normal):
+        potion = potion_list[len(potion_list) - x - 1]
+        item_list.append(potion)
+
+    return item_list
+
+
+def upgrade_gems(item_list, qualities_to_cube, types_to_cube, keep_at_least):
     # Get gems from item list
     gem_list = list(filter(lambda item: item.is_gem(), item_list))
 
@@ -421,6 +442,10 @@ def main():
     # Read stash file and parse items
     header, ver, gold, num_pages, stash_data = read_stash_file(stash_file_path)
     pages_to_ignore, item_list = parse_stash_data(stash_data, config)
+
+    # Upgrade Rejuvenation Potions
+    if (config["GENERAL"]["UpgradeRejuvenationPotions"]) == '1':
+        item_list = upgrade_rejuvenation_potions(item_list)
 
     # Upgrade runes
     if (config["UPGRADE_RUNES"]["Enabled"]) == '1':
