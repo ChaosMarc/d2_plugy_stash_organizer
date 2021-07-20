@@ -1,13 +1,15 @@
 import configparser
 import struct
 import tkinter as tk
-from bit_utils import find_next_null, write_bits, get_data_chunks
+from collections import OrderedDict
 from copy import copy
+from shutil import copy
+from tkinter import filedialog
+
+from bit_utils import find_next_null, write_bits, get_data_chunks
 from item import Item
 from item_data import ItemType, ItemQuality, GemQuality, get_gem_data_by_code, get_gem_data_by_type_and_quality, gems_types, rune_codes, get_rune_upgrade_recipe
 from page import Page
-from shutil import copy
-from tkinter import filedialog
 
 root = tk.Tk()
 root.withdraw()
@@ -166,7 +168,7 @@ def upgrade_gems(item_list, qualities_to_cube, types_to_cube, keep_at_least):
         gems[gem.type][gem.gem_quality].append(gem)
 
     # Upgrade Gems
-    for gem_type in gems_types:
+    for gem_type in types_to_cube:
         for gem_quality in qualities_to_cube:
             while len(gems[gem_type][gem_quality]) >= (3 + int(keep_at_least)):
                 gems[gem_type][gem_quality].pop()
@@ -284,7 +286,7 @@ def to_groups(item_list, config):
     # Sort the items into groups. Each group is sorted internally with some criteria, and different groups will never
     # be on the same stash page.
 
-    item_groups = {}
+    item_groups = OrderedDict()
     if "ITEM_GROUP_MISC" not in config:
         config["ITEM_GROUP_MISC"] = {}
     for section in config:
@@ -346,9 +348,15 @@ def to_groups(item_list, config):
         sort_by = []
         if "SortByAttribute" in config["ITEM_GROUP_" + group]:
             sort_by = [x.strip() for x in config["ITEM_GROUP_" + group]["SortByAttribute"].split(',')]
+
         if 'SubGroupByAttribute' in config["ITEM_GROUP_" + group]:
-            for sub_group in sorted(item_groups[group], key=lambda x: [getattr(x, attr, "code") for attr in sort_by]):
+            for sub_group in item_groups[group]:
                 item_groups[group][sub_group].sort(key=lambda x: [getattr(x, attr, "code") for attr in sort_by])
+
+            sort_sub_groups_by = [config["ITEM_GROUP_" + group]["SubGroupByAttribute"]]
+            if "SortSubGroupsByAttribute" in config["ITEM_GROUP_" + group]:
+                sort_sub_groups_by = [x.strip() for x in config["ITEM_GROUP_" + group]["SortSubGroupsByAttribute"].split(',')]
+            item_groups[group] = OrderedDict(sorted(item_groups[group].items(), key=lambda x: [getattr(x[1][0], attr, "code") for attr in sort_sub_groups_by]))
         else:
             item_groups[group].sort(key=lambda x: [getattr(x, attr, "code") for attr in sort_by])
 
@@ -454,8 +462,9 @@ def main():
 
     # Upgrade gems
     if (config["UPGRADE_GEMS"]["Enabled"]) == '1':
-        qualities_to_cube = [GemQuality[x.strip()] for x in config["UPGRADE_GEMS"]['UpgradeOnly'].split(',')]
-        item_list = upgrade_gems(item_list, qualities_to_cube, config["UPGRADE_GEMS"]['KeepAtLeast'])
+        qualities_to_cube = [GemQuality[x.strip()] for x in config["UPGRADE_GEMS"]['UpgradeQualitiesOnly'].split(',')]
+        types_to_cube = [ItemType[x.strip()] for x in config["UPGRADE_GEMS"]['UpgradeTypesOnly'].split(',')]
+        item_list = upgrade_gems(item_list, qualities_to_cube, types_to_cube, config["UPGRADE_GEMS"]['KeepAtLeast'])
 
     # Sort items into different groups, and sort each group
     groups = to_groups(item_list, config)

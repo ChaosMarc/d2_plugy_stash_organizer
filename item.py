@@ -13,7 +13,7 @@ class Item:
         offset = 20
         self.is_identified, offset = self.read_attribute(data, offset, 1)  # offset: 20
         offset += 6  # unknown bits
-        self.is_socketed, offset = self.read_attribute(data, offset, 1)  # offset: 27
+        self.has_sockets, offset = self.read_attribute(data, offset, 1)  # offset: 27
         offset += 1  # unknown bits
         offset += 1  # irrelevant bit: is_new
         offset += 2  # unknown bits
@@ -121,7 +121,7 @@ class Item:
             if self.is_stackable():
                 self.quantity, offset = self.read_attribute(data, offset, 9)
 
-            if self.is_socketed:
+            if self.has_sockets:
                 self.num_total_sockets, offset = self.read_attribute(data, offset, 4)
 
             set_list_count_value = 0
@@ -142,6 +142,7 @@ class Item:
                 else:
                     self.set_attributes_num_req = []
                     for i in range(4):
+                        # TODO set_list_count_value vs set_list_count ?
                         if set_list_count_value & (1 << i) == 0:
                             continue
                         self.set_attributes_num_req.append(i + 2)
@@ -297,7 +298,7 @@ class Item:
                 arr.append(self.set_item_name)
             if self.quality == ItemQuality.UNIQUE:
                 arr.append(self.unique_name)
-            if self.is_socketed:
+            if self.has_sockets:
                 arr.append('/'.join(str(i) for i in [self.num_filled_sockets, self.num_total_sockets]))
                 socketables = []
                 for socketable in self.socketables:
